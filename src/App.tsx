@@ -1,6 +1,5 @@
 import { 
   Container, Flex,
-  HStack, Heading, Text,
 } from '@chakra-ui/layout';
 import { FC } from 'react';
 import { Header } from './components/Header/Header';

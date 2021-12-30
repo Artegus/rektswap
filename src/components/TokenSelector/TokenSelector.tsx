@@ -2,9 +2,6 @@ import { FC } from 'react'
 import {
     HStack, FormControl, InputGroup,
     Input, InputRightElement, Button,
-    Modal, ModalOverlay, ModalContent,
-    ModalHeader, ModalCloseButton, ModalBody,
-    ModalFooter, Text
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { ModalMod } from '../ModalMod/ModalMod';

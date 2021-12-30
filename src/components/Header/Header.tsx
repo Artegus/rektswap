@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import {
-    HStack, Button, Divider
+    HStack, Button
 } from '@chakra-ui/react'
 import { Logo } from '../Logo/Logo'
 import { ConnectWallet } from '../ConnectWallet/ConnectWallet'
