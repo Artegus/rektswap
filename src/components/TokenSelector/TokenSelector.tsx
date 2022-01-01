@@ -23,8 +23,14 @@ export const TokenSelector: FC<Props> = ({
         <HStack px={5} >
             <FormControl>
                 <InputGroup>
-                    <Input placeholder="0.0" />
-                    <InputRightElement width='4.5rem'>
+                    <Input 
+                        placeholder="0.0"
+                        type="number"
+                    />
+                    <InputRightElement 
+                        width='4.5rem'
+                        pr="0.5rem"
+                    >
                         <Button h='1.75rem' size='sm' rightIcon={<ChevronDownIcon />} onClick={handleOpenModal}>
                             ETH
                         </Button>
@@ -37,7 +43,8 @@ export const TokenSelector: FC<Props> = ({
                     onClose: handleCloseModal,
                     isOpen: isOpen,
                     isCentered: true,
-                    autoFocus: true
+                    autoFocus: true,
+                    size:'sm'
                 }}
             />
         </HStack>

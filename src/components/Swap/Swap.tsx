@@ -50,7 +50,7 @@ export const Swap: FC = () => {
                 handleOpenModal={onOpen}
                 isOpen={isOpen}
             />
-            <HStack px={5} py={2} >
+            <HStack px={5} paddingTop={2} paddingBottom={5} >
                 {!isConnected ?
                     <ConnectWallet /> :
                     <Button
