@@ -4,6 +4,7 @@ import {
 } from '@chakra-ui/react'
 import { Logo } from '../Logo/Logo'
 import { ConnectWallet } from '../ConnectWallet/ConnectWallet'
+import { MoreOptions } from './MoreOptions';
 
 export const Header: FC = () => {
     
@@ -24,9 +25,7 @@ export const Header: FC = () => {
                         0x09...213
                     </Button>
                 }
-                <Button size='md'>
-                    ...
-                </Button>
+                <MoreOptions />
             </HStack>
         </HStack>
 

@@ -4,7 +4,7 @@ import {
     Button
 } from '@chakra-ui/react'
 
-export const ConnectWallet = () => {
+export const ConnectWallet: FC = () => {
     return (
         <Button size='md' >
             Connect wallet
