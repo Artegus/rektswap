@@ -1,14 +1,17 @@
 import { FC } from 'react'
+import { useEagerConnect, useInactiveListener } from '../../hooks/useWeb3';
+import { Web3ReactProvider, useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import {
     HStack, Button
 } from '@chakra-ui/react'
 import { Logo } from '../Logo/Logo'
 import { ConnectWallet } from '../ConnectWallet/ConnectWallet'
 import { MoreOptions } from './MoreOptions';
+import { useUserStore } from '../../stores/UserStore';
 
 export const Header: FC = () => {
     
-    const isConnected = false;
+    const { isConnected } = useUserStore();
 
     return (
         <HStack 
