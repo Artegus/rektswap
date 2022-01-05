@@ -22,8 +22,6 @@ export const ConnectWallet: FC = () => {
         }
     }
 
-export const ConnectWallet: FC = () => {
-
     return (
         <Button size='md'
             onClick={connectWallet}
