@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import {
-    Box, Heading, AspectRatio,
-    Image
+    Box
 } from '@chakra-ui/react'
 import { LogoIcon } from '../../icons/logo'
 
