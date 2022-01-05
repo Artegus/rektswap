@@ -10,7 +10,7 @@ import { useWeb3React } from '@web3-react/core';
 
 export const ConnectWallet: FC = () => {
 
-    const { activate, account } = useWeb3React<Web3Provider>()
+    const { activate, active, chainId } = useWeb3React<Web3Provider>()
     const { setActivatingConnector } = useUserStore();
 
     const connectWallet = async () => {

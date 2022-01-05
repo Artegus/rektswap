@@ -13,7 +13,7 @@ const App: FC = () => {
 
   const { setActivatingConnector, activatingConnector } = useUserStore();
   const context = useWeb3React<Web3Provider>()
-  const { connector, error } = context;
+  const { connector } = context;
 
   useEffect(() => {
     if (activatingConnector && activatingConnector === connector) {

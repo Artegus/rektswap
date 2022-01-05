@@ -1,18 +1,17 @@
 import { FC } from 'react'
-import { useEagerConnect, useInactiveListener } from '../../hooks/useWeb3';
-import { Web3ReactProvider, useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
+import { useWeb3React } from '@web3-react/core'
 import {
     HStack, Button
 } from '@chakra-ui/react'
 import { Logo } from '../Logo/Logo'
 import { ConnectWallet } from '../ConnectWallet/ConnectWallet'
 import { MoreOptions } from './MoreOptions';
-import { useUserStore } from '../../stores/UserStore';
+import { Web3Provider } from '@ethersproject/providers';
 
 export const Header: FC = () => {
     
-    const { isConnected } = useUserStore();
-
+    const { active, account } = useWeb3React<Web3Provider>()
+    
     return (
         <HStack 
             w="full" 
@@ -22,10 +21,10 @@ export const Header: FC = () => {
             <Logo />
 
             <HStack spacing={5} px="5">
-                {!isConnected ? 
+                {!active ? 
                     <ConnectWallet/> : 
                     <Button size='md'>
-                        0x09...213
+                        {account!.substring(0, 4)}...{account!.substring(account!.length - 4, account!.length)}
                     </Button>
                 }
                 <MoreOptions />
