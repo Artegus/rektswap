@@ -1,18 +1,15 @@
 import { FC } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import {
     HStack, Button
 } from '@chakra-ui/react'
 import { Logo } from '../Logo/Logo'
 import { ConnectWallet } from '../ConnectWallet/ConnectWallet'
 import { MoreOptions } from './MoreOptions';
-import { Web3Provider } from '@ethersproject/providers';
-
 
 export const Header: FC = () => {
     
-    const { active, account } = useWeb3React<Web3Provider>()
-    
+    const isConnected = false;
+
     return (
         <HStack 
             w="full" 
@@ -22,10 +19,10 @@ export const Header: FC = () => {
             <Logo />
 
             <HStack spacing={5} px="5">
-                {!active ? 
+                {!isConnected ? 
                     <ConnectWallet/> : 
                     <Button size='md'>
-                        {account!.substring(0, 4)}...{account!.substring(account!.length - 4, account!.length)}
+                        0x09...213
                     </Button>
                 }
                 <MoreOptions />
