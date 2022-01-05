@@ -1,18 +1,19 @@
 import { FC } from 'react'
 import {
-    VStack, HStack, Heading,IconButton,
+    VStack, HStack, Heading, IconButton,
     Button, useDisclosure,
 } from '@chakra-ui/react'
 import { SettingsIcon, ArrowDownIcon } from '@chakra-ui/icons';
-import { ConnectWallet } from '../ConnectWallet/ConnectWallet';
 import { TokenSelector } from '../TokenSelector/TokenSelector';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
+import { ConnectWallet } from '../ConnectWallet/ConnectWallet';
 
 export const Swap: FC = () => {
 
     const { active } = useWeb3React<Web3Provider>();
     const { onOpen, onClose, isOpen } = useDisclosure();
+
 
     const swapTokens = () => {
         //TODO: 
@@ -38,22 +39,25 @@ export const Swap: FC = () => {
                     aria-label='Send email'
                 />
             </HStack>
-            <TokenSelector 
+            <TokenSelector
                 handleCloseModal={onClose}
                 handleOpenModal={onOpen}
                 isOpen={isOpen}
             />
             <HStack px={5} justifyContent="center">
-                <ArrowDownIcon/>
+                <ArrowDownIcon />
             </HStack>
-            <TokenSelector 
+            <TokenSelector
                 handleCloseModal={onClose}
                 handleOpenModal={onOpen}
                 isOpen={isOpen}
             />
             <HStack px={5} paddingTop={2} paddingBottom={5} >
                 {!active ?
-                    <ConnectWallet /> :
+                    <ConnectWallet
+                        size="md"
+                        w="full"
+                    /> :
                     <Button
                         size="md"
                         w="full"

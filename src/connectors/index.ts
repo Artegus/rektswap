@@ -4,6 +4,8 @@ enum ConnectorNames {
     Injected = 'Injected',
 }
 
-export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
+const connectorsByName: { [connectorName in ConnectorNames]: any } = {
     [ConnectorNames.Injected]: injected,
 }
+
+export { connectorsByName, ConnectorNames };
