@@ -5,7 +5,6 @@ import {
     Image, Text, ModalFooter, Box,
     Button, HStack
 } from '@chakra-ui/react'
-
 import tokens from '../../config/constants/tokenLists/default.tokenlist'
 
 type TModalTokenSelector = {
