@@ -1,9 +1,7 @@
 import { FC } from 'react'
 
 import {
-    Modal as ModalChakra, ModalOverlay, ModalContent,
-    ModalHeader, ModalCloseButton, ModalBody,
-    Text, ModalFooter, Button, ModalProps
+    Modal as ModalChakra, ModalProps
 } from '@chakra-ui/react'
 
 type Props = {

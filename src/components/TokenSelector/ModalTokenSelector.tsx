@@ -1,5 +1,4 @@
 import { FC } from 'react'
-
 import {
     ModalOverlay, ModalContent, ModalHeader,
     ModalCloseButton, ModalBody, Stack,
@@ -9,17 +8,17 @@ import {
 
 import tokens from '../../config/constants/tokenLists/default.tokenlist'
 
-type ModalTokenSelector = {
+type TModalTokenSelector = {
     closeModal: () => void;
 }
 
-export const ModalTokenSelector: FC<ModalTokenSelector> = ({
-    closeModal
+export const ModalTokenSelector: FC<TModalTokenSelector> = ({
 }) => {
 
     const tokenItems = () => {
         return tokens.map(({ name, address, symbol, logoURI }) => (
             <HStack
+                key={name}
                 as={Button}
                 id={address}
                 variant='outline'
