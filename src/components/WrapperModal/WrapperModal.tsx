@@ -8,7 +8,7 @@ type Props = {
     settingsModal: ModalProps
 }
 
-export const ModalMod: FC<Props> = ({
+export const WrapperModal: FC<Props> = ({
     settingsModal,
 }) => {
     return (

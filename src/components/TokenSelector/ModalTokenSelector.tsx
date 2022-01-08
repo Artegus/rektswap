@@ -6,21 +6,41 @@ import {
     Button, HStack
 } from '@chakra-ui/react'
 import tokens from '../../config/constants/tokenLists/default.tokenlist'
+import { IToken } from '../../types/IToken'
+import { useSwapStore } from '../../stores/SwapStore'
 
 type TModalTokenSelector = {
     closeModal: () => void;
+    setToken: (_token: IToken) => void;
 }
 
 export const ModalTokenSelector: FC<TModalTokenSelector> = ({
+    closeModal,
+    setToken
 }) => {
 
+    const { tokenIn, tokenOut } = useSwapStore();
+
+    const isTokenSelected = (_token: IToken) => {
+        return (_token.address === tokenIn?.address || _token.address === tokenOut?.address)
+    }
+
+    const _setToken = (_token: IToken) => {
+        setToken(_token);
+        closeModal();
+    }
+
     const tokenItems = () => {
-        return tokens.map(({ name, address, symbol, logoURI }) => (
+        return tokens.map((token) => (
             <HStack
-                key={name}
+                onClick={() => {
+                    _setToken({
+                        ...token
+                    });
+                }}
+                key={token.address}
                 as={Button}
-                id={address}
-                variant='outline'
+                variant={isTokenSelected(token) ? 'solid' : 'outline'}
                 size="sm"
                 w="full"
                 px={0}
@@ -30,12 +50,12 @@ export const ModalTokenSelector: FC<TModalTokenSelector> = ({
                     w="15px"
                 >
                     <Image
-                        src={logoURI}
-                        alt={name}
+                        src={token.logoURI}
+                        alt={token.name}
                         objectFit='cover'
                     />
                 </Box>
-                <Text h="10px" >{symbol}</Text>
+                <Text h="10px" >{token.symbol}</Text>
             </HStack>
         ))
     }

@@ -2,51 +2,61 @@ import { FC } from 'react'
 import {
     HStack, FormControl, InputGroup,
     Input, InputRightElement, Button,
+    Text
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { ModalMod } from '../ModalMod/ModalMod';
-import { ModalTokenSelector } from './ModalTokenSelector';
+import { IToken } from '../../types/IToken';
 
 type Props = {
     handleOpenModal: () => void;
-    handleCloseModal: () => void;
-    isOpen: boolean;
+    token: IToken | undefined;
+    selectorTokenID: number;
+    handleSelectorTokenId: React.Dispatch<React.SetStateAction<number | undefined>>
+    amount: string;
 }
 
 export const TokenSelector: FC<Props> = ({
     handleOpenModal,
-    handleCloseModal,
-    isOpen,
+    selectorTokenID,
+    handleSelectorTokenId,
+    token,
+    amount
 }) => {
+
+    const handleChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+        
+    }
 
     return (
         <HStack px={5} >
             <FormControl>
-                <InputGroup>
+                <InputGroup size='md'>
                     <Input 
+                        pr='4.5rem'
+                        h='3rem'
                         placeholder="0.0"
+                        _placeholder={{ fontWeight: 'bold' }}
                         type="number"
+                        onChange={handleChangeAmount}
+                        value={amount}
                     />
                     <InputRightElement 
-                        width='4.5rem'
-                        pr="0.5rem"
+                        width='auto'
+                        h='full'
+                        px={1}
                     >
-                        <Button h='1.75rem' size='sm' rightIcon={<ChevronDownIcon />} onClick={handleOpenModal}>
-                            ETH
+                        <Button 
+                            h='2.5rem' size='md' 
+                            rightIcon={<ChevronDownIcon />} 
+                            onClick={ () => {
+                                handleSelectorTokenId(selectorTokenID)
+                                handleOpenModal();
+                            }}>
+                            <Text>{token ? token.symbol : 'Select a token'}</Text>
                         </Button>
                     </InputRightElement>
                 </InputGroup>
             </FormControl>
-            <ModalMod
-                settingsModal={{
-                    children: <ModalTokenSelector closeModal={handleCloseModal}/>,
-                    onClose: handleCloseModal,
-                    isOpen: isOpen,
-                    isCentered: true,
-                    autoFocus: true,
-                    size:'sm'
-                }}
-            />
         </HStack>
     )
 }
