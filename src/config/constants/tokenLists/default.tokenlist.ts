@@ -1,13 +1,5 @@
 const defaultTokens = [
     {
-        "name": "REKT Token",
-        "symbol": "REKT",
-        "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
-        "chainId": 137,
-        "decimals": 18,
-        "logoURI": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880"
-    },
-    {
         "name": "WETH Token",
         "symbol": "WETH",
         "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
@@ -16,20 +8,20 @@ const defaultTokens = [
         "logoURI": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880"
     },
     {
-        "name": "Ethereum Token",
-        "symbol": "ETH",
-        "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+        "name": "REKT Token",
+        "symbol": "REKT",
+        "address": "0x00",
         "chainId": 137,
         "decimals": 18,
-        "logoURI": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880"
+        "logoURI": "https://assets.coingecko.com/coins/images/19531/small/rekt.PNG?1635372905"
     },
     {
-        "name": "USDC Token",
+        "name": "USD Coin",
         "symbol": "USDC",
-        "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+        "address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
         "chainId": 137,
-        "decimals": 18,
-        "logoURI": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880"
+        "decimals": 6,
+        "logoURI": "https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389"
     },
 ]
 
