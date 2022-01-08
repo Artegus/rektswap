@@ -1,30 +1,22 @@
 import { FC } from 'react'
+import { Button, ButtonProps } from '@chakra-ui/react'
+import { ConnectorNames } from '../../connectors';
+import { useConnectWallet } from '../../hooks/useConnectWallet';
 
-import {
-    Button
-} from '@chakra-ui/react'
-import { useUserStore } from '../../stores/UserStore'
-import { connectorsByName } from '../../connectors';
-import { Web3Provider } from '@ethersproject/providers';
-import { useWeb3React } from '@web3-react/core';
+export const ConnectWallet: FC<ButtonProps> = ({
+    w,
+    size
+}) => {
 
-export const ConnectWallet: FC = () => {
-
-    const { activate, active, chainId } = useWeb3React<Web3Provider>()
-    const { setActivatingConnector } = useUserStore();
-
-    const connectWallet = async () => {
-        setActivatingConnector(connectorsByName['Injected'])
-        try {
-            await activate(connectorsByName['Injected'])
-        } catch (e) {
-            console.error(e); // TODO: Handle error
-        }
-    }
+    const connectWallet = useConnectWallet();
 
     return (
-        <Button size='md'
-            onClick={connectWallet}
+        <Button 
+            size={size}
+            w={w}
+            onClick={() => {
+                connectWallet(ConnectorNames.Injected);
+            }}
         >
             Connect wallet
         </Button>
