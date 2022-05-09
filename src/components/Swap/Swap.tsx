@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import {
     VStack, HStack, Heading, IconButton,
     Button, useDisclosure,
@@ -8,12 +8,21 @@ import { TokenSelector } from '../TokenSelector/TokenSelector';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { ConnectWallet } from '../ConnectWallet/ConnectWallet';
+import { useSwapStore } from '../../stores/SwapStore';
+import { WrapperModal } from '../WrapperModal/WrapperModal';
+import { ModalTokenSelector } from '../TokenSelector/ModalTokenSelector';
 
 export const Swap: FC = () => {
+
+    const [currentSelector, setCurrentSelector] = useState<number>();
 
     const { active } = useWeb3React<Web3Provider>();
     const { onOpen, onClose, isOpen } = useDisclosure();
 
+    const { 
+        setTokenIn, tokenIn, setTokenOut, 
+        tokenOut, turnAroundTokens, typedIn, estimatedOut
+    } = useSwapStore();
 
     const swapTokens = () => {
         //TODO: 
@@ -40,17 +49,26 @@ export const Swap: FC = () => {
                 />
             </HStack>
             <TokenSelector
-                handleCloseModal={onClose}
                 handleOpenModal={onOpen}
-                isOpen={isOpen}
+                token={tokenIn}
+                selectorTokenID={0}
+                handleSelectorTokenId={setCurrentSelector}
+                amount={typedIn}
             />
-            <HStack px={5} justifyContent="center">
-                <ArrowDownIcon />
+            <HStack justifyContent="center">
+                <IconButton
+                    size='xs'
+                    borderRadius='25px'
+                    aria-label='Turn around'
+                    onClick={turnAroundTokens} 
+                    icon={<ArrowDownIcon />} />
             </HStack>
             <TokenSelector
-                handleCloseModal={onClose}
                 handleOpenModal={onOpen}
-                isOpen={isOpen}
+                token={tokenOut}
+                selectorTokenID={1}
+                handleSelectorTokenId={setCurrentSelector}
+                amount={estimatedOut}
             />
             <HStack px={5} paddingTop={2} paddingBottom={5} >
                 {!active ?
@@ -67,6 +85,16 @@ export const Swap: FC = () => {
                     </Button>
                 }
             </HStack>
+            <WrapperModal
+                settingsModal={{
+                    children: <ModalTokenSelector closeModal={onClose} setToken={currentSelector === 0 ? setTokenIn : setTokenOut} />,
+                    onClose: onClose,
+                    isOpen: isOpen,
+                    isCentered: true,
+                    autoFocus: true,
+                    size: 'sm'
+                }}
+            />
         </VStack>
     )
 }
