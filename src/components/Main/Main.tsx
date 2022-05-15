@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { HStack } from '@chakra-ui/layout'
-import { Swap } from '../Swap/Swap'
+import { ActionsTabs } from '../Swap/ActionsTabs';
 
 export const Main: FC = () => {
 
@@ -10,7 +10,7 @@ export const Main: FC = () => {
             h="85vh"
             justifyContent="center"
         >
-            <Swap />
+            <ActionsTabs />
         </HStack>
     )
 }

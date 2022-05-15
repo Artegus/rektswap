@@ -7,6 +7,8 @@ interface SwapStore {
     tokenOut: IToken | undefined;
     typedIn: string;
     estimatedOut: string;
+    setTypedIn: (amout: string) => void;
+    setEstimitedOut: (amout: string) => void;
     setTokenIn: (_tokenIn: IToken | undefined) => void;
     setTokenOut: (_tokenOut: IToken | undefined) => void;
     turnAroundTokens: () => void;
@@ -44,8 +46,16 @@ const useSwapStore = create<SwapStore>((set, get) => ({
         return set((state) =>({
             ...state,
             tokenIn: get().tokenOut,
-            tokenOut: get().tokenIn
+            tokenOut: get().tokenIn,
+            estimatedOut: get().typedIn,
+            typedIn: get().estimatedOut
         }));
+    },
+    setEstimitedOut: (amout: string) => {
+        return set((state) => ({ ...state, estimatedOut: amout }));
+    },
+    setTypedIn: (amout: string) => { 
+        return set((state) => ({ ...state, typedIn: amout}))
     }
 }));
 

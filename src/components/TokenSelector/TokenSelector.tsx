@@ -11,7 +11,8 @@ type Props = {
     handleOpenModal: () => void;
     token: IToken | undefined;
     selectorTokenID: number;
-    handleSelectorTokenId: React.Dispatch<React.SetStateAction<number | undefined>>
+    handleSelectorTokenId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    handleSetAmount: (amount: string ) => void
     amount: string;
 }
 
@@ -20,11 +21,16 @@ export const TokenSelector: FC<Props> = ({
     selectorTokenID,
     handleSelectorTokenId,
     token,
-    amount
+    amount,
+    handleSetAmount
 }) => {
 
     const handleChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-        
+        const { value } = event.currentTarget;
+
+        if (!isNaN(Number(value))) {
+            handleSetAmount(value);
+        }
     }
 
     return (

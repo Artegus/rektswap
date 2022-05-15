@@ -21,7 +21,9 @@ export const Swap: FC = () => {
 
     const { 
         setTokenIn, tokenIn, setTokenOut, 
-        tokenOut, turnAroundTokens, typedIn, estimatedOut
+        tokenOut, turnAroundTokens, 
+        typedIn, estimatedOut,
+        setEstimitedOut, setTypedIn
     } = useSwapStore();
 
     const swapTokens = () => {
@@ -53,6 +55,7 @@ export const Swap: FC = () => {
                 token={tokenIn}
                 selectorTokenID={0}
                 handleSelectorTokenId={setCurrentSelector}
+                handleSetAmount={setTypedIn}
                 amount={typedIn}
             />
             <HStack justifyContent="center">
@@ -68,6 +71,7 @@ export const Swap: FC = () => {
                 token={tokenOut}
                 selectorTokenID={1}
                 handleSelectorTokenId={setCurrentSelector}
+                handleSetAmount={setEstimitedOut}
                 amount={estimatedOut}
             />
             <HStack px={5} paddingTop={2} paddingBottom={5} >
