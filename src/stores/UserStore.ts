@@ -5,10 +5,14 @@ interface UserStore {
     activatingConnector: any | undefined;
     address: string | undefined;
     chainId: number | undefined;
+	formatedEthBalance: string;
+	formatedRektBalance: string;
     connect: (address: string, chainId: number) => void;
     disconnect: () => void;
     changeChain: () => void;
     setActivatingConnector: (currentConnector: any) => void;
+	setFormatedEthBalance: (bal: string) => void;
+	setFormatedRektBalance: (bal: string) => void;
 }
 
 const useUserStore = create<UserStore>((set, get) => ({
@@ -16,10 +20,20 @@ const useUserStore = create<UserStore>((set, get) => ({
     activatingConnector: undefined,
     address: undefined,
     chainId: undefined,
+	formatedEthBalance: "",
+	formatedRektBalance: "",
     setActivatingConnector: (currentConnector: any) => set(state => ({
         ...state,
         activatingConnector: currentConnector
     })),
+	setFormatedEthBalance: (bal: string) => set(state => ({
+		...state,
+		formatedEthBalance: bal
+	})),
+	setFormatedRektBalance: (bal: string) => set(state => ({
+		...state,
+		formatedRektBalance: bal
+	})),
     connect: (address, chainId) => set(state => ({
         ...state,
         address,

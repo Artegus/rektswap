@@ -1,10 +1,11 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
-    HStack, Input, InputRightElement, Text, VStack
+    HStack, Input, InputRightElement, Text, VStack,
+	Box
 } from "@chakra-ui/react";
 
-import { Contract, utils } from 'ethers';
+import { Contract, utils, ethers } from 'ethers';
 import { ChainId, Fetcher, Route, TokenAmount, Trade, TradeType, WETH } from "@uniswap/sdk";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
@@ -15,7 +16,26 @@ import UNISWAPV2ROUTER_ABI from '../../abis/IUniswapV2Router.json'
 import { Props } from "../../types/TabProps/TabProps";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
 
+import { useUserStore } from '../../stores/UserStore';
 
+declare global {
+	interface Window {
+		ethereum: any;
+	}
+}
+
+const ethBalanceDecimalsToShow = 4;
+export const getEthBlanaceOf = async (addr: string): Promise<string> => {
+	const prov = new ethers.providers.Web3Provider(
+		window.ethereum
+	);
+	const weis = await prov.getBalance(addr);
+	const formated = ethers.utils.formatUnits(weis);
+	const pos = formated.search("\\.");
+	return formated.substring(0, pos + ethBalanceDecimalsToShow + 1);
+}
+
+// TODO refactor to BuyRektTab
 export const SwapTab: FC<Props> = ({
     tabTitle
 }) => {
@@ -25,6 +45,14 @@ export const SwapTab: FC<Props> = ({
 
     const timeRef = useRef<undefined | number>(undefined);
     const { active, library, account } = useWeb3React<Web3Provider>();
+	const { formatedEthBalance, setFormatedEthBalance } = useUserStore();
+
+	useEffect(() => {
+		if(account !== null && account !== undefined)
+			getEthBlanaceOf(account).then(
+				bal => setFormatedEthBalance(bal)
+			);
+	}, [account]);
 
     const chainId = ChainId.KOVAN;
     const wethToken = WETH[chainId];
@@ -93,6 +121,9 @@ export const SwapTab: FC<Props> = ({
                 w="full"
                 justifyContent="space-between">
                 <Heading size="md">{tabTitle}</Heading>
+				<Box>
+					{formatedEthBalance === ""? "" : `ETH balance: ${formatedEthBalance}`}
+				</Box>
             </HStack>
 
             <HStack px={5} >
@@ -116,7 +147,7 @@ export const SwapTab: FC<Props> = ({
                             h='2.5rem' size='md'
                             disabled
                         >
-                            <Text>WETH</Text>
+                            <Text>ETH</Text>
                         </Button>
                     </InputRightElement>
                 </FormControl>
@@ -158,7 +189,7 @@ export const SwapTab: FC<Props> = ({
                         w="full"
                         onClick={swapWithUniswapRouterV2}
                     >
-                        Swap
+                       	Buy 
                     </Button>
                 }
             </HStack>
