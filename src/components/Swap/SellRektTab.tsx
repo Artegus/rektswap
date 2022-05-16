@@ -54,7 +54,9 @@ export const SellRektTab: FC<Props> = ({
 	}
 	
 	const updateBals = async (addr: string | null | undefined) => {
-		if (typeof addr === "string") {
+		if (!active) 
+			setRektBal(null);
+		else if (typeof addr === "string") {
 			const rektCoin = getRektCoinContract();
 			const bal = await rektCoin.balanceOf(addr);
 			setRektBal(parseFloat(utils.formatUnits(bal)));

@@ -49,14 +49,16 @@ export const BuyRektTab: FC<Props> = ({
 	const [ethBal, setEthBal] = useState<number | null>(null);
 	
 	const updateBals = async (addr: string | null | undefined) => {
-		if(typeof addr === "string")
+		if (!active) 
+			setEthBal(null);
+		else if(typeof addr === "string")
 			setEthBal(parseFloat(
 				utils.formatUnits(await getEthBlanaceOf(addr))
 			));
 	}
 	
 	// TODO add parameters
-	useEffect(() => {updateBals(account);}, [account]);
+	useEffect(() => {updateBals(account);}, [account, active]);
 
     const chainId = ChainId.KOVAN;
     const wethToken = WETH[chainId];
