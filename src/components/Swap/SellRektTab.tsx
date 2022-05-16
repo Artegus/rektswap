@@ -20,7 +20,19 @@ import { Props } from "../../types/TabProps/TabProps";
 import { useUserStore } from '../../stores/UserStore';
 
 
+export const formatBal = (bal: number, decimals: number): string => {
+	const balStr = bal.toString();
+	const decimalPos = balStr.search("\\.");
+	return balStr.substring(0, decimalPos + decimals + 1);
+}
+
+
 const rektBalanceDecimalsToShow = 2;
+const formatRekt = (bal: number): string => {
+	return formatBal(bal, rektBalanceDecimalsToShow);
+}
+
+
 export const SellRektTab: FC<Props> = ({
     tabTitle
 }) => {
@@ -31,14 +43,26 @@ export const SellRektTab: FC<Props> = ({
     const timeRef = useRef<number | undefined>(undefined);
 
     const { active, library, account } = useWeb3React<Web3Provider>();
-	const { formatedRektBalance, setFormatedRektBalance } = useUserStore();
+	const [rektBal, setRektBal] = useState<number | null>(null);
 
-	useEffect(() => {
-		if(account !== null && account !== undefined)
-			getRektBlanaceOf(account).then(
-				bal => setFormatedRektBalance(bal)
-			);
-	}, [account]);
+	const getRektCoinContract = (): any => {
+		return new Contract(
+			defaultContracts.REKT_COIN.address,
+			REKT_COIN_ABI,
+			library?.getSigner()
+		);
+	}
+	
+	const updateBals = async (addr: string | null | undefined) => {
+		if (typeof addr === "string") {
+			const rektCoin = getRektCoinContract();
+			const bal = await rektCoin.balanceOf(addr);
+			setRektBal(parseFloat(utils.formatUnits(bal)));
+		} 
+	}
+	
+	// TODO add parameters
+	useEffect(() => {updateBals(account);}, [account, active]);
 
     const chainId = ChainId.KOVAN;
     const wethToken = WETH[chainId];
@@ -63,11 +87,9 @@ export const SellRektTab: FC<Props> = ({
         window.clearTimeout(timeRef.current)
 
         timeRef.current = window.setTimeout(async () => {
-            if (value !== "" && userInputSellAmount !== "") {
+            if (value !== "" && userInputSellAmount !== "")
                 await updateOutputAmount();
-            } else {
-                setExpectedOutput("");
-            }
+            else setExpectedOutput("");
         }, 1000)
     }
 
@@ -80,28 +102,16 @@ export const SellRektTab: FC<Props> = ({
         const amount = utils.parseEther(userInputSellAmount);
         try {
             const tx = await rektBatchet.functions["sellRektCoin"](amount);
-			setFormatedRektBalance(
-				(parseFloat(formatedRektBalance) - parseFloat(userInputSellAmount)).toFixed(
-					rektBalanceDecimalsToShow
-				)
-			)
+			setRektBal(
+				(currentBal: number | null) => currentBal !== null?
+					currentBal - parseFloat(userInputSellAmount) : null
+			);
             console.log(tx);
         } catch (e) {
             console.error(e);
         }
     }
 
-	const getRektBlanaceOf = async (addr: string): Promise<string> => {
-		const rektCoin = new Contract(
-			defaultContracts.REKT_COIN.address,
-			REKT_COIN_ABI,
-			library?.getSigner()
-		);
-		const weis = await rektCoin.balanceOf(addr);
-		const formated = ethers.utils.formatUnits(weis);
-		const pos = formated.search("\\.");
-		return formated.substring(0, pos + rektBalanceDecimalsToShow + 1);
-	}
 
     return (
         <VStack
@@ -117,7 +127,7 @@ export const SellRektTab: FC<Props> = ({
                 justifyContent="space-between">
                 <Heading size="md">{tabTitle}</Heading>
 				<Box>
-					{formatedRektBalance === ""? "" : `REKT balance: ${formatedRektBalance}`}
+					{rektBal === null? "" : `REKT balance: ${formatRekt(rektBal)}`}
 				</Box>
             </HStack>
 

@@ -15,8 +15,7 @@ import UNISWAPV2ROUTER_ABI from '../../abis/IUniswapV2Router.json'
 
 import { Props } from "../../types/TabProps/TabProps";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
-
-import { useUserStore } from '../../stores/UserStore';
+import { formatBal } from "./SellRektTab";
 
 declare global {
 	interface Window {
@@ -24,18 +23,20 @@ declare global {
 	}
 }
 
+
+
 const ethBalanceDecimalsToShow = 4;
-export const getEthBlanaceOf = async (addr: string): Promise<string> => {
+const formatEth = (bal: number): string => {
+	return formatBal(bal, ethBalanceDecimalsToShow);
+}
+
+export const getEthBlanaceOf = async (addr: string): Promise<any> => {
 	const prov = new ethers.providers.Web3Provider(
 		window.ethereum
 	);
-	const weis = await prov.getBalance(addr);
-	const formated = ethers.utils.formatUnits(weis);
-	const pos = formated.search("\\.");
-	return formated.substring(0, pos + ethBalanceDecimalsToShow + 1);
+	return await prov.getBalance(addr);
 }
 
-// TODO refactor to BuyRektTab
 export const BuyRektTab: FC<Props> = ({
     tabTitle
 }) => {
@@ -45,14 +46,17 @@ export const BuyRektTab: FC<Props> = ({
 
     const timeRef = useRef<undefined | number>(undefined);
     const { active, library, account } = useWeb3React<Web3Provider>();
-	const { formatedEthBalance, setFormatedEthBalance } = useUserStore();
-
-	useEffect(() => {
-		if(account !== null && account !== undefined)
-			getEthBlanaceOf(account).then(
-				bal => setFormatedEthBalance(bal)
-			);
-	}, [account]);
+	const [ethBal, setEthBal] = useState<number | null>(null);
+	
+	const updateBals = async (addr: string | null | undefined) => {
+		if(typeof addr === "string")
+			setEthBal(parseFloat(
+				utils.formatUnits(await getEthBlanaceOf(addr))
+			));
+	}
+	
+	// TODO add parameters
+	useEffect(() => {updateBals(account);}, [account]);
 
     const chainId = ChainId.KOVAN;
     const wethToken = WETH[chainId];
@@ -104,10 +108,9 @@ export const BuyRektTab: FC<Props> = ({
                 deadLine,
                 overrides
             );
-			setFormatedEthBalance(
-				(parseFloat(formatedEthBalance) - parseFloat(userInputAmount)).toFixed(
-					ethBalanceDecimalsToShow
-				)
+			setEthBal(
+				(currentBal: number | null) => currentBal !== null?
+					currentBal - parseFloat(userInputAmount) : null
 			);
             console.log("Txn: ", swapTx);
         } catch (e) {
@@ -129,7 +132,7 @@ export const BuyRektTab: FC<Props> = ({
                 justifyContent="space-between">
                 <Heading size="md">{tabTitle}</Heading>
 				<Box>
-					{formatedEthBalance === ""? "" : `ETH balance: ${formatedEthBalance}`}
+					{ethBal === null? "" : `ETH balance: ${formatEth(ethBal)}`}
 				</Box>
             </HStack>
 
