@@ -36,7 +36,7 @@ export const getEthBlanaceOf = async (addr: string): Promise<string> => {
 }
 
 // TODO refactor to BuyRektTab
-export const SwapTab: FC<Props> = ({
+export const BuyRektTab: FC<Props> = ({
     tabTitle
 }) => {
 
