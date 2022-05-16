@@ -1,21 +1,26 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
-    HStack, Input, InputRightElement, Text, VStack
+    HStack, Input, InputRightElement, Text, VStack,
+	Box
 } from "@chakra-ui/react";
 
-import { Contract, utils } from 'ethers'
+import { Contract, utils, ethers } from 'ethers'
 import { Trade, TradeType, TokenAmount, Route, Fetcher, WETH, ChainId } from '@uniswap/sdk'
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
 
-import REKT_COIN_BATCH_ABI from '../../abis/rektcoinBatch.json'
+import REKT_COIN_BATCH_ABI from '../../abis/rektcoinBatch.json';
+import REKT_COIN_ABI from '../../abis/rektcoin.json';
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 import { Props } from "../../types/TabProps/TabProps";
 
+import { useUserStore } from '../../stores/UserStore';
 
+
+const rektBalanceDecimalsToShow = 2;
 export const SellRektTab: FC<Props> = ({
     tabTitle
 }) => {
@@ -25,7 +30,15 @@ export const SellRektTab: FC<Props> = ({
     const [expectedOutput, setExpectedOutput] = useState<string>("")
     const timeRef = useRef<number | undefined>(undefined);
 
-    const { active, library } = useWeb3React<Web3Provider>();
+    const { active, library, account } = useWeb3React<Web3Provider>();
+	const { formatedRektBalance, setFormatedRektBalance } = useUserStore();
+
+	useEffect(() => {
+		if(account !== null && account !== undefined)
+			getRektBlanaceOf(account).then(
+				bal => setFormatedRektBalance(bal)
+			);
+	}, [account]);
 
     const chainId = ChainId.KOVAN;
     const wethToken = WETH[chainId];
@@ -36,7 +49,9 @@ export const SellRektTab: FC<Props> = ({
         const pairWethRekt = await Fetcher.fetchPairData(wethToken, rektCoin);
         const routeWethRekt = new Route([pairWethRekt], rektCoin);
 
-        const trade = new Trade(routeWethRekt, new TokenAmount(rektCoin, amount.toString()), TradeType.EXACT_INPUT);
+        const trade = new Trade(
+			routeWethRekt, new TokenAmount(rektCoin, amount.toString()), TradeType.EXACT_INPUT
+		);
         const { outputAmount } = trade;
         const parsedOutputAmount = outputAmount.toSignificant(6);
 
@@ -57,15 +72,36 @@ export const SellRektTab: FC<Props> = ({
     }
 
     const sellRektCoin = async () => {
-        const rektBatchet = new Contract(defaultContracts.REKT_TRANSACTION_BATCHER.address, REKT_COIN_BATCH_ABI, library?.getSigner());
+        const rektBatchet = new Contract(
+			defaultContracts.REKT_TRANSACTION_BATCHER.address,
+			REKT_COIN_BATCH_ABI,
+			library?.getSigner()
+		);
         const amount = utils.parseEther(userInputSellAmount);
         try {
             const tx = await rektBatchet.functions["sellRektCoin"](amount);
+			setFormatedRektBalance(
+				(parseFloat(formatedRektBalance) - parseFloat(userInputSellAmount)).toFixed(
+					rektBalanceDecimalsToShow
+				)
+			)
             console.log(tx);
         } catch (e) {
             console.error(e);
         }
     }
+
+	const getRektBlanaceOf = async (addr: string): Promise<string> => {
+		const rektCoin = new Contract(
+			defaultContracts.REKT_COIN.address,
+			REKT_COIN_ABI,
+			library?.getSigner()
+		);
+		const weis = await rektCoin.balanceOf(addr);
+		const formated = ethers.utils.formatUnits(weis);
+		const pos = formated.search("\\.");
+		return formated.substring(0, pos + rektBalanceDecimalsToShow + 1);
+	}
 
     return (
         <VStack
@@ -80,6 +116,9 @@ export const SellRektTab: FC<Props> = ({
                 w="full"
                 justifyContent="space-between">
                 <Heading size="md">{tabTitle}</Heading>
+				<Box>
+					{formatedRektBalance === ""? "" : `REKT balance: ${formatedRektBalance}`}
+				</Box>
             </HStack>
 
             <HStack px={5} >
@@ -129,7 +168,7 @@ export const SellRektTab: FC<Props> = ({
                             h='2.5rem' size='md'
                             disabled
                         >
-                            <Text>WETH</Text>
+                            <Text>ETH</Text>
                         </Button>
                     </InputRightElement>
                 </FormControl>

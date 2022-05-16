@@ -4,7 +4,7 @@ import { SwapTab } from "./SwapTab";
 
 export const ActionsTabs = () => {
 
-    const actionTabs = ["Swap", "Sell RektCoin"];
+    const actionTabs = ["Buy REKTcoin", "Sell REKTcoin"];
 
     return (
         <Tabs

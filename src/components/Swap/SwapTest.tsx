@@ -49,7 +49,11 @@ export const SwapTest: FC = () => {
 
     const swapWithUniswapRouterV2 = async () => {
         const signer = library?.getSigner()
-        const uniswapRouterV2 = new Contract(defaultContracts.UNISWAPV2_ROUTER02.address, UNISWAPV2ROUTER_ABI, signer);
+        const uniswapRouterV2 = new Contract(
+						defaultContracts.UNISWAPV2_ROUTER02.address,
+						UNISWAPV2ROUTER_ABI,
+						signer
+				);
         const currentTimeStamp = new Date().getTime() / 1000;
         const minutes = 3;
         const seconds = 60 * minutes;
@@ -72,7 +76,11 @@ export const SwapTest: FC = () => {
     }
 
     const sellRektCoin = async () => {
-        const rektBatchet = new Contract(defaultContracts.REKT_TRANSACTION_BATCHER.address, REKT_COIN_BATCH_ABI, library?.getSigner());
+    		const rektBatchet = new Contract(
+						defaultContracts.REKT_TRANSACTION_BATCHER.address,
+						REKT_COIN_BATCH_ABI,
+						library?.getSigner()
+				);
         const amount = utils.parseEther(userInputSellAmount);
         try {
             const tx = await rektBatchet.functions["sellRektCoin"](amount);
@@ -109,7 +117,7 @@ export const SwapTest: FC = () => {
     return (
         <div>
             <div>
-                <label htmlFor="inputAmount">WETH</label>
+                <label htmlFor="inputAmount">ETH</label>
 
                 <Input
                     pr='4.5rem'
