@@ -80,6 +80,11 @@ export const SellRektTab: FC<Props> = ({
         const amount = utils.parseEther(userInputSellAmount);
         try {
             const tx = await rektBatchet.functions["sellRektCoin"](amount);
+			setFormatedRektBalance(
+				(parseFloat(formatedRektBalance) - parseFloat(userInputSellAmount)).toFixed(
+					rektBalanceDecimalsToShow
+				)
+			)
             console.log(tx);
         } catch (e) {
             console.error(e);

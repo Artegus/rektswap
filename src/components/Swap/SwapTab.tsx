@@ -85,7 +85,9 @@ export const SwapTab: FC<Props> = ({
 
     const swapWithUniswapRouterV2 = async () => {
         const signer = library?.getSigner()
-        const uniswapRouterV2 = new Contract(defaultContracts.UNISWAPV2_ROUTER02.address, UNISWAPV2ROUTER_ABI, signer);
+        const uniswapRouterV2 = new Contract(
+			defaultContracts.UNISWAPV2_ROUTER02.address, UNISWAPV2ROUTER_ABI, signer
+		);
         const currentTimeStamp = new Date().getTime() / 1000;
         const minutes = 3;
         const seconds = 60 * minutes;
@@ -102,6 +104,11 @@ export const SwapTab: FC<Props> = ({
                 deadLine,
                 overrides
             );
+			setFormatedEthBalance(
+				(parseFloat(formatedEthBalance) - parseFloat(userInputAmount)).toFixed(
+					ethBalanceDecimalsToShow
+				)
+			);
             console.log("Txn: ", swapTx);
         } catch (e) {
             console.error(e);
