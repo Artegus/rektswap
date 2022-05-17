@@ -16,6 +16,7 @@ import UNISWAPV2ROUTER_ABI from '../../abis/IUniswapV2Router.json'
 import { Props } from "../../types/TabProps/TabProps";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
 import { formatBal } from "./SellRektTab";
+import { ACTION_TABS } from "./responsive/breakpoints";
 
 declare global {
 	interface Window {
@@ -122,23 +123,21 @@ export const BuyRektTab: FC<Props> = ({
 
     return (
         <VStack
-            width="450px"
-            borderRadius='md'
-            borderWidth='1px'
+            width={ACTION_TABS.VStackWidth}
             spacing={4}
             alignItems="stretch"
         >
             <HStack
-                p={5}
+                p={ACTION_TABS.HStackGeneralPadding}
                 w="full"
                 justifyContent="space-between">
-                <Heading size="md">{tabTitle}</Heading>
-				<Box>
+                <Heading size="md" fontSize={ACTION_TABS.HeadingFontSize} >{tabTitle}</Heading>
+				<Box textAlign={"right"} fontSize={ACTION_TABS.BoxFontSize} >
 					{ethBal === null? "" : `ETH balance: ${formatEth(ethBal)}`}
 				</Box>
             </HStack>
 
-            <HStack px={5} >
+            <HStack px={ACTION_TABS.HStackLeftRightPadding} >
                 <FormControl>
                     <Input
                         pr='4.5rem'
@@ -164,7 +163,7 @@ export const BuyRektTab: FC<Props> = ({
                     </InputRightElement>
                 </FormControl>
             </HStack>
-            <HStack px={5} >
+            <HStack px={ACTION_TABS.HStackLeftRightPadding} >
                 <FormControl>
                     <Input
                         pr='4.5rem'
@@ -190,7 +189,7 @@ export const BuyRektTab: FC<Props> = ({
                 </FormControl>
             </HStack>
 
-            <HStack px={5} paddingTop={2} paddingBottom={5} >
+            <HStack px={ACTION_TABS.HStackLeftRightPadding} paddingTop={2} paddingBottom={5} >
                 {!active ?
                     <ConnectWallet
                         size="md"
