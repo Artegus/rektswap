@@ -17,8 +17,9 @@ import REKT_COIN_ABI from '../../abis/rektcoin.json';
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 import { Props } from "../../types/TabProps/TabProps";
 
-import { useUserStore } from '../../stores/UserStore';
+import { useSwapStore } from '../../stores/SwapStore';
 import { ACTION_TABS } from "./responsive/breakpoints";
+
 
 export const formatBal = (bal: number, decimals: number): string => {
 	const balStr = bal.toString();
@@ -28,15 +29,22 @@ export const formatBal = (bal: number, decimals: number): string => {
 
 
 const rektBalanceDecimalsToShow = 2;
-const formatRekt = (bal: number): string => {
+export const formatRekt = (bal: number): string => {
 	return formatBal(bal, rektBalanceDecimalsToShow);
+}
+
+export const getRektCoinContract = (library: any): any => {
+	return new Contract(
+		defaultContracts.REKT_COIN.address,
+		REKT_COIN_ABI,
+		library?.getSigner()
+	);
 }
 
 
 export const SellRektTab: FC<Props> = ({
     tabTitle
 }) => {
-
 
     const [userInputSellAmount, setUserInputSellAmount] = useState<string>("");
     const [expectedOutput, setExpectedOutput] = useState<string>("")
@@ -45,19 +53,15 @@ export const SellRektTab: FC<Props> = ({
     const { active, library, account } = useWeb3React<Web3Provider>();
 	const [rektBal, setRektBal] = useState<number | null>(null);
 
-	const getRektCoinContract = (): any => {
-		return new Contract(
-			defaultContracts.REKT_COIN.address,
-			REKT_COIN_ABI,
-			library?.getSigner()
-		);
-	}
+	const { setLastTx } = useSwapStore();
+
+	const getCurrentRektContract = (): any => getRektCoinContract(library);
 	
 	const updateBals = async (addr: string | null | undefined) => {
 		if (!active) 
 			setRektBal(null);
 		else if (typeof addr === "string") {
-			const rektCoin = getRektCoinContract();
+			const rektCoin = getCurrentRektContract();
 			const bal = await rektCoin.balanceOf(addr);
 			setRektBal(parseFloat(utils.formatUnits(bal)));
 		} 
@@ -104,6 +108,7 @@ export const SellRektTab: FC<Props> = ({
         const amount = utils.parseEther(userInputSellAmount);
         try {
             const tx = await rektBatchet.functions["sellRektCoin"](amount);
+			setLastTx(tx);
 			setRektBal(
 				(currentBal: number | null) => currentBal !== null?
 					currentBal - parseFloat(userInputSellAmount) : null
@@ -124,8 +129,12 @@ export const SellRektTab: FC<Props> = ({
             <HStack
                 p={ACTION_TABS.HStackGeneralPadding}
                 w="full"
-                justifyContent="space-between">
-                <Heading size="md" fontSize={ACTION_TABS.HeadingFontSize} >{tabTitle}</Heading>
+                justifyContent="space-between"
+			>
+                <Heading 
+					size="md" 
+					fontSize={ACTION_TABS.HeadingFontSize} 
+				>{tabTitle}</Heading>
 				<Box textAlign={"right"} fontSize={ACTION_TABS.BoxFontSize} >
 					{rektBal === null? "" : `REKT balance: ${formatRekt(rektBal)}`}
 				</Box>
@@ -199,7 +208,6 @@ export const SellRektTab: FC<Props> = ({
                     </Button>
                 }
             </HStack>
-
         </VStack>
     )
 }

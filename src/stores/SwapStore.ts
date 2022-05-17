@@ -12,6 +12,8 @@ interface SwapStore {
     setTokenIn: (_tokenIn: IToken | undefined) => void;
     setTokenOut: (_tokenOut: IToken | undefined) => void;
     turnAroundTokens: () => void;
+	lastTx: object;
+	setLastTx: (tx: object) => void;
 }
 
 const defaultTokenIn:IToken = {
@@ -27,6 +29,7 @@ const useSwapStore = create<SwapStore>((set, get) => ({
     tokenOut: undefined,
     typedIn: '',
     estimatedOut: '',
+	lastTx: {},
     setTokenIn: (_tokenIn: IToken | undefined ) => {
         if (get().tokenOut === undefined) {
             return set((state) => ({ ...state, tokenIn: _tokenIn }));
@@ -56,7 +59,10 @@ const useSwapStore = create<SwapStore>((set, get) => ({
     },
     setTypedIn: (amout: string) => { 
         return set((state) => ({ ...state, typedIn: amout}))
-    }
+    },
+	setLastTx: (tx: object) => {
+		return set(state => ({ ...state, lastTx: tx }))
+	}
 }));
 
 export { useSwapStore };
