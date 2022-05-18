@@ -12,11 +12,14 @@ import { useWeb3React } from "@web3-react/core";
 
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 import UNISWAPV2ROUTER_ABI from '../../abis/IUniswapV2Router.json'
+import WETH_ABI from '../../abis/weth.json';
 
 import { Props } from "../../types/TabProps/TabProps";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
 import { formatBal } from "./SellRektTab";
 import { ACTION_TABS } from "./responsive/breakpoints";
+
+import { useSwapStore } from "../../stores/SwapStore";
 
 declare global {
 	interface Window {
@@ -24,10 +27,17 @@ declare global {
 	}
 }
 
+export const getWethContract = (library: any): any => {
+	return new Contract(
+		defaultContracts.WETH.address,
+		WETH_ABI,
+		library?.getSigner()
+	);
+}
 
 
 const ethBalanceDecimalsToShow = 4;
-const formatEth = (bal: number): string => {
+export const formatEth = (bal: number): string => {
 	return formatBal(bal, ethBalanceDecimalsToShow);
 }
 
@@ -42,13 +52,15 @@ export const BuyRektTab: FC<Props> = ({
     tabTitle
 }) => {
 
+	const { currentTab, currentTabIsBuy } = useSwapStore();
+
     const [userInputAmount, setInputAmount] = useState<string>("");
     const [expectedOutput, setOutputAmount] = useState<string>("");
 
     const timeRef = useRef<undefined | number>(undefined);
     const { active, library, account } = useWeb3React<Web3Provider>();
 	const [ethBal, setEthBal] = useState<number | null>(null);
-	
+
 	const updateBals = async (addr: string | null | undefined) => {
 		if (!active) 
 			setEthBal(null);

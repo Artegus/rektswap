@@ -1,3 +1,4 @@
 export type Props = {
-	quantitySold: string			
+	quantitySold: string;
+	quantityReceived: string;
 }

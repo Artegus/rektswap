@@ -53,7 +53,7 @@ export const SellRektTab: FC<Props> = ({
     const { active, library, account } = useWeb3React<Web3Provider>();
 	const [rektBal, setRektBal] = useState<number | null>(null);
 
-	const { setLastTx } = useSwapStore();
+	const { setLastTx, currentTab, currentTabIsSell } = useSwapStore();
 
 	const getCurrentRektContract = (): any => getRektCoinContract(library);
 	

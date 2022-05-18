@@ -14,6 +14,9 @@ interface SwapStore {
     turnAroundTokens: () => void;
 	lastTx: object;
 	setLastTx: (tx: object) => void;
+	currentTab: "Buy" | "Sell";
+	currentTabIsBuy: () => void;
+	currentTabIsSell: () => void;
 }
 
 const defaultTokenIn:IToken = {
@@ -30,6 +33,7 @@ const useSwapStore = create<SwapStore>((set, get) => ({
     typedIn: '',
     estimatedOut: '',
 	lastTx: {},
+	currentTab: "Buy",
     setTokenIn: (_tokenIn: IToken | undefined ) => {
         if (get().tokenOut === undefined) {
             return set((state) => ({ ...state, tokenIn: _tokenIn }));
@@ -62,6 +66,12 @@ const useSwapStore = create<SwapStore>((set, get) => ({
     },
 	setLastTx: (tx: object) => {
 		return set(state => ({ ...state, lastTx: tx }))
+	},
+	currentTabIsBuy: () => {
+		return set(state => ({ ...state, currentTab: "Buy" }))
+	},
+	currentTabIsSell: () => {
+		return set(state => ({ ...state, currentTab: "Sell" }))
 	}
 }));
 

@@ -7,22 +7,28 @@ import { Props } from "../../types/TabProps/TabProps";
 import { SellRektTab } from "./SellRektTab";
 import { BuyRektTab } from "./BuyRektTab";
 import { RektHistory } from "./RektHistory";
+import { useSwapStore } from '../../stores/SwapStore';
 
 type TabData = {
     title: string;
-    content: FC<Props>
+    content: FC<Props>;
+	handleClick: () => void;
 }
 
 export const ActionsTabs = () => {
 
+	const { currentTabIsBuy, currentTabIsSell } = useSwapStore();
+
     const tabsData: TabData[] = [
         {
             title: "Buy REKTcoin",
-            content: BuyRektTab
+            content: BuyRektTab,
+			handleClick: currentTabIsBuy
         },
         {
             title: "Sell REKTcoin",
-            content: SellRektTab
+            content: SellRektTab,
+			handleClick: currentTabIsSell
         },
     ]
 
@@ -35,7 +41,7 @@ export const ActionsTabs = () => {
 			>
 				<TabList mb='1em'>
 					{tabsData.map((tab, index) => (
-						<Tab key={index} >{tab.title}</Tab>
+						<Tab key={index} onClick={tab.handleClick}>{tab.title}</Tab>
 					))}
 				</TabList>
 				<TabPanels>
@@ -46,10 +52,6 @@ export const ActionsTabs = () => {
 					))}
 				</TabPanels>
 			</Tabs>
-			{/* 
-				TODO it should be an generic History but first
-				Ill do the RektHistory
-			*/}
 			<RektHistory/>
 		</VStack>
     )
