@@ -56,10 +56,10 @@ const getLastRektBuys = async (lib: any, addr: string, setter: any) => {
 	const txs = await weth.queryFilter(
 		filter, -blockMargin
 	);
-	var totalTxs = await Promise.all(txs.map(async (tx: any) => {
+	const totalTxs = await Promise.all(txs.map(async (tx: any) => {
 		return await tx.getTransactionReceipt()
 	}));
-	var userTxs = totalTxs.filter(tx => tx.from === addr);
+	const userTxs = totalTxs.filter(tx => tx.from === addr);
 
 	setter(userTxs.map((tx: any) => {
 		return {
