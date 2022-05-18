@@ -1,45 +1,58 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react"
+import { 
+	Tab, TabList, TabPanel, TabPanels, Tabs,
+	VStack, Box
+} from "@chakra-ui/react"
 import { FC } from "react";
 import { Props } from "../../types/TabProps/TabProps";
 import { SellRektTab } from "./SellRektTab";
 import { BuyRektTab } from "./BuyRektTab";
+import { RektHistory } from "./RektHistory";
+import { useSwapStore } from '../../stores/SwapStore';
 
 type TabData = {
     title: string;
-    content: FC<Props>
+    content: FC<Props>;
+	handleClick: () => void;
 }
 
 export const ActionsTabs = () => {
 
+	const { currentTabIsBuy, currentTabIsSell } = useSwapStore();
+
     const tabsData: TabData[] = [
         {
             title: "Buy REKTcoin",
-            content: BuyRektTab
+            content: BuyRektTab,
+			handleClick: currentTabIsBuy
         },
         {
             title: "Sell REKTcoin",
-            content: SellRektTab
+            content: SellRektTab,
+			handleClick: currentTabIsSell
         },
     ]
 
     return (
-        <Tabs
-            isFitted
-            borderRadius='md'
-            borderWidth='1px'
-        >
-            <TabList mb='1em'>
-                {tabsData.map((tab, index) => (
-                    <Tab key={index} >{tab.title}</Tab>
-                ))}
-            </TabList>
-            <TabPanels>
-                {tabsData.map((tab, index) => (
-                    <TabPanel key={index} >
-                        <tab.content tabTitle={tab.title} />
-                    </TabPanel>
-                ))}
-            </TabPanels>
-        </Tabs>
+		<VStack>
+			<Tabs
+				isFitted
+				borderRadius='md'
+				borderWidth='1px'
+			>
+				<TabList mb='1em'>
+					{tabsData.map((tab, index) => (
+						<Tab key={index} onClick={tab.handleClick}>{tab.title}</Tab>
+					))}
+				</TabList>
+				<TabPanels>
+					{tabsData.map((tab, index) => (
+						<TabPanel key={index} >
+							<tab.content tabTitle={tab.title} />
+						</TabPanel>
+					))}
+				</TabPanels>
+			</Tabs>
+			<RektHistory/>
+		</VStack>
     )
 }

@@ -14,5 +14,9 @@ export const defaultContracts = {
     UNISWAPV2_ROUTER02: {
         name: "UniswapV2Router02",
         address: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
-    }
+    }, 
+	UNISWAPV2_PAIR: {
+		name: "UniswapV2Pair",
+		address: "0x747830b2d511ABB860C1623015ed6396297f132f"
+	}
 }
