@@ -39,7 +39,11 @@ const getLastRektSells = async (lib: any, addr: string, setter: any) => {
 	);
 	setter(txs.map((tx: any) => {
 		return {
-			"quantitySold": formatRekt(tx.args.value),
+			"quantitySold": formatRekt(
+				parseFloat(utils.formatUnits(
+					tx.args.value
+				))
+			),
 			"quantityReceived": "0"
 		}
 	}));
