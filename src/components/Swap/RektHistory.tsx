@@ -5,14 +5,16 @@ import {
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers, utils } from "ethers";
+import { ethers, Event, EventFilter, utils } from "ethers";
 
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 import { useSwapStore } from "../../stores/SwapStore";
 
-import { getRektCoinContract, formatRekt } from "./SellRektTab";
-import { getWethContract, formatEth } from "./BuyRektTab";
+import { formatRekt } from "./SellRektTab";
+import { formatEth } from "./BuyRektTab";
 import { HistoryCard } from "./HistoryCard";
+import { useRektContract, useWethContract } from "../../hooks/useContract";
+import { TransactionReceipt, UserTransaction } from "../../types/Transaction/Transaction";
 
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
 const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
@@ -27,65 +29,72 @@ const estimatedBlocksPerDay = 6000;
 const totalHistoryDays = 2;
 const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
 
-const getLastRektSells = async (lib: any, addr: string, setter: any) => {
-	const rekt = getRektCoinContract(lib);
-	const filter = rekt.filters.Transfer(addr, batcherAddr);
-	const txs = await rekt.queryFilter(
-		filter, -blockMargin
-	);
-	setter(txs.map((tx: any) => {
-		return {
-			"quantitySold": formatRekt(
-				parseFloat(utils.formatUnits(
-					tx.args.value
-				))
-			),
-			"quantityReceived": "0"
-		}
-	}));
-}
-
-const getLastRektBuys = async (lib: any, addr: string, setter: any) => {
-	const weth = getWethContract(lib);
-	const bal = await weth.balanceOf(addr);
-	const filter = weth.filters.Transfer(uniRouterAddr, uniswapPairAddr);
-	const txs = await weth.queryFilter(
-		filter, -blockMargin
-	);
-	const totalTxs = await Promise.all(txs.map(async (tx: any) => {
-		return await tx.getTransactionReceipt()
-	}));
-	const userTxs = totalTxs.filter(tx => tx.from === addr);
-
-	setter(userTxs.map((tx: any) => {
-		return {
-			"quantitySold": formatEth(
-				parseFloat(utils.formatUnits(
-					tx.logs[1].data
-				))
-			),
-			"quantityReceived": formatRekt(
-				parseFloat(utils.formatUnits(
-					tx.logs[2].data
-				))
-			)
-		}
-	}));
-};
-
 export const RektHistory: FC = () => {
 
-	const { active, library, account } = useWeb3React<Web3Provider>();
-	const { lastTx, currentTab } = useSwapStore();
+	const { active, account } = useWeb3React<Web3Provider>();
+	const [lastRektOperations, setLastRektOperations] = useState<UserTransaction[]>([]);
+	
+	const { currentTab } = useSwapStore();
+	const rektContract = useRektContract();
+	const wethContract = useWethContract();
 
-	const [lastRektOperations, setLastRektOperations] = useState<any[]>([]);
+	const getLastRektSells = async () => {
+		if (rektContract) {
+			const filter: EventFilter = rektContract.filters.Transfer(account, batcherAddr);
+			const txs: Event[] = await rektContract.queryFilter(
+				filter, -blockMargin
+			);
+			setLastRektOperations(txs.map((tx: Event) => {
+				return {
+					transactionHash: tx.transactionHash,
+					quantitySold: formatRekt(
+						parseFloat(utils.formatUnits(
+							tx.args?.value
+						))
+					),
+					quantityReceived: "0"
+				}
+			}))
+		}
+	}
+
+	const getLastRektBuys = async () => {
+		if (wethContract) {
+			const filter: EventFilter = wethContract.filters.Transfer(uniRouterAddr, uniswapPairAddr);
+			const txs: Event[] = await wethContract.queryFilter(filter, -blockMargin);
+			const totalTxs: TransactionReceipt[] = await Promise.all(txs.map(async (tx: Event) => {
+				return tx.getTransactionReceipt()
+			}));
+			
+			const userTxs = totalTxs.filter(tx => tx.from === account);
+
+			setLastRektOperations(userTxs.map((tx: TransactionReceipt) => {
+				return {
+					transactionHash: tx.transactionHash,
+					quantitySold: formatEth(
+						parseFloat(utils.formatUnits(
+							tx.logs[1].data
+						))
+					),
+					quantityReceived: formatRekt(
+						parseFloat(utils.formatUnits(
+							tx.logs[2].data
+						))
+					)
+				}
+			}))
+		}
+	};
+
+
+
 
 	useEffect(() => {
 		if (typeof account === "string")
 			if (currentTab === "Sell")
-				getLastRektSells(library, account, setLastRektOperations);
+				getLastRektSells();
 			else
-				getLastRektBuys(library, account, setLastRektOperations);
+				getLastRektBuys();
 		else
 			setLastRektOperations([]);
 	}, [account, currentTab, active])
@@ -100,13 +109,16 @@ export const RektHistory: FC = () => {
 					<>
 						<Heading
 							fontSize='2xl'
-						>Recent Transactions</Heading>
+						>Recent Transactions (total: {lastRektOperations.length})</Heading>
 						<VStack
 							borderRadius='md'
 							borderWidth='1px'
+							overflowY="auto"
+							height={[300, 200, 150]}
 						>
 							{lastRektOperations.map(txData => (
 								<HistoryCard
+									key={txData.transactionHash}
 									quantitySold={txData.quantitySold}
 									quantityReceived={txData.quantityReceived}
 								/>
