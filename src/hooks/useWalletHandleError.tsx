@@ -4,6 +4,8 @@ import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers';
 import { Web3Error } from '../Errors/Web3Error';
 
+const WEB3_ERROR_DURATION = 4_000;
+
 const useWalletHandleError = () => {
 
     const { error } = useWeb3React<Web3Provider>();
@@ -11,7 +13,7 @@ const useWalletHandleError = () => {
 
     const toast = useToast({
         title: 'Error',
-        duration: 2_500,
+        duration: WEB3_ERROR_DURATION,
         status: 'error',
     });
 
