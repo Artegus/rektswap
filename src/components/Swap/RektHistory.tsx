@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import {
-	Center, Text, Box,
 	VStack, Heading
 } from "@chakra-ui/react";
 
@@ -14,9 +13,6 @@ import { useSwapStore } from "../../stores/SwapStore";
 import { getRektCoinContract, formatRekt } from "./SellRektTab";
 import { getWethContract, formatEth } from "./BuyRektTab";
 import { HistoryCard } from "./HistoryCard";
-import { ACTION_TABS } from "./responsive/breakpoints";
-
-import { WETH, ChainId } from "@uniswap/sdk";
 
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
 const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
@@ -35,7 +31,7 @@ const getLastRektSells = async (lib: any, addr: string, setter: any) => {
 	const rekt = getRektCoinContract(lib);
 	const filter = rekt.filters.Transfer(addr, batcherAddr);
 	const txs = await rekt.queryFilter(
-		filter, -blockMargin 
+		filter, -blockMargin
 	);
 	setter(txs.map((tx: any) => {
 		return {
@@ -78,10 +74,10 @@ const getLastRektBuys = async (lib: any, addr: string, setter: any) => {
 };
 
 export const RektHistory: FC = () => {
-	
+
 	const { active, library, account } = useWeb3React<Web3Provider>();
 	const { lastTx, currentTab } = useSwapStore();
-	
+
 	const [lastRektOperations, setLastRektOperations] = useState<any[]>([]);
 
 	useEffect(() => {
@@ -95,22 +91,30 @@ export const RektHistory: FC = () => {
 	}, [account, currentTab, active])
 
 	return (
-		<VStack pt={6}>
-		{
-			lastRektOperations.length !== 0 ?
-				<Heading 
-					fontSize='2xl'
-				>Recent Transactions</Heading>
-			: null
-		}
-		<VStack>
-			{lastRektOperations.map(txData => (
-				<HistoryCard 
-					quantitySold={txData.quantitySold} 
-					quantityReceived={txData.quantityReceived}
-				/>
-			)).reverse()}
-		</VStack>
+		<VStack
+			pt={6}
+			alignItems="stretch"
+		>
+			{
+				lastRektOperations.length !== 0 ?
+					<>
+						<Heading
+							fontSize='2xl'
+						>Recent Transactions</Heading>
+						<VStack
+							borderRadius='md'
+							borderWidth='1px'
+						>
+							{lastRektOperations.map(txData => (
+								<HistoryCard
+									quantitySold={txData.quantitySold}
+									quantityReceived={txData.quantityReceived}
+								/>
+							)).reverse()}
+						</VStack>
+					</>
+					: null
+			}
 		</VStack>
 	);
 
