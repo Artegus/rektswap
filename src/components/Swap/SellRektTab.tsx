@@ -122,7 +122,6 @@ export const SellRektTab: FC<Props> = ({
 
     return (
         <VStack
-            width={ACTION_TABS.VStackWidth}
             spacing={4}
             alignItems="stretch"
         >

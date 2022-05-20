@@ -4,6 +4,4 @@ export const ACTION_TABS = {
     HStackLeftRightPadding: { sm: 2, md: 3, lg: 3, xl: 3 },
     HeadingFontSize: { base: 'sm', md: 'md' },
     BoxFontSize: { base: 'sm', md: 'md' },
-	// FIXME this should not be hardcoded
-    HistoryCardWidth: { sm: 384, md: 434, lg: 484, xl: 484 },
 }

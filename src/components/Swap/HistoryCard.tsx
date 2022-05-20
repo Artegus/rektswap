@@ -1,10 +1,9 @@
 import { FC } from "react";
-import { ACTION_TABS } from "./responsive/breakpoints";
 import { Props } from "../../types/TxDataProps/TxDataProps";
 import { useSwapStore } from "../../stores/SwapStore";
 
 import {
-	Box, Badge, Text
+	Badge, Text
 } from "@chakra-ui/react";
 
 export const HistoryCard: FC<Props> = ({ quantitySold, quantityReceived }) => { 
@@ -32,9 +31,6 @@ export const HistoryCard: FC<Props> = ({ quantitySold, quantityReceived }) => {
 
 	return (
 		<Text
-			borderRadius='md'
-			borderWidth='1px'
-			w={ACTION_TABS.HistoryCardWidth}
 			fontSize='1xl'
 			px={4}
 			py={2}

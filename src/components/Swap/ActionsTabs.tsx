@@ -1,6 +1,6 @@
 import { 
 	Tab, TabList, TabPanel, TabPanels, Tabs,
-	VStack, Box
+	VStack
 } from "@chakra-ui/react"
 import { FC } from "react";
 import { Props } from "../../types/TabProps/TabProps";
@@ -8,6 +8,7 @@ import { SellRektTab } from "./SellRektTab";
 import { BuyRektTab } from "./BuyRektTab";
 import { RektHistory } from "./RektHistory";
 import { useSwapStore } from '../../stores/SwapStore';
+import { ACTION_TABS } from "./responsive/breakpoints";
 
 type TabData = {
     title: string;
@@ -33,7 +34,10 @@ export const ActionsTabs = () => {
     ]
 
     return (
-		<VStack>
+		<VStack
+			align='stretch'
+			w={ACTION_TABS.VStackWidth}
+		>
 			<Tabs
 				isFitted
 				borderRadius='md'
