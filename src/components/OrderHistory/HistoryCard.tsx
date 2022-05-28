@@ -34,6 +34,8 @@ export const HistoryCard: FC<Props> = ({ quantitySold, quantityReceived }) => {
 			fontSize='1xl'
 			px={4}
 			py={2}
+			textAlign='left'
+			w='100%'
 		>
 			{currentTab === "Buy"? <BuyText /> : <SellText />}
 		</Text> 

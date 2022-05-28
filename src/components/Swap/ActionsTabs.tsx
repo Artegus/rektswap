@@ -6,7 +6,6 @@ import { FC } from "react";
 import { Props } from "../../types/TabProps/TabProps";
 import { SellRektTab } from "./SellRektTab";
 import { BuyRektTab } from "./BuyRektTab";
-import { RektHistory } from "./RektHistory";
 import { useSwapStore } from '../../stores/SwapStore';
 import { ACTION_TABS } from "./responsive/breakpoints";
 
@@ -56,7 +55,6 @@ export const ActionsTabs = () => {
 					))}
 				</TabPanels>
 			</Tabs>
-			<RektHistory/>
 		</VStack>
     )
 }
