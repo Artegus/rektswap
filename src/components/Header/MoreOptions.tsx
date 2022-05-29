@@ -3,12 +3,14 @@ import { FC } from 'react'
 import {
     Menu, MenuButton, MenuList,
     MenuItem, useColorMode, IconButton,
-    HStack, Text
+    HStack, Text, useDisclosure
 } from '@chakra-ui/react';
 import {
     HamburgerIcon, InfoIcon, MoonIcon,
-    SunIcon
+    SunIcon, TimeIcon
 } from '@chakra-ui/icons'
+
+import { OrderHistory } from "../OrderHistory/OrderHistory";
 
 export const MoreOptions: FC = () => {
 
@@ -18,7 +20,10 @@ export const MoreOptions: FC = () => {
         return colorMode === 'light' ? <MoonIcon /> : <SunIcon />
     }
 
+	const { isOpen, onOpen, onClose } = useDisclosure();
+
     return (
+		<>
         <Menu
             autoSelect={false}
             closeOnSelect={false}
@@ -47,7 +52,19 @@ export const MoreOptions: FC = () => {
                         <InfoIcon />
                     </HStack>
                 </MenuItem>
+                <MenuItem
+					onClick={onOpen}
+				>
+                    <HStack w="full" justifyContent="space-between" >
+                        <Text>
+							Recent orders
+                        </Text>
+                        <TimeIcon />
+                    </HStack>
+                </MenuItem>
             </MenuList>
         </Menu>
+		<OrderHistory isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
+		</>		
     )
 }

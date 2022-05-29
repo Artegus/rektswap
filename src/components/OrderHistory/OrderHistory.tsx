@@ -1,40 +1,44 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState, useEffect } from 'react'
+
 import {
-	VStack, Heading
-} from "@chakra-ui/react";
+	Modal, ModalOverlay, useDisclosure,
+	ModalContent,
+	ModalHeader, ModalCloseButton, ModalBody,
+	Text, VStack, Divider
+} from '@chakra-ui/react';
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { ethers, Event, EventFilter, utils } from "ethers";
 
-import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
+import { Props } from "../../types/HistoryProps/HistoryProps";
+import { TransactionReceipt, UserTransaction } from "../../types/Transaction/Transaction";
+import { useRektContract, useWethContract } from "../../hooks/useContract";
+
+import { HistoryCard } from "./HistoryCard";
+
+import { formatRekt } from "../Swap/SellRektTab";
+import { formatEth } from "../Swap/BuyRektTab";
+
 import { useSwapStore } from "../../stores/SwapStore";
 
-import { formatRekt } from "./SellRektTab";
-import { formatEth } from "./BuyRektTab";
-import { HistoryCard } from "./HistoryCard";
-import { useRektContract, useWethContract } from "../../hooks/useContract";
-import { TransactionReceipt, UserTransaction } from "../../types/Transaction/Transaction";
-
+import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
 const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
 const uniRouterAddr = defaultContracts.UNISWAPV2_ROUTER02.address;
 
-// TODO this should not be hardcoded
-const RPC = "https://kovan.infura.io/v3/2b0748dfb0fb40af996afae36875897c";
-const infuraProv = new ethers.providers.JsonRpcProvider(RPC);
 
-// TODO it should go from account to rektTransactionBatcher addr
 const estimatedBlocksPerDay = 6000;
 const totalHistoryDays = 2;
 const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
 
-export const RektHistory: FC = () => {
-
-	const { active, account } = useWeb3React<Web3Provider>();
-	const [lastRektOperations, setLastRektOperations] = useState<UserTransaction[]>([]);
+export const OrderHistory: FC<Props> = ({
+	isOpen, onOpen, onClose
+}) => {
 	
+	const { active, account } = useWeb3React<Web3Provider>();
 	const { currentTab } = useSwapStore();
+	const [lastRektOperations, setLastRektOperations] = useState<UserTransaction[]>([]);
 	const rektContract = useRektContract();
 	const wethContract = useWethContract();
 
@@ -84,10 +88,7 @@ export const RektHistory: FC = () => {
 				}
 			}))
 		}
-	};
-
-
-
+	}
 
 	useEffect(() => {
 		if (typeof account === "string")
@@ -100,34 +101,32 @@ export const RektHistory: FC = () => {
 	}, [account, currentTab, active])
 
 	return (
-		<VStack
-			pt={6}
-			alignItems="stretch"
-		>
-			{
-				lastRektOperations.length !== 0 ?
-					<>
-						<Heading
-							fontSize='2xl'
-						>Recent Transactions (total: {lastRektOperations.length})</Heading>
+		<Modal isOpen={isOpen} onClose={onClose} >
+			<ModalOverlay />
+			<ModalContent>
+			  	<ModalHeader>Recent Orders</ModalHeader>
+			  	<ModalCloseButton />
+			  	<ModalBody pb={6}>
+					{lastRektOperations.length !== 0 ?
 						<VStack
 							borderRadius='md'
-							borderWidth='1px'
+							//borderWidth='1px'
 							overflowY="auto"
-							height={[300, 200, 150]}
 						>
 							{lastRektOperations.map(txData => (
+								<>
+								<Divider />
 								<HistoryCard
 									key={txData.transactionHash}
 									quantitySold={txData.quantitySold}
 									quantityReceived={txData.quantityReceived}
 								/>
+								</>
 							)).reverse()}
-						</VStack>
-					</>
-					: null
-			}
-		</VStack>
+						</VStack> : <Text>There are not any recent orders</Text>
+					}
+			  	</ModalBody>
+			</ModalContent>
+		</Modal>
 	);
-
 }
