@@ -2,7 +2,8 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-	Box, useDisclosure, useToast
+	Box, useDisclosure, useToast, Alert, AlertTitle,
+	Spinner
 } from "@chakra-ui/react";
 
 import { Contract, utils, ethers, providers } from 'ethers';
@@ -22,6 +23,8 @@ import { ACTION_TABS } from "./responsive/breakpoints";
 import { useSwapStore } from "../../stores/SwapStore";
 import { useOrdersStore } from "../../stores/OrdersStore";
 import { OrderHistory } from "../OrderHistory/OrderHistory";
+
+import { formatRekt } from './SellRektTab';
 
 declare global {
 	interface Window {
@@ -137,20 +140,36 @@ export const BuyRektTab: FC<Props> = ({
 				(currentBal: number | null) => currentBal !== null?
 					currentBal - parseFloat(userInputAmount) : null
 			);
-            console.log("Txn: ", swapTx);
+            console.log('Txn: ', swapTx);
 			toast({
 				title: 'Buying REKTcoin',
-				status: 'loading',
-				duration: 90000
+				duration: 9000000,
+				render: () => (
+					<Alert borderRadius='md'>
+						<Spinner pr={2} mr={2}/>
+					  	<AlertTitle>Buying REKTcoin</AlertTitle>
+					</Alert>
+				)
 			});
-			console.log(await swapTx.wait());
+			const tx = await swapTx.wait();
 			toast.closeAll();
 			toast({
 				title: 'Buy completed',
+				description: `You bought ${
+					formatRekt(parseFloat(utils.formatUnits(tx.logs[2].data)))
+				} REKT for ${
+					formatEth(parseFloat(utils.formatUnits(tx.logs[1].data)))
+				} ETH`, 
 				status: 'success'
 			});
         } catch (e) {
             console.error(e);
+			toast.closeAll();
+			toast({
+				title: 'Transaction error',
+				description: 'There was an error processing your transaction',
+				status: 'error'
+			});
         }
     }
 

@@ -36,7 +36,7 @@ const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 }
 
 const SellText: FC<{tx: TransactionReceipt}> = ({tx}) => {
-	const quantitySold = '0';// TODO utils.formatUnits(tx.tx.logs[0].data);
+	const quantitySold = utils.formatUnits(tx.logs[0].data);
 	const quantityReceived = '0'; // TODO implement @DennisDv24 crazy algorithm
 	return (
 		<>

@@ -41,31 +41,6 @@ export const OrderHistory: FC<Props> = ({
 	const rektContract = useRektContract();
 	const wethContract = useWethContract();
 
-	const getLastRektSells = async () => {
-		if (rektContract) {
-			const filter: EventFilter = rektContract.filters.Transfer(account, batcherAddr);
-			const txs: Event[] = await rektContract.queryFilter(
-				filter, -blockMargin
-			);
-			setTransactions(await Promise.all(txs.map(async (tx: Event) => {
-				return tx.getTransactionReceipt();
-			})));	
-		}
-	}
-
-	const getLastRektBuys = async () => {
-		if (wethContract) {
-			const filter: EventFilter = wethContract.filters.Transfer(uniRouterAddr, uniswapPairAddr);
-			const txs: Event[] = await wethContract.queryFilter(filter, -blockMargin);
-			const totalTxs: providers.TransactionReceipt[] = await Promise.all(txs.map(async (tx: Event) => {
-				return tx.getTransactionReceipt()
-			}));
-			
-			const userTxs = totalTxs.filter(tx => tx.from === account);
-			setTransactions(userTxs);
-		}
-	}
-	
 	const mergeEvents = (arr1: Event[], arr2: Event[]) => {
 		if(arr1.length === 0) return arr2;
 		if(arr2.length === 0) return arr1;

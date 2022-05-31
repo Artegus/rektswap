@@ -2,7 +2,8 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-    Box, useDisclosure
+    Box, useDisclosure, useToast, Alert, Spinner,
+	AlertTitle
 } from "@chakra-ui/react";
 
 import { Contract, utils, BigNumberish } from 'ethers'
@@ -57,6 +58,7 @@ export const SellRektTab: FC<Props> = ({
 
     const { setLastTx } = useSwapStore();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const toast = useToast();
 
     const getCurrentRektContract = (): any => getRektCoinContract(library);
 
@@ -108,17 +110,40 @@ export const SellRektTab: FC<Props> = ({
         );
         const amount = utils.parseEther(userInputSellAmount);
         try {
-            const tx = await rektBatchet.functions["sellRektCoin"](amount);
-            setLastTx(tx);
+            const swapTx = await rektBatchet.functions["sellRektCoin"](amount);
+            setLastTx(swapTx);
             setRektBal(
                 (currentBal: number | null) => currentBal !== null ?
                     currentBal - parseFloat(userInputSellAmount) : null
             );
-            console.log(tx);
-			// TODO here it should update the history
-			onOpen(); // Opens tx history after doing an swap
+			console.log('Txn: ', swapTx);
+			toast({
+				title: 'Selling REKTcoin',
+				duration: 9000000,
+				render: () => (
+					<Alert borderRadius='md'>
+						<Spinner pr={2} mr={2}/>
+					  	<AlertTitle>Selling REKTcoin</AlertTitle>
+					</Alert>
+				)
+			});
+			const tx = await swapTx.wait();
+			toast.closeAll();
+			toast({
+				title: 'Sell order submited',
+				description: `You submited an ${
+					formatRekt(parseFloat(utils.formatUnits(tx.logs[0].data)))
+				} REKT sell order to the batcher, you can see its status at the recent orders tab`, 
+				status: 'success'
+			});
         } catch (e) {
             console.error(e);
+			toast.closeAll();
+			toast({
+				title: 'Transaction error',
+				description: 'There was an error processing your transaction',
+				status: 'error'
+			});
         }
     }
 
