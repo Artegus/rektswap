@@ -27,9 +27,8 @@ export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => {
 		)
 	};
 	const SellText: FC = () => {
-		// TODO
-		const quantitySold = utils.formatUnits(tx.tx.logs[1].data);
-		const quantityReceived = utils.formatUnits(tx.tx.logs[2].data);
+		const quantitySold = utils.formatUnits(tx.tx.logs[0].data);
+		const quantityReceived = "0"; // TODO implement @DennisDv24 crazy algorithm
 		return (
 			<>
 			Sell <Badge>

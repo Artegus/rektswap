@@ -25,7 +25,7 @@ const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
 const uniRouterAddr = defaultContracts.UNISWAPV2_ROUTER02.address;
 
 
-const estimatedBlocksPerDay = 600;//6000;
+const estimatedBlocksPerDay = 100;//6000;
 const totalHistoryDays = 1;
 const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
 
