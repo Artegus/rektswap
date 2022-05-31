@@ -2,10 +2,10 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-	Box, useDisclosure
+	Box, useDisclosure, useToast
 } from "@chakra-ui/react";
 
-import { Contract, utils, ethers } from 'ethers';
+import { Contract, utils, ethers, providers } from 'ethers';
 import { ChainId, Fetcher, Route, TokenAmount, Trade, TradeType, WETH } from "@uniswap/sdk";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
@@ -56,6 +56,7 @@ export const BuyRektTab: FC<Props> = ({
 
 	const { currentTab, currentTabIsBuy } = useSwapStore();
 	const { addTransaction } = useOrdersStore();
+	const toast = useToast();
 
     const [userInputAmount, setInputAmount] = useState<string>("");
     const [expectedOutput, setOutputAmount] = useState<string>("");
@@ -123,7 +124,9 @@ export const BuyRektTab: FC<Props> = ({
             value: utils.parseEther(userInputAmount)
         };
         try {
-            const swapTx = await uniswapRouterV2.functions["swapExactETHForTokensSupportingFeeOnTransferTokens"](
+			const swapTx: providers.TransactionResponse = await uniswapRouterV2.functions[
+				"swapExactETHForTokensSupportingFeeOnTransferTokens"
+			](
                 0,
                 path,
                 account,
@@ -135,13 +138,17 @@ export const BuyRektTab: FC<Props> = ({
 					currentBal - parseFloat(userInputAmount) : null
 			);
             console.log("Txn: ", swapTx);
-			console.log(utils.formatUnits(swapTx.value));
-			/*
-			addTransaction({
-				buy: utils.formatUnit(swapTx.value), forAmount: expectedOutput
-				});*/
-			// TODO it should update the history here
-			onOpen(); // Opens the tx history after doing an swap
+			toast({
+				title: 'Buying REKTcoin',
+				status: 'loading',
+				duration: 90000
+			});
+			console.log(await swapTx.wait());
+			toast.closeAll();
+			toast({
+				title: 'Buy completed',
+				status: 'success'
+			});
         } catch (e) {
             console.error(e);
         }

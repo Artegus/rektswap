@@ -1,11 +1,16 @@
 import create from "zustand";
 import { providers } from "ethers";
+
 type TransactionReceipt = providers.TransactionReceipt;
+type PendingTx = {
+	buy: number; forAmount: number
+};
+type HistoryCardProps = TransactionReceipt | PendingTx;
 
 interface OrdersStore {
-	lastTransactions: TransactionReceipt[];
-	addTransaction: (newTx: TransactionReceipt) => void;
-	setTransactions: (txs: TransactionReceipt[]) => void;
+	lastTransactions: HistoryCardProps[];
+	addTransaction: (newTx: HistoryCardProps) => void;
+	setTransactions: (txs: HistoryCardProps[]) => void;
 }
 
 const useOrdersStore = create<OrdersStore>((set, get) => ({
