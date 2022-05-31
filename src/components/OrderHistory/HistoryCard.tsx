@@ -9,25 +9,22 @@ import {
 	Badge, Text
 } from "@chakra-ui/react";
 
-export const isTransactionReceipt = (tx: any): boolean => (tx.tx !== undefined);
-
-export const isBuyOrder = (tx: any) => 
-	tx.tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;	
-
-type PendingTx = {
-	buy: number; forAmount: number
-}
+export const isBuyOrder = (tx: TransactionReceipt) =>
+	tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;
 
 type TransactionReceipt = providers.TransactionReceipt;
-type ThisTx = TransactionReceipt | PendingTx;
+type PendingTx = {
+	buy: number; forAmount: number
+};
+type HistoryCardProps = TransactionReceipt | PendingTx;
 
-export const HistoryCard: FC<{tx: ThisTx}> = tx => { 
-	console.log(tx);
-	console.log(typeof tx);
+export const isTransactionReceipt = (x: any) => true; // TODO
+
+export const HistoryCard: FC<{tx: HistoryCardProps}> = ({tx}) => { 
 	
-	const BuyText: FC<{tx: TransactionReceipt}> = tx => {
-		const quantitySold = utils.formatUnits(tx.tx.logs[1].data);
-		const quantityReceived = utils.formatUnits(tx.tx.logs[2].data);
+	const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
+		const quantitySold = utils.formatUnits(tx.logs[1].data);
+		const quantityReceived = utils.formatUnits(tx.logs[2].data);
 		return (
 			<>
 			Buy <Badge>
@@ -38,7 +35,8 @@ export const HistoryCard: FC<{tx: ThisTx}> = tx => {
 			</>
 		)
 	};
-	const SellText: FC<{tx: TransactionReceipt}> = tx => {
+
+	const SellText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 		const quantitySold = '0';// TODO utils.formatUnits(tx.tx.logs[0].data);
 		const quantityReceived = '0'; // TODO implement @DennisDv24 crazy algorithm
 		return (
@@ -52,11 +50,13 @@ export const HistoryCard: FC<{tx: ThisTx}> = tx => {
 		)
 	};
 	
-	const GetFormatedTextBasedOn: FC<{tx: ThisTx}> = tx => {
-		if(isTransactionReceipt(tx))
-			return isBuyOrder(tx) ? 
-				<BuyText tx={tx} /> :
-				<SellText tx={tx} />;
+	const GetFormatedTextBasedOn: FC<{tx: HistoryCardProps}> = ({tx}) => {
+		if(isTransactionReceipt(tx)) {
+			const txRec = tx as TransactionReceipt;
+			return isBuyOrder(txRec) ? 
+				<BuyText tx={txRec} /> :
+				<SellText tx={txRec} />;
+		}
 		else return null;
 	};
 
