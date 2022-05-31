@@ -9,10 +9,9 @@ import {
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers, Event, EventFilter, utils } from "ethers";
+import { ethers, Event, EventFilter, utils, providers } from "ethers";
 
 import { Props } from "../../types/HistoryProps/HistoryProps";
-import { TransactionReceipt, UserTransaction } from "../../types/Transaction/Transaction";
 import { useRektContract, useWethContract } from "../../hooks/useContract";
 
 import { HistoryCard } from "./HistoryCard";
@@ -21,6 +20,7 @@ import { formatRekt } from "../Swap/SellRektTab";
 import { formatEth } from "../Swap/BuyRektTab";
 
 import { useSwapStore } from "../../stores/SwapStore";
+import { useOrdersStore } from "../../stores/OrdersStore";
 
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
@@ -39,7 +39,7 @@ export const OrderHistory: FC<Props> = ({
 	const { active, account } = useWeb3React<Web3Provider>();
 	const { currentTab } = useSwapStore();
 	// TODO this should be centralized and you should update it from the Swap tabs.
-	const [lastRektOperations, setLastRektOperations] = useState<UserTransaction[]>([]);
+	const { lastTransactions, addTransaction, setTransactions } = useOrdersStore();
 	const rektContract = useRektContract();
 	const wethContract = useWethContract();
 
@@ -49,17 +49,8 @@ export const OrderHistory: FC<Props> = ({
 			const txs: Event[] = await rektContract.queryFilter(
 				filter, -blockMargin
 			);
-			setLastRektOperations(txs.map((tx: Event) => {
-				return {
-					transactionHash: tx.transactionHash,
-					quantitySold: formatRekt(
-						parseFloat(utils.formatUnits(
-							tx.args?.value
-						))
-					),
-					quantityReceived: "0"
-				}
-			}))
+			console.log(txs);
+			//setTransactions(txs);	
 		}
 	}
 
@@ -67,27 +58,12 @@ export const OrderHistory: FC<Props> = ({
 		if (wethContract) {
 			const filter: EventFilter = wethContract.filters.Transfer(uniRouterAddr, uniswapPairAddr);
 			const txs: Event[] = await wethContract.queryFilter(filter, -blockMargin);
-			const totalTxs: TransactionReceipt[] = await Promise.all(txs.map(async (tx: Event) => {
+			const totalTxs: providers.TransactionReceipt[] = await Promise.all(txs.map(async (tx: Event) => {
 				return tx.getTransactionReceipt()
 			}));
 			
 			const userTxs = totalTxs.filter(tx => tx.from === account);
-
-			setLastRektOperations(userTxs.map((tx: TransactionReceipt) => {
-				return {
-					transactionHash: tx.transactionHash,
-					quantitySold: formatEth(
-						parseFloat(utils.formatUnits(
-							tx.logs[1].data
-						))
-					),
-					quantityReceived: formatRekt(
-						parseFloat(utils.formatUnits(
-							tx.logs[2].data
-						))
-					)
-				}
-			}))
+			setTransactions(userTxs);
 		}
 	}
 
@@ -98,9 +74,9 @@ export const OrderHistory: FC<Props> = ({
 			else
 				getLastRektBuys();
 		else
-			setLastRektOperations([]);
+			setTransactions([]);
 	}, [account, currentTab, active])
-
+	
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} >
 			<ModalOverlay />
@@ -108,20 +84,16 @@ export const OrderHistory: FC<Props> = ({
 			  	<ModalHeader>Recent Orders</ModalHeader>
 			  	<ModalCloseButton />
 			  	<ModalBody pb={6}>
-					{lastRektOperations.length !== 0 ?
+					{lastTransactions.length !== 0 ?
 						<VStack
 							borderRadius='md'
 							//borderWidth='1px'
 							overflowY="auto"
 						>
-							{lastRektOperations.map(txData => (
+							{lastTransactions.map(txData => (
 								<>
 								<Divider />
-								<HistoryCard
-									key={txData.transactionHash}
-									quantitySold={txData.quantitySold}
-									quantityReceived={txData.quantityReceived}
-								/>
+								<HistoryCard tx={txData} />
 								</>
 							)).reverse()}
 						</VStack> : <Text>There are not any recent orders</Text>

@@ -1,14 +1,21 @@
 import { FC } from "react";
-import { Props } from "../../types/TxDataProps/TxDataProps";
 import { useSwapStore } from "../../stores/SwapStore";
+import { providers, utils } from "ethers";
 
 import {
 	Badge, Text
 } from "@chakra-ui/react";
 
-export const HistoryCard: FC<Props> = ({ quantitySold, quantityReceived }) => { 
+export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => { 
 
-	const { lastTx, currentTab } = useSwapStore();
+	const { currentTab } = useSwapStore();
+	
+	console.log(tx);
+	// TODO it should be something like
+	// quantitySold= txIsRektsell(tx)? specificFormatX : specificFormatY;
+	const quantitySold = utils.formatUnits(tx.tx.logs[1].data);
+	const quantityReceived = utils.formatUnits(tx.tx.logs[2].data);
+
 	const BuyText: FC = () => (
 		<>
 		Buy <Badge>
