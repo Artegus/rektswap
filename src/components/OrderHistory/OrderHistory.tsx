@@ -4,7 +4,7 @@ import {
 	Modal, ModalOverlay, 
 	ModalContent,
 	ModalHeader, ModalCloseButton, ModalBody,
-	Text, VStack, Divider
+	Text, VStack, Divider, Container
 } from '@chakra-ui/react';
 
 import { Web3Provider } from "@ethersproject/providers";
@@ -25,7 +25,9 @@ const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
 const uniRouterAddr = defaultContracts.UNISWAPV2_ROUTER02.address;
 
 
-const estimatedBlocksPerDay = 100;//6000;
+const maxTxToShow = 5;
+
+const estimatedBlocksPerDay = 6000;
 const totalHistoryDays = 1;
 const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
 
@@ -107,7 +109,7 @@ export const OrderHistory: FC<Props> = ({
 			getLastOrders();
 		else
 			setTransactions([]);
-	}, [account, currentTab, active])
+	}, [isOpen])
 	
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} >
@@ -117,18 +119,23 @@ export const OrderHistory: FC<Props> = ({
 			  	<ModalCloseButton />
 			  	<ModalBody pb={6}>
 					{lastTransactions.length !== 0 ?
-						<VStack
-							borderRadius='md'
-							//borderWidth='1px'
-							overflowY="auto"
-						>
-							{lastTransactions.map(txData => (
-								<>
-								<Divider />
-								<HistoryCard tx={txData} />
-								</>
-							)).reverse()}
-						</VStack> : <Text>There are not any recent orders</Text>
+						<>
+							<VStack
+								borderRadius='md'
+								//borderWidth='1px'
+								overflowY="auto"
+							>
+								{lastTransactions.map(txData => (
+									<>
+									<Divider />
+									<HistoryCard tx={txData} />
+									</>
+								)).reverse().slice(0, maxTxToShow)}
+							</VStack> 
+							{lastTransactions.length > maxTxToShow ?
+								<Container centerContent>...</Container> : null
+							}
+						</> : <Text>There are not any recent orders</Text>
 					}
 			  	</ModalBody>
 			</ModalContent>
