@@ -9,11 +9,23 @@ import {
 	Badge, Text
 } from "@chakra-ui/react";
 
-export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => { 
+export const isTransactionReceipt = (tx: any): boolean => (tx.tx !== undefined);
 
-	const { currentTab } = useSwapStore();
+export const isBuyOrder = (tx: any) => 
+	tx.tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;	
 
-	const BuyText: FC = () => {
+type PendingTx = {
+	buy: number; forAmount: number
+}
+
+type TransactionReceipt = providers.TransactionReceipt;
+type ThisTx = TransactionReceipt | PendingTx;
+
+export const HistoryCard: FC<{tx: ThisTx}> = tx => { 
+	console.log(tx);
+	console.log(typeof tx);
+	
+	const BuyText: FC<{tx: TransactionReceipt}> = tx => {
 		const quantitySold = utils.formatUnits(tx.tx.logs[1].data);
 		const quantityReceived = utils.formatUnits(tx.tx.logs[2].data);
 		return (
@@ -26,9 +38,9 @@ export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => {
 			</>
 		)
 	};
-	const SellText: FC = () => {
-		const quantitySold = utils.formatUnits(tx.tx.logs[0].data);
-		const quantityReceived = "0"; // TODO implement @DennisDv24 crazy algorithm
+	const SellText: FC<{tx: TransactionReceipt}> = tx => {
+		const quantitySold = '0';// TODO utils.formatUnits(tx.tx.logs[0].data);
+		const quantityReceived = '0'; // TODO implement @DennisDv24 crazy algorithm
 		return (
 			<>
 			Sell <Badge>
@@ -40,8 +52,13 @@ export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => {
 		)
 	};
 	
-	const isBuyOrder = (tx: any) => 
-		tx.tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;	
+	const GetFormatedTextBasedOn: FC<{tx: ThisTx}> = tx => {
+		if(isTransactionReceipt(tx))
+			return isBuyOrder(tx) ? 
+				<BuyText tx={tx} /> :
+				<SellText tx={tx} />;
+		else return null;
+	};
 
 	return (
 		<Text
@@ -51,7 +68,7 @@ export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => {
 			textAlign='left'
 			w='100%'
 		>
-			{isBuyOrder(tx) ? <BuyText /> : <SellText />}
+			<GetFormatedTextBasedOn tx={tx} />
 		</Text> 
 	);
 }

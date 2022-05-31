@@ -20,6 +20,7 @@ import { formatBal } from "./SellRektTab";
 import { ACTION_TABS } from "./responsive/breakpoints";
 
 import { useSwapStore } from "../../stores/SwapStore";
+import { useOrdersStore } from "../../stores/OrdersStore";
 import { OrderHistory } from "../OrderHistory/OrderHistory";
 
 declare global {
@@ -54,6 +55,7 @@ export const BuyRektTab: FC<Props> = ({
 }) => {
 
 	const { currentTab, currentTabIsBuy } = useSwapStore();
+	const { addTransaction } = useOrdersStore();
 
     const [userInputAmount, setInputAmount] = useState<string>("");
     const [expectedOutput, setOutputAmount] = useState<string>("");
@@ -96,7 +98,11 @@ export const BuyRektTab: FC<Props> = ({
         const pairWethRekt = await Fetcher.fetchPairData(wethToken, rektCoin);
         const routeWethRekt = new Route([pairWethRekt], wethToken);
 
-        const trade = new Trade(routeWethRekt, new TokenAmount(wethToken, amount.toString()), TradeType.EXACT_INPUT);
+        const trade = new Trade(
+			routeWethRekt,
+			new TokenAmount(wethToken, amount.toString()),
+			TradeType.EXACT_INPUT
+		);
         const { outputAmount } = trade;
         const parsedOutputAmount = outputAmount.toSignificant(6);
 
@@ -104,7 +110,7 @@ export const BuyRektTab: FC<Props> = ({
     }
 
     const swapWithUniswapRouterV2 = async () => {
-        const signer = library?.getSigner()
+        const signer = library?.getSigner();
         const uniswapRouterV2 = new Contract(
 			defaultContracts.UNISWAPV2_ROUTER02.address, UNISWAPV2ROUTER_ABI, signer
 		);
@@ -129,6 +135,11 @@ export const BuyRektTab: FC<Props> = ({
 					currentBal - parseFloat(userInputAmount) : null
 			);
             console.log("Txn: ", swapTx);
+			console.log(utils.formatUnits(swapTx.value));
+			/*
+			addTransaction({
+				buy: utils.formatUnit(swapTx.value), forAmount: expectedOutput
+				});*/
 			// TODO it should update the history here
 			onOpen(); // Opens the tx history after doing an swap
         } catch (e) {
