@@ -2,7 +2,7 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-    Box
+    Box, useDisclosure
 } from "@chakra-ui/react";
 
 import { Contract, utils, BigNumberish } from 'ethers'
@@ -18,6 +18,7 @@ import { defaultContracts } from "../../config/constants/tokenLists/default.cont
 import { Props } from "../../types/TabProps/TabProps";
 
 import { useSwapStore } from '../../stores/SwapStore';
+import { OrderHistory } from "../OrderHistory/OrderHistory";
 import { ACTION_TABS } from "./responsive/breakpoints";
 
 
@@ -55,6 +56,7 @@ export const SellRektTab: FC<Props> = ({
     const [rektBal, setRektBal] = useState<number | null>(null);
 
     const { setLastTx } = useSwapStore();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
     const getCurrentRektContract = (): any => getRektCoinContract(library);
 
@@ -113,6 +115,8 @@ export const SellRektTab: FC<Props> = ({
                     currentBal - parseFloat(userInputSellAmount) : null
             );
             console.log(tx);
+			// TODO here it should update the history
+			onOpen(); // Opens tx history after doing an swap
         } catch (e) {
             console.error(e);
         }
@@ -246,6 +250,7 @@ export const SellRektTab: FC<Props> = ({
                     renderActionButton()
                 }
             </HStack>
+			<OrderHistory isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
         </VStack>
     )
 }

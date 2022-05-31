@@ -1,33 +1,47 @@
 import { FC } from "react";
-import { Props } from "../../types/TxDataProps/TxDataProps";
 import { useSwapStore } from "../../stores/SwapStore";
+import { providers, utils } from "ethers";
+import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
+import { formatEth } from "../Swap/BuyRektTab";
+import { formatRekt } from "../Swap/SellRektTab";
 
 import {
 	Badge, Text
 } from "@chakra-ui/react";
 
-export const HistoryCard: FC<Props> = ({ quantitySold, quantityReceived }) => { 
+export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => { 
 
-	const { lastTx, currentTab } = useSwapStore();
-	const BuyText: FC = () => (
-		<>
-		Buy <Badge>
-			{quantityReceived} REKT
-		</Badge> for <Badge>
-			{quantitySold} ETH
-		</Badge>
-		</>
-	);
-	const SellText: FC = () => (
-		<>
-		Sell <Badge>
-			{quantitySold} REKT
-		</Badge> for <Badge>
-			{quantityReceived} ETH
-		</Badge>
-		</>
-	);
+	const { currentTab } = useSwapStore();
+
+	const BuyText: FC = () => {
+		const quantitySold = utils.formatUnits(tx.tx.logs[1].data);
+		const quantityReceived = utils.formatUnits(tx.tx.logs[2].data);
+		return (
+			<>
+			Buy <Badge>
+				{formatRekt(parseFloat(quantityReceived))} REKT
+			</Badge> for <Badge>
+				{formatEth(parseFloat(quantitySold))} ETH
+			</Badge>
+			</>
+		)
+	};
+	const SellText: FC = () => {
+		const quantitySold = utils.formatUnits(tx.tx.logs[0].data);
+		const quantityReceived = "0"; // TODO implement @DennisDv24 crazy algorithm
+		return (
+			<>
+			Sell <Badge>
+				{formatRekt(parseFloat(quantitySold))} REKT
+			</Badge> for <Badge>
+				{formatEth(parseFloat(quantityReceived))} ETH
+			</Badge>
+			</>
+		)
+	};
 	
+	const isBuyOrder = (tx: any) => 
+		tx.tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;	
 
 	return (
 		<Text
@@ -37,7 +51,7 @@ export const HistoryCard: FC<Props> = ({ quantitySold, quantityReceived }) => {
 			textAlign='left'
 			w='100%'
 		>
-			{currentTab === "Buy"? <BuyText /> : <SellText />}
+			{isBuyOrder(tx) ? <BuyText /> : <SellText />}
 		</Text> 
 	);
 }

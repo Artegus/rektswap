@@ -2,7 +2,7 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-	Box
+	Box, useDisclosure
 } from "@chakra-ui/react";
 
 import { Contract, utils, ethers } from 'ethers';
@@ -20,6 +20,7 @@ import { formatBal } from "./SellRektTab";
 import { ACTION_TABS } from "./responsive/breakpoints";
 
 import { useSwapStore } from "../../stores/SwapStore";
+import { OrderHistory } from "../OrderHistory/OrderHistory";
 
 declare global {
 	interface Window {
@@ -70,8 +71,8 @@ export const BuyRektTab: FC<Props> = ({
 			));
 	}
 	
-	// TODO add parameters
 	useEffect(() => {updateBals(account);}, [account, active]);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
     const chainId = ChainId.KOVAN;
     const wethToken = WETH[chainId];
@@ -128,6 +129,8 @@ export const BuyRektTab: FC<Props> = ({
 					currentBal - parseFloat(userInputAmount) : null
 			);
             console.log("Txn: ", swapTx);
+			// TODO it should update the history here
+			onOpen(); // Opens the tx history after doing an swap
         } catch (e) {
             console.error(e);
         }
@@ -215,7 +218,7 @@ export const BuyRektTab: FC<Props> = ({
                     </Button>
                 }
             </HStack>
-
+			<OrderHistory isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
         </VStack>
     )
 }

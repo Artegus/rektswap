@@ -1,7 +1,7 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 
 import {
-	Modal, ModalOverlay, useDisclosure,
+	Modal, ModalOverlay, 
 	ModalContent,
 	ModalHeader, ModalCloseButton, ModalBody,
 	Text, VStack, Divider
@@ -9,18 +9,15 @@ import {
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers, Event, EventFilter, utils } from "ethers";
+import { Event, EventFilter, providers } from "ethers";
 
 import { Props } from "../../types/HistoryProps/HistoryProps";
-import { TransactionReceipt, UserTransaction } from "../../types/Transaction/Transaction";
 import { useRektContract, useWethContract } from "../../hooks/useContract";
 
 import { HistoryCard } from "./HistoryCard";
 
-import { formatRekt } from "../Swap/SellRektTab";
-import { formatEth } from "../Swap/BuyRektTab";
-
 import { useSwapStore } from "../../stores/SwapStore";
+import { useOrdersStore } from "../../stores/OrdersStore";
 
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
@@ -28,8 +25,8 @@ const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
 const uniRouterAddr = defaultContracts.UNISWAPV2_ROUTER02.address;
 
 
-const estimatedBlocksPerDay = 6000;
-const totalHistoryDays = 2;
+const estimatedBlocksPerDay = 100;//6000;
+const totalHistoryDays = 1;
 const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
 
 export const OrderHistory: FC<Props> = ({
@@ -38,7 +35,7 @@ export const OrderHistory: FC<Props> = ({
 	
 	const { active, account } = useWeb3React<Web3Provider>();
 	const { currentTab } = useSwapStore();
-	const [lastRektOperations, setLastRektOperations] = useState<UserTransaction[]>([]);
+	const { lastTransactions, setTransactions } = useOrdersStore();
 	const rektContract = useRektContract();
 	const wethContract = useWethContract();
 
@@ -48,17 +45,9 @@ export const OrderHistory: FC<Props> = ({
 			const txs: Event[] = await rektContract.queryFilter(
 				filter, -blockMargin
 			);
-			setLastRektOperations(txs.map((tx: Event) => {
-				return {
-					transactionHash: tx.transactionHash,
-					quantitySold: formatRekt(
-						parseFloat(utils.formatUnits(
-							tx.args?.value
-						))
-					),
-					quantityReceived: "0"
-				}
-			}))
+			setTransactions(await Promise.all(txs.map(async (tx: Event) => {
+				return tx.getTransactionReceipt();
+			})));	
 		}
 	}
 
@@ -66,40 +55,60 @@ export const OrderHistory: FC<Props> = ({
 		if (wethContract) {
 			const filter: EventFilter = wethContract.filters.Transfer(uniRouterAddr, uniswapPairAddr);
 			const txs: Event[] = await wethContract.queryFilter(filter, -blockMargin);
-			const totalTxs: TransactionReceipt[] = await Promise.all(txs.map(async (tx: Event) => {
+			const totalTxs: providers.TransactionReceipt[] = await Promise.all(txs.map(async (tx: Event) => {
 				return tx.getTransactionReceipt()
 			}));
 			
 			const userTxs = totalTxs.filter(tx => tx.from === account);
+			setTransactions(userTxs);
+		}
+	}
+	
+	const mergeEvents = (arr1: Event[], arr2: Event[]) => {
+		if(arr1.length === 0) return arr2;
+		if(arr2.length === 0) return arr1;
+		let events: Event[] = [];
+		let [i, j] = [0, 0];
+		while(i !== arr1.length && j !== arr2.length) {
+			if(arr1[i].blockNumber > arr2[j].blockNumber) {
+				events.push(arr2[j]);
+				j++;
+			}
+			else if(arr1[i].blockNumber < arr2[j].blockNumber) {
+				events.push(arr1[i]);
+				i++;
+			}
+		}
+		if(i !== arr1.length)
+			return events.concat(arr1.slice(i, arr1.length));
+		if(j !== arr2.length)
+			return events.concat(arr2.slice(j, arr2.length));
+		return events;
+	}
 
-			setLastRektOperations(userTxs.map((tx: TransactionReceipt) => {
-				return {
-					transactionHash: tx.transactionHash,
-					quantitySold: formatEth(
-						parseFloat(utils.formatUnits(
-							tx.logs[1].data
-						))
-					),
-					quantityReceived: formatRekt(
-						parseFloat(utils.formatUnits(
-							tx.logs[2].data
-						))
-					)
+	const getLastOrders = async () => {
+		if(rektContract) {
+			const sellsFilter: EventFilter = rektContract.filters.Transfer(account, batcherAddr);
+			const buysFilter: EventFilter = rektContract.filters.Transfer(uniswapPairAddr, account);
+			const sellsEvents: Event[] = await rektContract.queryFilter(sellsFilter, -blockMargin);
+			const buysEvents: Event[] = await rektContract.queryFilter(buysFilter, -blockMargin);
+
+			const txs: providers.TransactionReceipt[] = await Promise.all(
+				mergeEvents(sellsEvents, buysEvents).map(async (tx: Event) => {
+					return tx.getTransactionReceipt()
 				}
-			}))
+			));
+			setTransactions(txs);
 		}
 	}
 
 	useEffect(() => {
 		if (typeof account === "string")
-			if (currentTab === "Sell")
-				getLastRektSells();
-			else
-				getLastRektBuys();
+			getLastOrders();
 		else
-			setLastRektOperations([]);
+			setTransactions([]);
 	}, [account, currentTab, active])
-
+	
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} >
 			<ModalOverlay />
@@ -107,20 +116,16 @@ export const OrderHistory: FC<Props> = ({
 			  	<ModalHeader>Recent Orders</ModalHeader>
 			  	<ModalCloseButton />
 			  	<ModalBody pb={6}>
-					{lastRektOperations.length !== 0 ?
+					{lastTransactions.length !== 0 ?
 						<VStack
 							borderRadius='md'
 							//borderWidth='1px'
 							overflowY="auto"
 						>
-							{lastRektOperations.map(txData => (
+							{lastTransactions.map(txData => (
 								<>
 								<Divider />
-								<HistoryCard
-									key={txData.transactionHash}
-									quantitySold={txData.quantitySold}
-									quantityReceived={txData.quantityReceived}
-								/>
+								<HistoryCard tx={txData} />
 								</>
 							)).reverse()}
 						</VStack> : <Text>There are not any recent orders</Text>
