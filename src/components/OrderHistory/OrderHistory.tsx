@@ -38,6 +38,7 @@ export const OrderHistory: FC<Props> = ({
 	
 	const { active, account } = useWeb3React<Web3Provider>();
 	const { currentTab } = useSwapStore();
+	// TODO this should be centralized and you should update it from the Swap tabs.
 	const [lastRektOperations, setLastRektOperations] = useState<UserTransaction[]>([]);
 	const rektContract = useRektContract();
 	const wethContract = useWethContract();
