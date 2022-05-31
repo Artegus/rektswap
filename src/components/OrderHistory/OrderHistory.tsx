@@ -84,7 +84,7 @@ export const OrderHistory: FC<Props> = ({
 			getLastOrders();
 		else
 			setTransactions([]);
-	}, [isOpen])
+	}, [account])
 	
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} >

@@ -152,6 +152,7 @@ export const BuyRektTab: FC<Props> = ({
 				)
 			});
 			const tx = await swapTx.wait();
+			addTransaction(tx);
 			toast.closeAll();
 			toast({
 				title: 'Buy completed',
@@ -160,7 +161,8 @@ export const BuyRektTab: FC<Props> = ({
 				} REKT for ${
 					formatEth(parseFloat(utils.formatUnits(tx.logs[1].data)))
 				} ETH`, 
-				status: 'success'
+				status: 'success',
+				isClosable: true,
 			});
         } catch (e) {
             console.error(e);

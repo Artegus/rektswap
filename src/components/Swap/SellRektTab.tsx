@@ -19,6 +19,7 @@ import { defaultContracts } from "../../config/constants/tokenLists/default.cont
 import { Props } from "../../types/TabProps/TabProps";
 
 import { useSwapStore } from '../../stores/SwapStore';
+import { useOrdersStore } from "../../stores/OrdersStore";
 import { OrderHistory } from "../OrderHistory/OrderHistory";
 import { ACTION_TABS } from "./responsive/breakpoints";
 
@@ -55,6 +56,7 @@ export const SellRektTab: FC<Props> = ({
 
     const { active, library, account } = useWeb3React<Web3Provider>();
     const [rektBal, setRektBal] = useState<number | null>(null);
+	const { addTransaction } = useOrdersStore();
 
     const { setLastTx } = useSwapStore();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -128,13 +130,16 @@ export const SellRektTab: FC<Props> = ({
 				)
 			});
 			const tx = await swapTx.wait();
+			addTransaction(tx);
 			toast.closeAll();
 			toast({
 				title: 'Sell order submited',
 				description: `You submited an ${
 					formatRekt(parseFloat(utils.formatUnits(tx.logs[0].data)))
 				} REKT sell order to the batcher, you can see its status at the recent orders tab`, 
-				status: 'success'
+				status: 'success',
+				duration: 7000,
+				isClosable: true
 			});
         } catch (e) {
             console.error(e);
