@@ -1,7 +1,7 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 
 import {
-	Modal, ModalOverlay, useDisclosure,
+	Modal, ModalOverlay, 
 	ModalContent,
 	ModalHeader, ModalCloseButton, ModalBody,
 	Text, VStack, Divider
@@ -9,15 +9,12 @@ import {
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers, Event, EventFilter, utils, providers } from "ethers";
+import { Event, EventFilter, providers } from "ethers";
 
 import { Props } from "../../types/HistoryProps/HistoryProps";
 import { useRektContract, useWethContract } from "../../hooks/useContract";
 
 import { HistoryCard } from "./HistoryCard";
-
-import { formatRekt } from "../Swap/SellRektTab";
-import { formatEth } from "../Swap/BuyRektTab";
 
 import { useSwapStore } from "../../stores/SwapStore";
 import { useOrdersStore } from "../../stores/OrdersStore";
@@ -38,8 +35,7 @@ export const OrderHistory: FC<Props> = ({
 	
 	const { active, account } = useWeb3React<Web3Provider>();
 	const { currentTab } = useSwapStore();
-	// TODO this should be centralized and you should update it from the Swap tabs.
-	const { lastTransactions, addTransaction, setTransactions } = useOrdersStore();
+	const { lastTransactions, setTransactions } = useOrdersStore();
 	const rektContract = useRektContract();
 	const wethContract = useWethContract();
 
@@ -49,8 +45,9 @@ export const OrderHistory: FC<Props> = ({
 			const txs: Event[] = await rektContract.queryFilter(
 				filter, -blockMargin
 			);
-			console.log(txs);
-			//setTransactions(txs);	
+			setTransactions(await Promise.all(txs.map(async (tx: Event) => {
+				return tx.getTransactionReceipt();
+			})));	
 		}
 	}
 
@@ -67,12 +64,29 @@ export const OrderHistory: FC<Props> = ({
 		}
 	}
 
+	const getLastOrders = async () => {
+		if(rektContract) {
+			const buysFilter: EventFilter = rektContract.filters.Transfer(account, batcherAddr);
+			const sellsFilter: EventFilter = rektContract.filters.Transfer(uniswapPairAddr, account);
+			const txEvents: Event[] = await rektContract.queryFilter({
+				topics: [
+					[buysFilter.topics![0], sellsFilter.topics![0]].flat()
+				]
+			}, -blockMargin);
+			console.log(txEvents);
+			const txs: providers.TransactionReceipt[] = await Promise.all(
+				txEvents.map(async (tx: Event) => {
+					return tx.getTransactionReceipt()
+				}
+			));
+			console.log(txs);
+			setTransactions(txs);
+		}
+	}
+
 	useEffect(() => {
 		if (typeof account === "string")
-			if (currentTab === "Sell")
-				getLastRektSells();
-			else
-				getLastRektBuys();
+			getLastOrders();
 		else
 			setTransactions([]);
 	}, [account, currentTab, active])

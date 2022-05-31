@@ -10,7 +10,6 @@ export const HistoryCard: FC<{tx: providers.TransactionReceipt}> = tx => {
 
 	const { currentTab } = useSwapStore();
 	
-	console.log(tx);
 	// TODO it should be something like
 	// quantitySold= txIsRektsell(tx)? specificFormatX : specificFormatY;
 	const quantitySold = utils.formatUnits(tx.tx.logs[1].data);
