@@ -2,10 +2,11 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-	Box, useDisclosure
+	Box, useDisclosure, useToast, Alert, AlertTitle,
+	Spinner
 } from "@chakra-ui/react";
 
-import { Contract, utils, ethers } from 'ethers';
+import { Contract, utils, ethers, providers } from 'ethers';
 import { ChainId, Fetcher, Route, TokenAmount, Trade, TradeType, WETH } from "@uniswap/sdk";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
@@ -20,7 +21,10 @@ import { formatBal } from "./SellRektTab";
 import { ACTION_TABS } from "./responsive/breakpoints";
 
 import { useSwapStore } from "../../stores/SwapStore";
+import { useOrdersStore } from "../../stores/OrdersStore";
 import { OrderHistory } from "../OrderHistory/OrderHistory";
+
+import { formatRekt } from './SellRektTab';
 
 declare global {
 	interface Window {
@@ -54,6 +58,8 @@ export const BuyRektTab: FC<Props> = ({
 }) => {
 
 	const { currentTab, currentTabIsBuy } = useSwapStore();
+	const { addTransaction } = useOrdersStore();
+	const toast = useToast();
 
     const [userInputAmount, setInputAmount] = useState<string>("");
     const [expectedOutput, setOutputAmount] = useState<string>("");
@@ -96,7 +102,11 @@ export const BuyRektTab: FC<Props> = ({
         const pairWethRekt = await Fetcher.fetchPairData(wethToken, rektCoin);
         const routeWethRekt = new Route([pairWethRekt], wethToken);
 
-        const trade = new Trade(routeWethRekt, new TokenAmount(wethToken, amount.toString()), TradeType.EXACT_INPUT);
+        const trade = new Trade(
+			routeWethRekt,
+			new TokenAmount(wethToken, amount.toString()),
+			TradeType.EXACT_INPUT
+		);
         const { outputAmount } = trade;
         const parsedOutputAmount = outputAmount.toSignificant(6);
 
@@ -104,7 +114,7 @@ export const BuyRektTab: FC<Props> = ({
     }
 
     const swapWithUniswapRouterV2 = async () => {
-        const signer = library?.getSigner()
+        const signer = library?.getSigner();
         const uniswapRouterV2 = new Contract(
 			defaultContracts.UNISWAPV2_ROUTER02.address, UNISWAPV2ROUTER_ABI, signer
 		);
@@ -117,7 +127,9 @@ export const BuyRektTab: FC<Props> = ({
             value: utils.parseEther(userInputAmount)
         };
         try {
-            const swapTx = await uniswapRouterV2.functions["swapExactETHForTokensSupportingFeeOnTransferTokens"](
+			const swapTx: providers.TransactionResponse = await uniswapRouterV2.functions[
+				"swapExactETHForTokensSupportingFeeOnTransferTokens"
+			](
                 0,
                 path,
                 account,
@@ -128,11 +140,38 @@ export const BuyRektTab: FC<Props> = ({
 				(currentBal: number | null) => currentBal !== null?
 					currentBal - parseFloat(userInputAmount) : null
 			);
-            console.log("Txn: ", swapTx);
-			// TODO it should update the history here
-			onOpen(); // Opens the tx history after doing an swap
+            console.log('Txn: ', swapTx);
+			toast({
+				title: 'Buying REKTcoin',
+				duration: 9000000,
+				render: () => (
+					<Alert borderRadius='md'>
+						<Spinner pr={2} mr={2}/>
+					  	<AlertTitle>Buying REKTcoin</AlertTitle>
+					</Alert>
+				)
+			});
+			const tx = await swapTx.wait();
+			addTransaction(tx);
+			toast.closeAll();
+			toast({
+				title: 'Buy completed',
+				description: `You bought ${
+					formatRekt(parseFloat(utils.formatUnits(tx.logs[2].data)))
+				} REKT for ${
+					formatEth(parseFloat(utils.formatUnits(tx.logs[1].data)))
+				} ETH`, 
+				status: 'success',
+				isClosable: true,
+			});
         } catch (e) {
             console.error(e);
+			toast.closeAll();
+			toast({
+				title: 'Transaction error',
+				description: 'There was an error processing your transaction',
+				status: 'error'
+			});
         }
     }
 
