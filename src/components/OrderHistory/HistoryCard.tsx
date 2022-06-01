@@ -13,13 +13,6 @@ export const isBuyOrder = (tx: TransactionReceipt) =>
 	tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;
 
 type TransactionReceipt = providers.TransactionReceipt;
-type PendingTx = {
-	buy: number; forAmount: number
-};
-type HistoryCardProps = TransactionReceipt | PendingTx;
-
-export const isTransactionReceipt = (tx: HistoryCardProps): boolean =>
-	(tx as TransactionReceipt).transactionHash !== undefined; 
 
 const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 	const quantitySold = utils.formatUnits(tx.logs[1].data);
@@ -49,30 +42,14 @@ const SellText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 	)
 }
 
-const FormatedPendingOrder: FC<{tx: PendingTx}> = ({tx}) => {
-	return (
-		<>
-		Buying <Badge>
-			{formatRekt(tx.forAmount)} REKT
-		</Badge> for <Badge>
-			{formatEth(tx.buy)} ETH
-		</Badge>
-		<Spinner />
-		</>
-	)
-}
-
-const GetFormatedTextBasedOn: FC<{tx: HistoryCardProps}> = ({tx}) => {
-	if(isTransactionReceipt(tx)) {
-		const txRec = tx as TransactionReceipt;
+const GetFormatedTextBasedOn: FC<{tx: TransactionReceipt}> = ({tx}) => {
+	const txRec = tx as TransactionReceipt;
 		return isBuyOrder(txRec) ? 
 			<BuyText tx={txRec} /> :
 			<SellText tx={txRec} />;
-	}
-	else return <FormatedPendingOrder tx={tx as PendingTx} />;
 }
 
-export const HistoryCard: FC<{tx: HistoryCardProps}> = ({tx}) => { 
+export const HistoryCard: FC<{tx: TransactionReceipt}> = ({tx}) => { 
 	return (
 		<Text
 			fontSize='1xl'
