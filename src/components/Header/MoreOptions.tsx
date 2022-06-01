@@ -10,7 +10,8 @@ import {
     SunIcon, TimeIcon
 } from '@chakra-ui/icons'
 
-import { OrderHistory } from "../OrderHistory/OrderHistory";
+import { OrderHistory } from '../OrderHistory/OrderHistory';
+import { AboutRekt } from '../AboutRekt/AboutRekt';
 
 export const MoreOptions: FC = () => {
 
@@ -20,7 +21,12 @@ export const MoreOptions: FC = () => {
         return colorMode === 'light' ? <MoonIcon /> : <SunIcon />
     }
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { 
+		isOpen: historyIsOpen, onOpen: historyOnOpen, onClose: historyOnClose
+	} = useDisclosure();
+	const { 
+		isOpen: infoIsOpen, onOpen: infoOnOpen, onClose: infoOnClose 
+	} = useDisclosure();
 
     return (
 		<>
@@ -44,7 +50,9 @@ export const MoreOptions: FC = () => {
                         {iconMode()}
                     </HStack>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+					onClick={infoOnOpen}
+				>
                     <HStack w="full" justifyContent="space-between" >
                         <Text>
                             About
@@ -53,7 +61,7 @@ export const MoreOptions: FC = () => {
                     </HStack>
                 </MenuItem>
                 <MenuItem
-					onClick={onOpen}
+					onClick={historyOnOpen}
 				>
                     <HStack w="full" justifyContent="space-between" >
                         <Text>
@@ -64,7 +72,12 @@ export const MoreOptions: FC = () => {
                 </MenuItem>
             </MenuList>
         </Menu>
-		<OrderHistory isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
+		<OrderHistory 
+			isOpen={historyIsOpen} onOpen={historyOnOpen} onClose={historyOnClose}
+		/>
+		<AboutRekt 
+			isOpen={infoIsOpen} onOpen={infoOnOpen} onClose={infoOnClose} 
+		/>
 		</>		
     )
 }

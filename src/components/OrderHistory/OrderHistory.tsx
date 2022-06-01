@@ -11,7 +11,7 @@ import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { Event, EventFilter, providers } from "ethers";
 
-import { Props } from "../../types/HistoryProps/HistoryProps";
+import { Props } from '../../types/ModalProps/ModalProps';
 import { useRektContract, useWethContract } from "../../hooks/useContract";
 
 import { HistoryCard } from "./HistoryCard";
