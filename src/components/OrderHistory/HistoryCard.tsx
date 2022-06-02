@@ -7,8 +7,11 @@ import { formatRekt } from '../Swap/SellRektTab';
 import { RektSaleFormat } from './RektSaleFormat';
 
 import {
-	Badge, Text, Spinner
+	Badge, Text, Spinner, HStack, Box
 } from '@chakra-ui/react';
+import {
+	CheckCircleIcon	
+} from '@chakra-ui/icons'
 
 export const isBuyOrder = (tx: TransactionReceipt) =>
 	tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;
@@ -19,13 +22,16 @@ const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 	const quantitySold = utils.formatUnits(tx.logs[1].data);
 	const quantityReceived = utils.formatUnits(tx.logs[2].data);
 	return (
-		<>
-		Buy <Badge>
-			{formatRekt(parseFloat(quantityReceived))} REKT
-		</Badge> for <Badge>
-			{formatEth(parseFloat(quantitySold))} ETH
-		</Badge>
-		</>
+		<HStack>
+			<Box w='100%'>
+				Buy <Badge>
+					{formatRekt(parseFloat(quantityReceived))} REKT
+				</Badge> for <Badge>
+					{formatEth(parseFloat(quantitySold))} ETH
+				</Badge>
+			</Box>
+			<CheckCircleIcon />
+		</HStack>
 	)
 }
 

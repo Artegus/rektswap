@@ -6,7 +6,8 @@ import { formatRekt } from '../Swap/SellRektTab';
 import { useRektTxsBatcherContract } from "../../hooks/useContract";
 
 import {
-	Badge, Text, Spinner, HStack, Box
+	Badge, Text, Spinner, HStack, Box, Center,
+	Flex
 } from '@chakra-ui/react';
 
 import {
@@ -62,15 +63,13 @@ const SaleCompleted: FC<{
 	tx: TransactionReceipt, sale: Event 
 }> = ({tx, sale}) => {
 	const quantitySold = utils.formatUnits(tx.logs[0].data);
-	console.log(sale);
 	const percent = formatPercent(getBurnedAmountPercent(sale));
-	console.log(percent);
 	return(
 		<HStack>
-			<Box>
-			You sold <Badge>
-				{formatRekt(parseFloat(quantitySold))} REKT
-			</Badge> for an {percent}%
+			<Box w='100%'>
+				You sold <Badge>
+					{formatRekt(parseFloat(quantitySold))} REKT
+				</Badge> for an <Badge>{percent}%</Badge>
 			</Box>
 			<CheckCircleIcon />
 		</HStack>
@@ -79,12 +78,31 @@ const SaleCompleted: FC<{
 
 export const RektSaleFormat: FC<{tx: TransactionReceipt}> = ({tx}) => {
     const [sale, setSale] = useState<Event | null>(null);
+	const [loadingHistory, setLoadingHistory] = useState<boolean>(true);
 	const batcher = useRektTxsBatcherContract();
+	
+	const updateSale = () => {
+		getBatcherSaleIfFulfilled(tx, batcher).then(res => {
+			setSale(res);
+			setLoadingHistory(false);
+		});
+	}
+
+	const updateSaleAndLoad = () => {
+		setLoadingHistory(true);
+		updateSale();
+	}
+	
 	useEffect(() => {
-		getBatcherSaleIfFulfilled(tx, batcher).then(
-			res => {setSale(res);}
-		)
+		updateSaleAndLoad();
+		const interval = setInterval(() => {
+			updateSale();
+		}, 3000);
+		return () => clearInterval(interval);
 	}, []);
+
+
+	if(loadingHistory) return <Center><Spinner/></Center>
 	if(sale === null)
 		return <ProcessingByBatcher tx={tx} />
 	else return <SaleCompleted tx={tx} sale={sale} />
