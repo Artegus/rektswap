@@ -3,11 +3,12 @@ import { FC, useState, useEffect } from 'react';
 import { providers, utils, EventFilter } from 'ethers';
 import { formatEth } from '../Swap/BuyRektTab';
 import { formatRekt } from '../Swap/SellRektTab';
-import { useRektTxsBatcherContract } from "../../hooks/useContract";
+import { useRektTxsBatcherContract } from '../../hooks/useContract';
+import { DateBadgeFor } from './HistoryCard';
 
 import {
 	Badge, Text, Spinner, HStack, Box, Center,
-	Flex
+	Flex, VStack
 } from '@chakra-ui/react';
 
 import {
@@ -29,13 +30,6 @@ const getBatcherSaleIfFulfilled = async (
 		sellsFilter, tx.blockNumber - await userProv.getBlockNumber()
 	);
 	if(sellsEvents.length === 0) return null;
-	// @ts-ignore
-	/* TODO use the etherscan API or something to see internal transactions
-	const txHash = sellsEvents[0].transactionHash;
-	const fulfillTx = await userProv.getTransaction(txHash);
-	console.log(txHash);
-	console.log(fulfillTx);
-	*/
 	return sellsEvents[0];
 
 }
@@ -66,11 +60,14 @@ const SaleCompleted: FC<{
 	const percent = formatPercent(getBurnedAmountPercent(sale));
 	return(
 		<HStack>
-			<Box w='100%'>
-				You sold <Badge>
-					{formatRekt(parseFloat(quantitySold))} REKT
-				</Badge> for an <Badge>{percent}%</Badge>
-			</Box>
+			<VStack w='100%' align='left'>
+				<Box>
+					You sold <Badge>
+						{formatRekt(parseFloat(quantitySold))} REKT
+					</Badge> for an <Badge>{percent}%</Badge>
+				</Box>
+				<DateBadgeFor tx={tx} />
+			</VStack>
 			<CheckCircleIcon />
 		</HStack>
 	);
