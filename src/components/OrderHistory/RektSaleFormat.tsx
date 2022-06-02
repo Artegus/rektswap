@@ -97,7 +97,7 @@ export const RektSaleFormat: FC<{tx: TransactionReceipt}> = ({tx}) => {
 		updateSaleAndLoad();
 		const interval = setInterval(() => {
 			updateSale();
-		}, 3000);
+		}, 1000);
 		return () => clearInterval(interval);
 	}, []);
 

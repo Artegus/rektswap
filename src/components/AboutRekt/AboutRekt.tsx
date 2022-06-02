@@ -40,7 +40,7 @@ export const AboutRekt: FC<Props> = ({
 							burned. Gamble with caution.
 						</Text>
 						<Text>
-							If you like the coin we might do an poper
+							If you like the coin we might do an proper 
 							whitepaper in the future explaining the
 							protocol.
 						</Text>
