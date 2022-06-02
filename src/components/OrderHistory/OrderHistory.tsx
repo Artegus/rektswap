@@ -28,7 +28,7 @@ const uniRouterAddr = defaultContracts.UNISWAPV2_ROUTER02.address;
 const maxTxToShow = 5;
 
 const estimatedBlocksPerDay = 6000;
-const totalHistoryDays = 1;
+const totalHistoryDays = 2;
 const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
 
 export const OrderHistory: FC<Props> = ({
