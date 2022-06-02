@@ -11,10 +11,10 @@ interface OrdersStore {
 
 const useOrdersStore = create<OrdersStore>((set, get) => ({
 	lastTransactions: [],
-	addTransaction: newTx => set(state => {
-		state.lastTransactions.push(newTx);
-		return state;
-	}),
+	addTransaction: newTx => set(state => ({
+		...state,
+		lastTransactions: [...state.lastTransactions, newTx]
+	})),
 	setTransactions: txs => set(state => ({
 		...state,
 		lastTransactions: txs
