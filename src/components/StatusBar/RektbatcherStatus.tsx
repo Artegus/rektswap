@@ -1,28 +1,18 @@
 import { FC, useState } from 'react'
 import { HStack, Text, Tooltip } from '@chakra-ui/react';
-import { Contract, providers } from 'ethers';
-import { REKT_TX_BATCHER } from '../../config/constants/tokenLists/default.contracts';
-import rektcoinBatch from '../../abis/rektcoinBatch.json'
 import { CircleIcon } from '../../icons/CircleIcon';
-
+import { useTxsBatcherStore } from '../../stores/TransactionBatcherStore';
 
 export const RektbatcherStatus: FC = () => {
 
-    const [status, setStatus] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const createcontract = async () => {
-        const prov = new providers.Web3Provider(window.ethereum);
-        const rekttx = new Contract(REKT_TX_BATCHER, rektcoinBatch, prov);
-        console.log(rekttx);
-        const isInProcess: boolean = await rekttx.functions['saleOfBatchInProcess']();
-        console.log(isInProcess);
-    }
+    const { statusBatcher } = useTxsBatcherStore();
 
     return (
         <HStack >
             <Tooltip
-                label={status ? 'Batcher is currently in process' : 'There are currently no active batchers'}
+                label={statusBatcher ? 'The batcher is currently active' : 'The batcher is currently inactive'}
                 closeDelay={350}
                 isOpen={isOpen}
             >
@@ -34,7 +24,9 @@ export const RektbatcherStatus: FC = () => {
                     onTouchEnd={() => setIsOpen(false)}
                 >RektTransactionBatcher</Text>
             </Tooltip>
-            <CircleIcon color={status ? 'green' : 'red.700'} w='10px' />
+            <CircleIcon 
+                color={statusBatcher ? 'green.700' : 'red.700'} w='10px'
+            />
         </HStack>
     )
 }
