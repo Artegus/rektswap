@@ -7,7 +7,7 @@ export const Main: FC = () => {
     return (
         <HStack
             w="full"
-            h="85vh"
+            h="100vh"
             justifyContent="center"
         >
             <ActionsTabs />
