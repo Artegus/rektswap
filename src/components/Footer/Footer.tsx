@@ -19,7 +19,12 @@ export const Footer: FC = () => {
         >
             <HStack spacing={5} >
                 {socialMediaData.map(({ href, component }) => (
-                    <IconLink href={href} IconComponent={component} key={href} isExternal />
+                    <IconLink 
+                        href={href} 
+                        IconComponent={component} 
+                        key={href} 
+                        isExternal 
+                    />
                 ))}
             </HStack>
         </HStack>
