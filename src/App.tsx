@@ -11,6 +11,8 @@ import { useWalletHandleError } from './hooks/useWalletHandleError';
 import { useEagerConnect, useInactiveListener } from './hooks/useWeb3'
 import { useUserStore } from './stores/UserStore';
 
+import './providers/chakra/styles.css'
+
 const App: FC = () => {
 
   const { setActivatingConnector, activatingConnector } = useUserStore();
