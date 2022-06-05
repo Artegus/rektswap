@@ -1,14 +1,14 @@
-import { HStack } from "@chakra-ui/react"
 import { FC } from "react"
+import { HStack } from "@chakra-ui/react"
 
 import { TelegramIcon } from "../../icons/TelegramIcon"
 import { TwitterIcon } from "../../icons/TwitterIcon"
 import { IconLink } from "../IconLink/IconLink"
-import { StatusBar } from "../StatusBar/StatusBar"
 
 const socialMediaData = [
-    { href: 'https://twitter.com/{_}', component: TwitterIcon },
-    { href: 'https://t.me/{_}', component: TelegramIcon }
+    { href: 'https://twitter.com/REKTswap', component: TwitterIcon },
+    { href: 'https://t.me/rektswap_community', component: TelegramIcon }
+
 ]
 
 export const Footer: FC = () => {
@@ -28,7 +28,6 @@ export const Footer: FC = () => {
                     />
                 ))}
             </HStack>
-            <StatusBar/>
         </HStack>
 
     )

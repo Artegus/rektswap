@@ -17,7 +17,7 @@ export const defaultContracts = {
     }, 
 	UNISWAPV2_PAIR: {
 		name: 'UniswapV2Pair',
-		address: '0x747830b2d511ABB860C1623015ed6396297f132f'
+		address: '0x59f3B7FE07319a8d0B233Ada0E32Ca30B6C21314'
 	},
 	RANDOMNESS_FULFILLER: {
 		name: 'RandomnessFulfiller',

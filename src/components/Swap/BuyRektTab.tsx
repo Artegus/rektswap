@@ -144,6 +144,7 @@ export const BuyRektTab: FC<Props> = ({
 			toast({
 				title: 'Buying REKTcoin',
 				duration: 9000000,
+				position: 'top',
 				render: () => (
 					<Alert borderRadius='md'>
 						<Spinner pr={2} mr={2}/>
@@ -160,8 +161,9 @@ export const BuyRektTab: FC<Props> = ({
 					formatRekt(parseFloat(utils.formatUnits(tx.logs[2].data)))
 				} REKT for ${
 					formatEth(parseFloat(utils.formatUnits(tx.logs[1].data)))
-				} ETH`, 
+				} MATIC`, 
 				status: 'success',
+				position: 'top',
 				isClosable: true,
 			});
         } catch (e) {
@@ -169,6 +171,7 @@ export const BuyRektTab: FC<Props> = ({
 			toast.closeAll();
 			toast({
 				title: 'Transaction error',
+				position: 'top',
 				description: 'There was an error processing your transaction',
 				status: 'error'
 			});
@@ -186,7 +189,7 @@ export const BuyRektTab: FC<Props> = ({
                 justifyContent="space-between">
                 <Heading size="md" fontSize={ACTION_TABS.HeadingFontSize} >{tabTitle}</Heading>
 				<Box textAlign={"right"} fontSize={ACTION_TABS.BoxFontSize} >
-					{ethBal === null? "" : `ETH balance: ${formatEth(ethBal)}`}
+					{ethBal === null? "" : `MATIC balance: ${formatEth(ethBal)}`}
 				</Box>
             </HStack>
 
@@ -211,7 +214,7 @@ export const BuyRektTab: FC<Props> = ({
                             h='2.5rem' size='md'
                             disabled
                         >
-                            <Text>ETH</Text>
+                            <Text>MATIC</Text>
                         </Button>
                     </InputRightElement>
                 </FormControl>

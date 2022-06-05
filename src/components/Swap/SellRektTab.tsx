@@ -28,15 +28,9 @@ export const formatBal = (bal: number, decimals: number): string => {
     return balStr.substring(0, decimalPos + decimals + 1);
 }
 
-
 const rektBalanceDecimalsToShow = 2;
 export const formatRekt = (bal: number): string => {
     return formatBal(bal, rektBalanceDecimalsToShow);
-}
-
-const rektBatcherStatusText = {
-    inactive: 'Rekt batcher is inactive. Fees will be applied to your transaction to activate it.',
-    active: 'Rekt batcher is active. Enjoy'
 }
 
 export const SellRektTab: FC<Props> = ({
@@ -105,14 +99,6 @@ export const SellRektTab: FC<Props> = ({
             const amount = utils.parseEther(userInputSellAmount);
             updateRektBatcherStatus()
 
-            if (!statusBatcher) {
-                toast({
-                    position: 'top-left',
-                    status: 'info',
-                    description: rektBatcherStatusText.inactive
-                });
-            }
-
             try {
                 const swapTx = await rektTxsBatcherContract.sellRektCoin(amount);
                 setRektBal(
@@ -122,7 +108,7 @@ export const SellRektTab: FC<Props> = ({
                 toast({
                     title: 'Selling REKTcoin',
                     duration: 9000000,
-                    position: 'top-left',
+                    position: 'top',
                     render: () => (
                         <Alert borderRadius='md'>
                             <Spinner pr={2} mr={2} />
@@ -140,16 +126,24 @@ export const SellRektTab: FC<Props> = ({
                     status: 'success',
                     duration: 7000,
                     isClosable: true,
-                    position: 'top-left',
+                    position: 'top',
                 });
             } catch (e) {
                 toast.closeAll();
-                toast({
-                    position: 'top-left',
-                    title: 'Transaction error',
-                    description: 'There was an error processing your transaction',
-                    status: 'error'
-                });
+				const fee = utils.formatUnits(await rektTxsBatcherContract.getCurrentRektFee())
+				if(parseFloat(userInputSellAmount) < parseFloat(fee))
+					toast({
+						position: 'top',
+						title: `The minimum sell amount is ${fee} REKT`,
+						status: 'error'
+					})
+				else
+					toast({
+						position: 'top',
+						title: 'Transaction error',
+						description: 'There was an error processing your transaction',
+						status: 'error'
+					});
             }
         }
 
@@ -182,7 +176,6 @@ export const SellRektTab: FC<Props> = ({
 
     const renderActionButton = () => {
         return (
-        <Tooltip isDisabled={!allowedTosell} label={statusBatcher ? rektBatcherStatusText.active: rektBatcherStatusText.inactive} >
             <Button
                 size="md"
                 w="full"
@@ -190,7 +183,6 @@ export const SellRektTab: FC<Props> = ({
             >
                 {allowedTosell ? "Sell" : "Approve"}
             </Button>
-        </Tooltip>
         )
     }
 
@@ -268,7 +260,7 @@ export const SellRektTab: FC<Props> = ({
                             h='2.5rem' size='md'
                             disabled
                         >
-                            <Text>ETH</Text>
+                            <Text>MATIC</Text>
                         </Button>
                     </InputRightElement>
                 </FormControl>
