@@ -5,11 +5,11 @@ export const defaultContracts = {
     },
     REKT_COIN: {
         name: 'REKT',
-        address: '0x33632E8362e9084F36Ab68BF59269F54BDe787AE'
+        address: '0x439204d72e04e309adbf49410a403f2931a7a157'
     },
     REKT_TRANSACTION_BATCHER: {
         name: 'RektTransactionBatcher',
-        address: '0x4b170fA8934740a3a753E2C7cfD2Dd1D973FaC93'
+        address: '0x059bD73c045713A9B33a0735Da04E7E4c6f8d451'
     },
     UNISWAPV2_ROUTER02: {
         name: 'UniswapV2Router02',
