@@ -7,7 +7,6 @@ import { FC, useEffect } from 'react';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
-import { usePollingRektBatchStatus } from './hooks/usePollingRektBatchStatus';
 import { useWalletHandleError } from './hooks/useWalletHandleError';
 import { useEagerConnect, useInactiveListener } from './hooks/useWeb3'
 import { useUserStore } from './stores/UserStore';
@@ -29,7 +28,6 @@ const App: FC = () => {
   // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
   useInactiveListener(!triedEager || !!activatingConnector)
   useWalletHandleError();
-  usePollingRektBatchStatus();
 
   return (
     <Container maxW="100vw" p={0} m={0} >

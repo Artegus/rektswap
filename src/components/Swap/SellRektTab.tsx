@@ -4,7 +4,6 @@ import {
     HStack, Input, InputRightElement, Text, VStack,
     Box, useToast, Alert, Spinner,
     AlertTitle,
-    Tooltip
 } from "@chakra-ui/react";
 
 import { utils, BigNumberish } from 'ethers'
@@ -19,7 +18,6 @@ import { Props } from "../../types/TabProps/TabProps";
 import { useOrdersStore } from "../../stores/OrdersStore";
 import { useRektContract, useRektTxsBatcherContract } from '../../hooks/useContract';
 import { ACTION_TABS } from "./responsive/breakpoints";
-import { useTxsBatcherStore } from "../../stores/TransactionBatcherStore";
 
 
 export const formatBal = (bal: number, decimals: number): string => {
@@ -50,7 +48,6 @@ export const SellRektTab: FC<Props> = ({
 
     const rektContract = useRektContract();
     const rektTxsBatcherContract = useRektTxsBatcherContract();
-    const { updateRektBatcherStatus, statusBatcher } = useTxsBatcherStore();
 
 
     const updateBals = async (addr: string | null | undefined) => {
@@ -97,7 +94,6 @@ export const SellRektTab: FC<Props> = ({
     const sellRektCoin = async () => {
         if (rektTxsBatcherContract && userInputSellAmount !== '') {
             const amount = utils.parseEther(userInputSellAmount);
-            updateRektBatcherStatus()
 
             try {
                 const swapTx = await rektTxsBatcherContract.sellRektCoin(amount);
