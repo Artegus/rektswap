@@ -1,7 +1,7 @@
 import { createIcon } from '@chakra-ui/react';
 
-const LogoIcon = createIcon({
-    displayName: 'LogoIcon',
+const MaticIcon = createIcon({
+    displayName: 'MaticIcon',
     viewBox: '0 0 38.4 33.5',
     path: (
         <path 
@@ -15,4 +15,4 @@ const LogoIcon = createIcon({
     )
 })
 
-export { LogoIcon };
+export { MaticIcon };
