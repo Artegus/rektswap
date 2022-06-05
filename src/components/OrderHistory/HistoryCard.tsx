@@ -63,7 +63,7 @@ const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 					You bought <Badge>
 						{formatRekt(parseFloat(quantityReceived))} REKT
 					</Badge> for <Badge>
-						{formatEth(parseFloat(quantitySold))} ETH
+						{formatEth(parseFloat(quantitySold))} MATIC 
 					</Badge>
 				</Box>
 				<DateBadgeFor tx={tx} />

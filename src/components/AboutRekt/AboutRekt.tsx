@@ -36,7 +36,7 @@ export const AboutRekt: FC<Props> = ({
 							REKTcoin (REKT) is an hyperdeflationary ERC20
 							experimental shitcoin on the MATIC blockchain. You
 							can buy REKT without any fees, but every time you
-							sell any REKT an completly random amount gets
+							sell any REKT an completely random amount gets
 							burned. Gamble with caution.
 						</Text>
 						<Text>
