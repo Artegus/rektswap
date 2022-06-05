@@ -15,7 +15,7 @@ export const Logo: FC = () => {
             <Text
                 bgGradient='linear(270deg, #ff3737, #8247E5)'
                 backgroundClip='text'
-                fontSize='2xl'
+                fontSize='xl'
                 fontFamily={`'Kdam Thmor Pro', sans-serif`}
             >REKT</Text>
         </HStack>
