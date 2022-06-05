@@ -24,3 +24,7 @@ export const defaultContracts = {
 		address: '0x42543C0E9092cf56674ECC50908ff3C4F35E4808'
 	}
 }
+
+export const REKTCOIN = defaultContracts.REKT_COIN.address;
+export const REKT_TX_BATCHER = defaultContracts.REKT_TRANSACTION_BATCHER.address;
+export const UNISWAPV2 = defaultContracts.UNISWAPV2_ROUTER02.address;

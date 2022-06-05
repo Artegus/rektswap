@@ -4,6 +4,7 @@ import { FC } from "react"
 import { TelegramIcon } from "../../icons/TelegramIcon"
 import { TwitterIcon } from "../../icons/TwitterIcon"
 import { IconLink } from "../IconLink/IconLink"
+import { StatusBar } from "../StatusBar/StatusBar"
 
 const socialMediaData = [
     { href: 'https://twitter.com/{_}', component: TwitterIcon },
@@ -27,6 +28,7 @@ export const Footer: FC = () => {
                     />
                 ))}
             </HStack>
+            <StatusBar/>
         </HStack>
 
     )
