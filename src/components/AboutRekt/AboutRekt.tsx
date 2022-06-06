@@ -6,6 +6,7 @@ import {
 	ModalContent,
 	ModalHeader, ModalCloseButton, ModalBody,
 	Text, VStack, Divider, Box, Link, HStack,
+	Wrap, WrapItem
 } from '@chakra-ui/react';
 
 import {
@@ -46,22 +47,28 @@ export const AboutRekt: FC<Props> = ({
 							protocol.
 						</Text>
 						<Divider pt={3}/>
-						<HStack>
-							<Link href={batcherEtherscan} isExternal>
-								DEX contract <ExternalLinkIcon mx='2px' />
-							</Link>
-							<Link href={rektEtherscan} isExternal>
-								ERC20 contract <ExternalLinkIcon mx='2px' />
-							</Link>
-						</HStack>
-						<HStack>
-							<Link href={ownershipRenouncedTx} isExternal>
-								Ownership renounced<ExternalLinkIcon mx='2px' />
-							</Link>
-							<Link href={liqLockedTx} isExternal>
-								Liquidity locked<ExternalLinkIcon mx='2px' />
-							</Link>
-						</HStack>
+						<Wrap justify='center'>
+							<WrapItem>
+								<Link href={batcherEtherscan} isExternal>
+									DEX contract <ExternalLinkIcon mx='2px' />
+								</Link>
+							</WrapItem>
+							<WrapItem>
+								<Link href={rektEtherscan} isExternal>
+									ERC20 contract <ExternalLinkIcon mx='2px' />
+								</Link>
+							</WrapItem>
+							<WrapItem>
+								<Link href={ownershipRenouncedTx} isExternal>
+									Ownership renounced<ExternalLinkIcon mx='2px' />
+								</Link>
+							</WrapItem>
+							<WrapItem>
+								<Link href={liqLockedTx} isExternal>
+									Liquidity locked<ExternalLinkIcon mx='2px' />
+								</Link>
+							</WrapItem>
+						</Wrap>
 					</VStack>
 			  	</ModalBody>
 			</ModalContent>
