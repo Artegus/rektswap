@@ -13,11 +13,12 @@ import {
 } from '@chakra-ui/icons'
 
 const batcherEtherscan = 
-	'https://kovan.etherscan.io/address/0x4b170fa8934740a3a753e2c7cfd2dd1d973fac93';
+	'https://polygonscan.com/address/0x686ec0d335b843ce76efb1a5ea458169aa2f2518';
 const rektEtherscan = 
-	'https://kovan.etherscan.io/token/0x33632e8362e9084f36ab68bf59269f54bde787ae';
-const ownershipRenouncedTx = batcherEtherscan;
-const liqLockedTx = rektEtherscan;
+	'https://polygonscan.com/address/0x6810eB4C954eE77E4fe5d4Af59EF1AA15E25B70F';
+const ownershipRenouncedTx = 
+	'https://polygonscan.com/tx/0xff2df70d467ab42cb34853269fce722b6de0333bd89f8ed35d6faeed7d699f0f';
+const liqLockedTx = rektEtherscan; // TODO
 
 // TODO NOTE FIXME all those links should be updated in production
 
