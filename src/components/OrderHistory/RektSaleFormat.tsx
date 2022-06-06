@@ -17,7 +17,6 @@ import {
 
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
-const fulfillerAddr = defaultContracts.RANDOMNESS_FULFILLER.address;
 
 type TransactionReceipt = providers.TransactionReceipt;
 

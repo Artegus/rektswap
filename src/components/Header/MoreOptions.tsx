@@ -3,12 +3,15 @@ import { FC } from 'react'
 import {
     Menu, MenuButton, MenuList,
     MenuItem, useColorMode, IconButton,
-    HStack, Text, useDisclosure
+    HStack, Text, useDisclosure, Link
 } from '@chakra-ui/react';
 import {
     HamburgerIcon, InfoIcon, MoonIcon,
     SunIcon, TimeIcon
 } from '@chakra-ui/icons'
+import {
+	BsFillBarChartFill
+} from 'react-icons/bs'
 
 import { OrderHistory } from '../OrderHistory/OrderHistory';
 import { AboutRekt } from '../AboutRekt/AboutRekt';
@@ -51,16 +54,6 @@ export const MoreOptions: FC = () => {
                     </HStack>
                 </MenuItem>
                 <MenuItem
-					onClick={infoOnOpen}
-				>
-                    <HStack w="full" justifyContent="space-between" >
-                        <Text>
-                            About
-                        </Text>
-                        <InfoIcon />
-                    </HStack>
-                </MenuItem>
-                <MenuItem
 					onClick={historyOnOpen}
 				>
                     <HStack w="full" justifyContent="space-between" >
@@ -70,6 +63,27 @@ export const MoreOptions: FC = () => {
                         <TimeIcon />
                     </HStack>
                 </MenuItem>
+                <MenuItem
+					onClick={infoOnOpen}
+				>
+                    <HStack w="full" justifyContent="space-between" >
+                        <Text>
+                            About
+                        </Text>
+                        <InfoIcon />
+                    </HStack>
+                </MenuItem>
+					<Link href='https://polygon.poocoin.app/tokens/0x6810eb4c954ee77e4fe5d4af59ef1aa15e25b70f'>
+                <MenuItem
+				>
+                    <HStack w="full" justifyContent="space-between" >
+                        <Text>
+							Chart	
+                        </Text>
+                        <BsFillBarChartFill />
+                    </HStack>
+                </MenuItem>
+					</Link>
             </MenuList>
         </Menu>
 		<OrderHistory 

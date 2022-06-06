@@ -23,6 +23,7 @@ import { ACTION_TABS } from "./responsive/breakpoints";
 export const formatBal = (bal: number, decimals: number): string => {
     const balStr = bal.toString();
     const decimalPos = balStr.search("\\.");
+	if(decimalPos === -1) return balStr;
     return balStr.substring(0, decimalPos + decimals + 1);
 }
 
@@ -149,7 +150,7 @@ export const SellRektTab: FC<Props> = ({
         if (rektContract) {
             try {
                 const tx = await rektContract.approve(REKT_TX_BATCHER, utils.parseEther('9999'));
-                await tx.wait();
+                //await tx.wait();
                 setAllowedTosell(true);
             } catch (approveError) {
                 setAllowedTosell(false);
@@ -189,7 +190,6 @@ export const SellRektTab: FC<Props> = ({
     }, [account, active])
 
     useEffect(() => { updateBals(account); }, [account, active]);
-
     return (
         <VStack
             spacing={4}
