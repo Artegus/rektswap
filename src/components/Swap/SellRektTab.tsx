@@ -23,6 +23,7 @@ import { ACTION_TABS } from "./responsive/breakpoints";
 export const formatBal = (bal: number, decimals: number): string => {
     const balStr = bal.toString();
     const decimalPos = balStr.search("\\.");
+	if(decimalPos === -1) return balStr;
     return balStr.substring(0, decimalPos + decimals + 1);
 }
 
@@ -189,7 +190,6 @@ export const SellRektTab: FC<Props> = ({
     }, [account, active])
 
     useEffect(() => { updateBals(account); }, [account, active]);
-
     return (
         <VStack
             spacing={4}

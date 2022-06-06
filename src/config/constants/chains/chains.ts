@@ -1,6 +1,6 @@
 enum SupportedChainId {
   POLYGON = 137,
-  KOVAN = 42
+  //KOVAN = 42
 }
 
 const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(SupportedChainId).filter(
