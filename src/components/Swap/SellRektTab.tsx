@@ -7,17 +7,17 @@ import {
 } from "@chakra-ui/react";
 
 import { utils, BigNumberish } from 'ethers'
-import { Trade, TradeType, TokenAmount, Route, Fetcher, WETH, ChainId, Token } from '@uniswap/sdk'
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
 
-import { REKTCOIN, REKT_TX_BATCHER } from "../../config/constants/tokenLists/default.contracts";
+import { REKT_TX_BATCHER } from "../../config/constants/tokenLists/default.contracts";
 import { Props } from "../../types/TabProps/TabProps";
 import { useOrdersStore } from "../../stores/OrdersStore";
 import { useRektContract, useRektTxsBatcherContract } from '../../hooks/useContract';
 import { ACTION_TABS } from "./responsive/breakpoints";
+import { getTrade } from "../../utils/getTrade";
 
 
 export const formatBal = (bal: number, decimals: number): string => {
@@ -62,18 +62,10 @@ export const SellRektTab: FC<Props> = ({
         }
     }
 
-    const chainId = ChainId.KOVAN;
-    const wethToken = WETH[chainId];
-
     const updateOutputAmount = async () => {
         const amount = utils.parseEther(userInputSellAmount.toString());
-        const rektCoin = new Token(chainId, REKTCOIN, 18);
-        const pairWethRekt = await Fetcher.fetchPairData(wethToken, rektCoin);
-        const routeWethRekt = new Route([pairWethRekt], rektCoin);
 
-        const trade = new Trade(
-            routeWethRekt, new TokenAmount(rektCoin, amount.toString()), TradeType.EXACT_INPUT
-        );
+        const trade = await getTrade(amount, 'sell');
         const { outputAmount } = trade;
         const parsedOutputAmount = outputAmount.toSignificant(6);
 
@@ -153,7 +145,7 @@ export const SellRektTab: FC<Props> = ({
                 const tx = await rektContract.approve(
 					REKT_TX_BATCHER, utils.parseEther(initial_supply)
 				);
-                //await tx.wait();
+                await tx.wait();
                 setAllowedTosell(true);
             } catch (approveError) {
                 setAllowedTosell(false);

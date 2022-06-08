@@ -25,6 +25,7 @@ import { useOrdersStore } from "../../stores/OrdersStore";
 import { OrderHistory } from "../OrderHistory/OrderHistory";
 
 import { formatRekt } from './SellRektTab';
+import { getTrade } from "../../utils/getTrade";
 
 declare global {
 	interface Window {
@@ -80,9 +81,6 @@ export const BuyRektTab: FC<Props> = ({
 	useEffect(() => {updateBals(account);}, [account, active]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const chainId = ChainId.KOVAN;
-    const wethToken = WETH[chainId];
-
     const onKeyUpInputAmount = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const { value } = e.currentTarget;
         window.clearTimeout(timeRef.current)
@@ -98,15 +96,7 @@ export const BuyRektTab: FC<Props> = ({
 
     const updateOutputAmount = async () => {
         const amount = utils.parseEther(userInputAmount.toString());
-        const rektCoin = await Fetcher.fetchTokenData(chainId, defaultContracts.REKT_COIN.address);
-        const pairWethRekt = await Fetcher.fetchPairData(wethToken, rektCoin);
-        const routeWethRekt = new Route([pairWethRekt], wethToken);
-
-        const trade = new Trade(
-			routeWethRekt,
-			new TokenAmount(wethToken, amount.toString()),
-			TradeType.EXACT_INPUT
-		);
+        const trade = await getTrade(amount, 'buy');
         const { outputAmount } = trade;
         const parsedOutputAmount = outputAmount.toSignificant(6);
 
