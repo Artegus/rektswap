@@ -29,7 +29,7 @@ const maxTxToShow = 5;
 
 const estimatedBlocksPerDay = 6000;
 const totalHistoryDays = 5;
-const blockMargin = totalHistoryDays * estimatedBlocksPerDay;
+const blockMargin = 3000;//totalHistoryDays * estimatedBlocksPerDay;
 
 export const OrderHistory: FC<Props> = ({
 	isOpen, onOpen, onClose
