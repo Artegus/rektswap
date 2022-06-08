@@ -158,9 +158,9 @@ export const BuyRektTab: FC<Props> = ({
 			toast({
 				title: 'Buy completed',
 				description: `You bought ${
-					formatRekt(parseFloat(utils.formatUnits(tx.logs[2].data)))
+					formatRekt(parseFloat(utils.formatUnits(tx.logs[4].data)))
 				} REKT for ${
-					formatEth(parseFloat(utils.formatUnits(tx.logs[1].data)))
+					formatEth(parseFloat(utils.formatUnits(tx.logs[2].data)))
 				} MATIC`, 
 				status: 'success',
 				position: 'top',

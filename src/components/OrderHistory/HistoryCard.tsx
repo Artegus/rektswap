@@ -53,9 +53,8 @@ export const DateBadgeFor: FC<{tx: TransactionReceipt}> = ({tx}) => {
 }
 
 const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
-	const quantitySold = utils.formatUnits(tx.logs[1].data);
-
-	const quantityReceived = utils.formatUnits(tx.logs[2].data);
+	const quantitySold = utils.formatUnits(tx.logs[2].data);
+	const quantityReceived = utils.formatUnits(tx.logs[4].data);
 	return (
 		<HStack>
 			<VStack w='100%' align='left'>

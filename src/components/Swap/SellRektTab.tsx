@@ -149,7 +149,10 @@ export const SellRektTab: FC<Props> = ({
     const approveAllowance = async (): Promise<void> => {
         if (rektContract) {
             try {
-                const tx = await rektContract.approve(REKT_TX_BATCHER, utils.parseEther('9999'));
+				const initial_supply = (1_000_000_000).toString();
+                const tx = await rektContract.approve(
+					REKT_TX_BATCHER, utils.parseEther(initial_supply)
+				);
                 //await tx.wait();
                 setAllowedTosell(true);
             } catch (approveError) {

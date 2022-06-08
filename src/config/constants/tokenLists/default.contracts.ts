@@ -1,28 +1,24 @@
 export const defaultContracts = {
     WETH: {
         name: 'WETH',
-        address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
+        address: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
     },
     REKT_COIN: {
         name: 'REKT',
-        address: '0x6810eB4C954eE77E4fe5d4Af59EF1AA15E25B70F'
+        address: '0x1c9bE52c4531DA802581e9beE27797926090709e'
     },
     REKT_TRANSACTION_BATCHER: {
         name: 'RektTransactionBatcher',
-        address: '0x686EC0d335B843Ce76EFB1a5EA458169aA2F2518'
+        address: '0x349fea47fa67fAF75C9F301Adb5108aef49223ff'
     },
     UNISWAPV2_ROUTER02: {
         name: 'UniswapV2Router02',
-        address: '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'
+        address: '0x8954AfA98594b838bda56FE4C12a09D7739D179b'
     }, 
 	UNISWAPV2_PAIR: {
 		name: 'UniswapV2Pair',
-		address: '0x61D59367dAA096199E0070414e8A33EfaA44DF62'
+		address: '0xCeA7656cef847FdB05a3b0530D6b2Eb71ad6f332'
 	},
-	RANDOMNESS_FULFILLER: {
-		name: 'RandomnessFulfiller',
-		address: '0x42543C0E9092cf56674ECC50908ff3C4F35E4808'
-	}
 }
 
 export const REKTCOIN = defaultContracts.REKT_COIN.address;

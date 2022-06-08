@@ -17,7 +17,8 @@ const useWalletHandleError = () => {
         title: 'Error',
         duration: WEB3_ERROR_DURATION,
         status: 'error',
-        position: 'top'
+        position: 'top',
+		isClosable: true
     });
 
     const suggestNetworkChange = async () => {
