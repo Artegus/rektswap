@@ -1,7 +1,9 @@
+import { config } from "../../config";
+
 enum SupportedChainId {
-  //POLYGON = 137,
-	MUMBAI = 80001
-  //KOVAN = 42
+  	POLYGON = config.CHAIN_ID,
+	//MUMBAI = 80001
+  	//KOVAN = 42
 }
 
 const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(SupportedChainId).filter(

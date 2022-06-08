@@ -23,6 +23,8 @@ export const defaultContracts = {
 	},
 }
 
+export const WETH = defaultContracts.WETH.address;
 export const REKTCOIN = defaultContracts.REKT_COIN.address;
 export const REKT_TX_BATCHER = defaultContracts.REKT_TRANSACTION_BATCHER.address;
 export const UNISWAPV2 = defaultContracts.UNISWAPV2_ROUTER02.address;
+export const REKT_WETH_LP = defaultContracts.UNISWAPV2_PAIR.address;

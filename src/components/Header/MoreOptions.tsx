@@ -12,9 +12,13 @@ import {
 import {
 	BsFillBarChartFill
 } from 'react-icons/bs'
+import { REKTCOIN } from '../../config/constants/tokenLists/default.contracts';
 
 import { OrderHistory } from '../OrderHistory/OrderHistory';
 import { AboutRekt } from '../AboutRekt/AboutRekt';
+const chartLink = 
+	`https://polygon.poocoin.app/tokens/${REKTCOIN}`;
+
 
 export const MoreOptions: FC = () => {
 
@@ -73,7 +77,7 @@ export const MoreOptions: FC = () => {
                         <InfoIcon />
                     </HStack>
                 </MenuItem>
-					<Link href='https://polygon.poocoin.app/tokens/0x6810eb4c954ee77e4fe5d4af59ef1aa15e25b70f'>
+					<Link href={chartLink}>
                 <MenuItem
 				>
                     <HStack w="full" justifyContent="space-between" >
