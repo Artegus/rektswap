@@ -9,16 +9,20 @@ import {
 	Wrap, WrapItem
 } from '@chakra-ui/react';
 
+import { 
+	REKT_TX_BATCHER, REKTCOIN
+} from "../../config/constants/tokenLists/default.contracts";
+
 import {
 	ExternalLinkIcon
 } from '@chakra-ui/icons'
 
 const batcherEtherscan = 
-	'https://polygonscan.com/address/0x686ec0d335b843ce76efb1a5ea458169aa2f2518';
+	`https://polygonscan.com/address/${REKT_TX_BATCHER}`;
 const rektEtherscan = 
-	'https://polygonscan.com/address/0x6810eB4C954eE77E4fe5d4Af59EF1AA15E25B70F';
+	`https://polygonscan.com/address/${REKTCOIN}`;
 const ownershipRenouncedTx = 
-	'https://polygonscan.com/tx/0xff2df70d467ab42cb34853269fce722b6de0333bd89f8ed35d6faeed7d699f0f';
+	'https://polygonscan.com/tx/0x4c3b72620a65b06b965a73cbf5decef04af24aedef16a56516f766981e566389';
 const liqLockedTx = rektEtherscan; // TODO
 
 // TODO NOTE FIXME all those links should be updated in production
