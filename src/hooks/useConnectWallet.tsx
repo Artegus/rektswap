@@ -6,16 +6,12 @@ import { connectorsByName, ConnectorNames } from '../connectors';
 function useConnectWallet() {
 
     const { setActivatingConnector } = useUserStore();
-    const { activate } = useWeb3React<Web3Provider>()
-    const connectWallet = async (connectorName: ConnectorNames) => {
-        setActivatingConnector(connectorsByName[connectorName])
-        try {
-            await activate(connectorsByName[connectorName])
-        } catch (e) {
-            console.error(e);
-        }
-    }
+    const { activate } = useWeb3React<Web3Provider>();
 
-    return connectWallet
+    return async (connectorName: ConnectorNames) => {
+        await activate(connectorsByName[connectorName], undefined, false);
+        setActivatingConnector(connectorsByName[connectorName]);
+    }
 }
+
 export { useConnectWallet };

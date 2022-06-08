@@ -16,12 +16,12 @@ export const Header: FC = () => {
     return (
         <HStack 
             w="full" 
-            h="70" 
+            h="50" 
             justifyContent="space-between"
         >
             <Logo />
 
-            <HStack spacing={5} px="5">
+            <HStack spacing={5} >
                 {!active ? 
                     <ConnectWallet/> : 
                     <Button size='md'>

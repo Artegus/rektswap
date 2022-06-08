@@ -1,19 +1,23 @@
 import { FC } from 'react';
 import {
-    Box
+    HStack, Text
 } from '@chakra-ui/react'
-import { LogoIcon } from '../../icons/logo'
+import { MaticIcon } from '../../icons/MaticIcon'
 
 export const Logo: FC = () => {
     return (
-        <Box px='5'>
-            <LogoIcon
+        <HStack>
+            <MaticIcon
                 w={8} 
                 h={8}
-                style={{
-                    fill: '#8247E5',
-                }}
+                color="#8247E5"
             />
-        </Box>
+            <Text
+                bgGradient='linear(270deg, #ff3737, #8247E5)'
+                backgroundClip='text'
+                fontSize='xl'
+                fontFamily={`'Kdam Thmor Pro', sans-serif`}
+            >REKT</Text>
+        </HStack>
     )
 }

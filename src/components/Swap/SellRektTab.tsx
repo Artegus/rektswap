@@ -2,46 +2,35 @@ import { FC, useRef, useState, useEffect } from "react";
 import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
-    Box, useDisclosure
+    Box, useToast, Alert, Spinner,
+    AlertTitle,
 } from "@chakra-ui/react";
 
-import { Contract, utils, BigNumberish } from 'ethers'
-import { Trade, TradeType, TokenAmount, Route, Fetcher, WETH, ChainId, Token } from '@uniswap/sdk'
+import { utils, BigNumberish } from 'ethers'
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
 
-import REKT_COIN_BATCH_ABI from '../../abis/rektcoinBatch.json';
-import REKT_COIN_ABI from '../../abis/rektcoin.json';
-import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
+import { REKT_TX_BATCHER } from "../../config/constants/tokenLists/default.contracts";
 import { Props } from "../../types/TabProps/TabProps";
-
-import { useSwapStore } from '../../stores/SwapStore';
-import { OrderHistory } from "../OrderHistory/OrderHistory";
+import { useOrdersStore } from "../../stores/OrdersStore";
+import { useRektContract, useRektTxsBatcherContract } from '../../hooks/useContract';
 import { ACTION_TABS } from "./responsive/breakpoints";
+import { getTrade } from "../../utils/getTrade";
 
 
 export const formatBal = (bal: number, decimals: number): string => {
     const balStr = bal.toString();
     const decimalPos = balStr.search("\\.");
+	if(decimalPos === -1) return balStr;
     return balStr.substring(0, decimalPos + decimals + 1);
 }
-
 
 const rektBalanceDecimalsToShow = 2;
 export const formatRekt = (bal: number): string => {
     return formatBal(bal, rektBalanceDecimalsToShow);
 }
-
-export const getRektCoinContract = (library: any): any => {
-    return new Contract(
-        defaultContracts.REKT_COIN.address,
-        REKT_COIN_ABI,
-        library?.getSigner()
-    );
-}
-
 
 export const SellRektTab: FC<Props> = ({
     tabTitle
@@ -52,37 +41,31 @@ export const SellRektTab: FC<Props> = ({
     const [allowedTosell, setAllowedTosell] = useState<boolean>(false);
     const timeRef = useRef<number | undefined>(undefined);
 
-    const { active, library, account } = useWeb3React<Web3Provider>();
+    const { active, account } = useWeb3React<Web3Provider>();
     const [rektBal, setRektBal] = useState<number | null>(null);
+    const { addTransaction } = useOrdersStore();
 
-    const { setLastTx } = useSwapStore();
-	const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast();
 
-    const getCurrentRektContract = (): any => getRektCoinContract(library);
+    const rektContract = useRektContract();
+    const rektTxsBatcherContract = useRektTxsBatcherContract();
+
 
     const updateBals = async (addr: string | null | undefined) => {
         if (!active)
             setRektBal(null);
         else if (typeof addr === "string") {
-            const rektCoin = getCurrentRektContract();
-            const bal = await rektCoin.balanceOf(addr);
-            setRektBal(parseFloat(utils.formatUnits(bal)));
+            if (rektContract) {
+                const balance = await rektContract.balanceOf(addr);
+                setRektBal(parseFloat(utils.formatUnits(balance)));
+            }
         }
     }
 
-
-    const chainId = ChainId.KOVAN;
-    const wethToken = WETH[chainId];
-
     const updateOutputAmount = async () => {
         const amount = utils.parseEther(userInputSellAmount.toString());
-        const rektCoin = new Token(chainId, defaultContracts.REKT_COIN.address, 18);
-        const pairWethRekt = await Fetcher.fetchPairData(wethToken, rektCoin);
-        const routeWethRekt = new Route([pairWethRekt], rektCoin);
 
-        const trade = new Trade(
-            routeWethRekt, new TokenAmount(rektCoin, amount.toString()), TradeType.EXACT_INPUT
-        );
+        const trade = await getTrade(amount, 'sell');
         const { outputAmount } = trade;
         const parsedOutputAmount = outputAmount.toSignificant(6);
 
@@ -100,65 +83,99 @@ export const SellRektTab: FC<Props> = ({
         }, 1000)
     }
 
+
     const sellRektCoin = async () => {
-        const rektBatchet = new Contract(
-            defaultContracts.REKT_TRANSACTION_BATCHER.address,
-            REKT_COIN_BATCH_ABI,
-            library?.getSigner()
-        );
-        const amount = utils.parseEther(userInputSellAmount);
-        try {
-            const tx = await rektBatchet.functions["sellRektCoin"](amount);
-            setLastTx(tx);
-            setRektBal(
-                (currentBal: number | null) => currentBal !== null ?
-                    currentBal - parseFloat(userInputSellAmount) : null
-            );
-            console.log(tx);
-			// TODO here it should update the history
-			onOpen(); // Opens tx history after doing an swap
-        } catch (e) {
-            console.error(e);
+        if (rektTxsBatcherContract && userInputSellAmount !== '') {
+            const amount = utils.parseEther(userInputSellAmount);
+
+            try {
+                const swapTx = await rektTxsBatcherContract.sellRektCoin(amount);
+                setRektBal(
+                    (currentBal: number | null) => currentBal !== null ?
+                        currentBal - parseFloat(userInputSellAmount) : null
+                );
+                toast({
+                    title: 'Selling REKTcoin',
+                    duration: 9000000,
+                    position: 'top',
+                    render: () => (
+                        <Alert borderRadius='md'>
+                            <Spinner pr={2} mr={2} />
+                            <AlertTitle>Selling REKTcoin</AlertTitle>
+                        </Alert>
+                    )
+                });
+                const tx = await swapTx.wait();
+                addTransaction(tx);
+                toast.closeAll();
+                toast({
+                    title: 'Sell order submited',
+                    description: `You submited an ${formatRekt(parseFloat(utils.formatUnits(tx.logs[0].data)))
+                        } REKT sell order to the batcher, you can see its status at the recent orders tab`,
+                    status: 'success',
+                    duration: 7000,
+                    isClosable: true,
+                    position: 'top',
+                });
+            } catch (e) {
+                toast.closeAll();
+				const fee = utils.formatUnits(await rektTxsBatcherContract.getCurrentRektFee())
+				if(parseFloat(userInputSellAmount) < parseFloat(fee))
+					toast({
+						position: 'top',
+						title: `The minimum sell amount is ${fee} REKT`,
+						status: 'error'
+					})
+				else
+					toast({
+						position: 'top',
+						title: 'Transaction error',
+						description: 'There was an error processing your transaction',
+						status: 'error'
+					});
+            }
         }
+
     }
 
     const approveAllowance = async (): Promise<void> => {
-        const rektContract: Contract = getRektCoinContract(library!);
-
-        try {
-            const txApprove = await rektContract.functions["approve"](
-                defaultContracts.REKT_TRANSACTION_BATCHER.address,
-                utils.parseEther("99999")
-            );
-            console.log(txApprove);
-            setAllowedTosell(true);
-        } catch (e) {
-            console.error(e)
-            setAllowedTosell(false);
+        if (rektContract) {
+            try {
+				const initial_supply = (1_000_000_000).toString();
+                const tx = await rektContract.approve(
+					REKT_TX_BATCHER, utils.parseEther(initial_supply)
+				);
+                await tx.wait();
+                setAllowedTosell(true);
+            } catch (approveError) {
+                setAllowedTosell(false);
+            }
         }
     }
 
     const checkAllowance = async () => {
-        const rektContract: Contract = getRektCoinContract(library!);
-        try {
-            const allowanceAmount: BigNumberish = await rektContract.functions["allowance"](account, defaultContracts.REKT_TRANSACTION_BATCHER.address);
-            const amountAllowed = utils.parseEther(allowanceAmount.toString());
-            const isAprroved = amountAllowed.gt(utils.parseEther("1"));
-            setAllowedTosell(isAprroved);
-        } catch (e) {
-            console.error(e);
-            setAllowedTosell(false);
+        if (rektContract && account) {
+            try {
+                const allowanceAmount: BigNumberish = await rektContract.allowance(account, REKT_TX_BATCHER);
+                const amountAllowed = utils.parseEther(allowanceAmount.toString());
+                const isApproved = amountAllowed.gt(utils.parseEther('1'));
+                setAllowedTosell(isApproved);
+            } catch (e) {
+                setAllowedTosell(false);
+            }
         }
     }
 
     const renderActionButton = () => {
-        return <Button
-            size="md"
-            w="full"
-            onClick={allowedTosell ? sellRektCoin : approveAllowance}
-        >
-            {allowedTosell ? "Sell" : "Approve"}
-        </Button>
+        return (
+            <Button
+                size="md"
+                w="full"
+                onClick={allowedTosell ? sellRektCoin : approveAllowance}
+            >
+                {allowedTosell ? "Sell" : "Approve"}
+            </Button>
+        )
     }
 
     useEffect(() => {
@@ -168,7 +185,6 @@ export const SellRektTab: FC<Props> = ({
     }, [account, active])
 
     useEffect(() => { updateBals(account); }, [account, active]);
-
     return (
         <VStack
             spacing={4}
@@ -235,7 +251,7 @@ export const SellRektTab: FC<Props> = ({
                             h='2.5rem' size='md'
                             disabled
                         >
-                            <Text>ETH</Text>
+                            <Text>MATIC</Text>
                         </Button>
                     </InputRightElement>
                 </FormControl>
@@ -250,7 +266,6 @@ export const SellRektTab: FC<Props> = ({
                     renderActionButton()
                 }
             </HStack>
-			<OrderHistory isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
         </VStack>
     )
 }
