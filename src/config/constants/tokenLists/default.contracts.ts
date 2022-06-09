@@ -1,23 +1,25 @@
+import { config } from '../../config'
+
 export const defaultContracts = {
     WETH: {
         name: 'WETH',
-        address: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889'
+        address: config.WETH
     },
     REKT_COIN: {
         name: 'REKT',
-        address: '0x1c9bE52c4531DA802581e9beE27797926090709e'
+        address: config.REKT_COIN
     },
     REKT_TRANSACTION_BATCHER: {
         name: 'RektTransactionBatcher',
-        address: '0x349fea47fa67fAF75C9F301Adb5108aef49223ff'
+        address: config.REKT_TXS_BATCHER
     },
     UNISWAPV2_ROUTER02: {
         name: 'UniswapV2Router02',
-        address: '0x8954AfA98594b838bda56FE4C12a09D7739D179b'
+        address: config.UNIV2_ROUTER02
     }, 
 	UNISWAPV2_PAIR: {
 		name: 'UniswapV2Pair',
-		address: '0xCeA7656cef847FdB05a3b0530D6b2Eb71ad6f332'
+		address: config.UNIV2_PAIR
 	},
 }
 
