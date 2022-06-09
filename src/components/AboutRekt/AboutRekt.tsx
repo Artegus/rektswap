@@ -24,7 +24,7 @@ const rektEtherscan =
 const ownershipRenouncedTx = 
 	'https://polygonscan.com/tx/0x4c3b72620a65b06b965a73cbf5decef04af24aedef16a56516f766981e566389';
 const liqLockedTx = 
-	'https://polygonscan.com/tx/0x1771fe607ce332550ff2271a37754582fbfd0745bd5d72d1b8a78b8be655f3cf';
+	'https://cryptexlock.me/pair/137/0xd7EC5C3569aCc64a705968bBDe6D2bdcE784B2B0';
 
 // TODO NOTE FIXME all those links should be updated in production
 
