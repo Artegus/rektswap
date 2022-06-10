@@ -69,7 +69,6 @@ export const SwapTest: FC = () => {
                 deadLine,
                 overrides
             );
-            console.log("Txn: ", swapTx);
         } catch (e) {
             console.error(e);
         }
@@ -84,7 +83,6 @@ export const SwapTest: FC = () => {
         const amount = utils.parseEther(userInputSellAmount);
         try {
             const tx = await rektBatchet.functions["sellRektCoin"](amount);
-            console.log(tx);
         } catch (e) {
             console.error(e);
         }
@@ -97,7 +95,6 @@ export const SwapTest: FC = () => {
                 defaultContracts.REKT_TRANSACTION_BATCHER.address, 
                 utils.parseEther("99999")
             );
-            console.log(txApprove);
         } catch (e) {
             console.error(e)
         }
@@ -108,7 +105,6 @@ export const SwapTest: FC = () => {
         const rektContract = new Contract(defaultContracts.REKT_COIN.address, REKT_COIN_ABI, library?.getSigner());
         try {
             const txCheck = await rektContract.functions["allowance"](account, defaultContracts.REKT_TRANSACTION_BATCHER.address);
-            console.log(txCheck);
         } catch (e) {
             console.error(e);
         }

@@ -130,7 +130,6 @@ export const BuyRektTab: FC<Props> = ({
 				(currentBal: number | null) => currentBal !== null?
 					currentBal - parseFloat(userInputAmount) : null
 			);
-            console.log('Txn: ', swapTx);
 			toast({
 				title: 'Buying REKTcoin',
 				duration: 9000000,
