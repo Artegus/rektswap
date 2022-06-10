@@ -60,7 +60,7 @@ export const FaqAccordion: FC = () => (
 		<h2>
 		  <AccordionButton>
 			<Box flex='1' textAlign='left' fontSize='2xl'>
-				How does it work?
+				How does it works?
 			</Box>
 			<AccordionIcon />
 		  </AccordionButton>
