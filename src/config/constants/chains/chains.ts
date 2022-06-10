@@ -1,5 +1,7 @@
+import { config } from "../../config";
+
 enum SupportedChainId {
-  	POLYGON = 137,
+  	POLYGON = config.CHAIN_ID,
 	//MUMBAI = 80001
   	//KOVAN = 42
 }
