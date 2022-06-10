@@ -15,7 +15,7 @@ import { TelegramIcon } from '../../icons/TelegramIcon';
 
 export const FaqAccordion: FC = () => {
 	return (
-		<Container>
+		<Container px={-5}>
 			<Accordion defaultIndex={[0]}>
 
 			  <AccordionItem>

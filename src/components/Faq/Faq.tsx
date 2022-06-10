@@ -11,7 +11,7 @@ import {
 
 export const Faq: FC = () => {
 	return (
-		<Container maxW="100vw" p={0} m={0} >
+		<Container maxW='100vw' p={0} m={0} >
 			<Flex
 				h={{ base: '100vh' }}
 				py={2}
