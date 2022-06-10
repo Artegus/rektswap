@@ -5,6 +5,7 @@ import {
     Box, useToast, Alert, Spinner,
     AlertTitle,
 } from "@chakra-ui/react";
+import { SellButton } from "../SellButton/SellButton";
 
 import { utils, BigNumberish } from 'ethers'
 
@@ -18,6 +19,7 @@ import { useOrdersStore } from "../../stores/OrdersStore";
 import { useRektContract, useRektTxsBatcherContract } from '../../hooks/useContract';
 import { ACTION_TABS } from "./responsive/breakpoints";
 import { getTrade } from "../../utils/getTrade";
+import { useSwapStore } from "../../stores/SwapStore";
 
 
 export const formatBal = (bal: number, decimals: number): string => {
@@ -38,12 +40,12 @@ export const SellRektTab: FC<Props> = ({
 
     const [userInputSellAmount, setUserInputSellAmount] = useState<string>("");
     const [expectedOutput, setExpectedOutput] = useState<string>("")
-    const [allowedTosell, setAllowedTosell] = useState<boolean>(false);
     const timeRef = useRef<number | undefined>(undefined);
 
     const { active, account } = useWeb3React<Web3Provider>();
     const [rektBal, setRektBal] = useState<number | null>(null);
     const { addTransaction } = useOrdersStore();
+    const { approvedContract, setApprovedContract } = useSwapStore();
 
     const toast = useToast();
 
@@ -138,43 +140,30 @@ export const SellRektTab: FC<Props> = ({
 
     }
 
-    const approveAllowance = async (): Promise<void> => {
-        if (rektContract) {
-            try {
-				const initial_supply = (1_000_000_000).toString();
-                const tx = await rektContract.approve(
-					REKT_TX_BATCHER, utils.parseEther(initial_supply)
-				);
-                await tx.wait();
-                setAllowedTosell(true);
-            } catch (approveError) {
-                setAllowedTosell(false);
-            }
-        }
-    }
-
     const checkAllowance = async () => {
         if (rektContract && account) {
             try {
                 const allowanceAmount: BigNumberish = await rektContract.allowance(account, REKT_TX_BATCHER);
                 const amountAllowed = utils.parseEther(allowanceAmount.toString());
                 const isApproved = amountAllowed.gt(utils.parseEther('1'));
-                setAllowedTosell(isApproved);
+                setApprovedContract(isApproved);
             } catch (e) {
-                setAllowedTosell(false);
+                setApprovedContract(false);
             }
         }
     }
 
     const renderActionButton = () => {
         return (
+            approvedContract ? 
             <Button
                 size="md"
                 w="full"
-                onClick={allowedTosell ? sellRektCoin : approveAllowance}
+                onClick={sellRektCoin}
             >
-                {allowedTosell ? "Sell" : "Approve"}
-            </Button>
+                Sell
+            </Button> : 
+            <SellButton />
         )
     }
 
