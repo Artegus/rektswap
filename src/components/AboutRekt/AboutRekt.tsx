@@ -32,7 +32,7 @@ export const AboutRekt: FC<Props> = ({
 	isOpen, onOpen, onClose
 }) => {
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} >
+		<Modal isOpen={isOpen} onClose={onClose} isCentered >
 			<ModalOverlay />
 			<ModalContent>
 			  	<ModalHeader>About REKTcoin</ModalHeader>
