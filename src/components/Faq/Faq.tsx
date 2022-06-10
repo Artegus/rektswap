@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { FaqAccordion } from './FaqAccordion';
 import { FaqHeading } from './FaqHeading';
 import { FaqHeader } from './FaqHeader';
+import { Footer } from '../Footer/Footer';
 
 import {
 	Container,
@@ -21,6 +22,7 @@ export const Faq: FC = () => {
 				<FaqHeader />
 				<FaqHeading />
 				<FaqAccordion />
+				<Footer />
 			</Flex>
 		</Container>
 	);

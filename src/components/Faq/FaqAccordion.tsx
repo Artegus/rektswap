@@ -11,11 +11,12 @@ import {
 } from '@chakra-ui/react'
 
 import { batcherEtherscan } from '../AboutRekt/AboutRekt';
+import { liqLockedTx } from '../AboutRekt/AboutRekt';
 import { TelegramIcon } from '../../icons/TelegramIcon';
 
 export const FaqAccordion: FC = () => {
 	return (
-		<Container px={-5}>
+		<Container px={-5} h='100vh' pb={5}>
 			<Accordion defaultIndex={[0]}>
 
 			  <AccordionItem>
@@ -81,6 +82,55 @@ export const FaqAccordion: FC = () => {
 					code works feel free to ask the devs in the <Link color='#8247E5' href='https://t.me/rektswap_community'>
 						Telegram group <TelegramIcon/> 
 					</Link>.
+				</AccordionPanel>
+			  </AccordionItem>
+
+			  <AccordionItem>
+				<h2>
+				  <AccordionButton>
+					<Box flex='1' textAlign='left' fontSize='2xl'>
+						What about the tokenomics?
+					</Box>
+					<AccordionIcon />
+				  </AccordionButton>
+				</h2>
+				<AccordionPanel pb={4}>
+					The initial supply is 1B REKT. The front-end dev has an
+					3.5% of the initial supply and the back-end dev has another
+					3.5%. The initial (and final) liquidity is 3700 MATIC for
+					908.874.000 REKT, <Link href={liqLockedTx} color='#8247E5'>
+						locked
+					</Link> until the 9th of September. If the project goes well we will
+					extend the lock duration. Finally, the remaining tokens
+					(aproximately 21M REKT) will be used for an airdrop in the <Link 
+						color='#8247E5' href='https://t.me/rektswap_community'
+					>
+						Telegram group <TelegramIcon />
+					</Link>. There
+					are not any dev fees, if we need money for marketing
+					purposes we will use our balances.
+				</AccordionPanel>
+			  </AccordionItem>
+
+			  <AccordionItem>
+				<h2>
+				  <AccordionButton>
+					<Box flex='1' textAlign='left' fontSize='2xl'>
+						What about the future?
+					</Box>
+					<AccordionIcon />
+				  </AccordionButton>
+				</h2>
+				<AccordionPanel pb={4}>
+					REKT is an experimental shitcoin, an Proof of Concept
+					for an bigger ecosystem of experimental shitcoins with original
+					mechanics. We have a lot of ideas about different
+					things we could do: REKT NFTs that will give reflections
+					on the burned REKT, others shitcoins with inherent gambling
+					mechanics like REKT (we dont want to spoil anything), etc. 
+
+					If we accomplish or not all of this will depend on the success 
+					of the POC and the decissions of the community.
 				</AccordionPanel>
 			  </AccordionItem>
 
