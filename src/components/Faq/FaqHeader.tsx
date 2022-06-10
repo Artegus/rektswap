@@ -6,27 +6,47 @@ import {
 	Center, 
 	Text,
 	Flex,
-	HStack
-} from '@chakra-ui/react'
+	HStack,
+	Button,
+	IconButton,
+	Link,
+	useColorMode,
+} from '@chakra-ui/react';
+
+import {
+    MoonIcon,
+    SunIcon, 
+} from '@chakra-ui/icons'
+
+import { Logo } from '../Logo/Logo';
 
 export const FaqHeader: FC = () => {
+
+    const { colorMode, toggleColorMode } = useColorMode();
+    
+    const iconMode = () => {
+        return colorMode === 'light' ? <MoonIcon /> : <SunIcon />
+    }
+
 	return (
-		<Center p={10}>
-			<Heading size='4xl'>
-				<Text
-					bgGradient='linear(270deg, #ff3737, #8247E5)'
-					backgroundClip='text'
-					fontFamily={`'Kdam Thmor Pro', sans-serif`}
-				>REKT </Text>
-				<Center>
-				<Text
-					fontSize='4xl'
-					fontFamily={`'Kdam Thmor Pro', sans-serif`}
-				>
-					FAQ
-				</Text>
-				</Center>
-			</Heading>
-		</Center>
+        <HStack 
+            w="full" 
+            h="50" 
+            justifyContent="space-between"
+        >
+            <Logo />
+
+            <HStack spacing={5} >
+				<Link href='/'>
+					<Button size='md'>Launch App</Button>
+				</Link>
+				<IconButton 
+					aria-label='Change theme'
+					onClick={toggleColorMode} 
+					icon={iconMode()} 
+				/>
+            </HStack>
+        </HStack>
+
 	);
 }
