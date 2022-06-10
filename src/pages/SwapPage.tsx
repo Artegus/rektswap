@@ -4,14 +4,14 @@ import {
 import { Web3Provider } from '@ethersproject/providers';
 import { useWeb3React } from '@web3-react/core';
 import { FC, useEffect } from 'react';
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
-import { Main } from './components/Main/Main';
-import { useWalletHandleError } from './hooks/useWalletHandleError';
-import { useEagerConnect, useInactiveListener } from './hooks/useWeb3'
-import { useUserStore } from './stores/UserStore';
+import { Footer } from '../components/Footer/Footer';
+import { Header } from '../components/Header/Header';
+import { Main } from '../components/Main/Main';
+import { useWalletHandleError } from '../hooks/useWalletHandleError';
+import { useEagerConnect, useInactiveListener } from '../hooks/useWeb3'
+import { useUserStore } from '../stores/UserStore';
 
-import './providers/chakra/styles.css';
+import '../providers/chakra/styles.css';
 
 export const SwapPage: FC = () => {
 
