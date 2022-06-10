@@ -34,7 +34,6 @@ export const SwapPage: FC = () => {
   useWalletHandleError();
 
   return (
-    <Container maxW="100vw" p={0} m={0} >
       <Flex
         h={{ base: '100vh' }}
         py={2}
@@ -45,6 +44,5 @@ export const SwapPage: FC = () => {
         <Main />
         <Footer />
       </Flex>
-    </Container>
   );
 }

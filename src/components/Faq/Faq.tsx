@@ -1,19 +1,19 @@
 import React from 'react';
 import { FC } from 'react';
-import { FaqAccordion } from './FaqAccordion';
-import { FaqHeading } from './FaqHeading';
+import { FaqContents } from './FaqContents';
 import { FaqHeader } from './FaqHeader';
 import { Footer } from '../Footer/Footer';
 
 import {
 	Container,
 	Flex,
-	Box
+	Box,
+	VStack, 
+	HStack
 } from '@chakra-ui/react'
 
 export const Faq: FC = () => {
 	return (
-		<Container maxW='100vw' p={0} m={0} >
 			<Flex
 				h={{ base: '100vh' }}
 				py={2}
@@ -21,13 +21,8 @@ export const Faq: FC = () => {
 				direction={'column'}
 			>
 				<FaqHeader />
-				<FaqHeading />
-				<FaqAccordion />
-				<Box px={[2, 0, 0, 0]} py={[2, 0, 0, 0]}>
-					<Footer />
-				</Box>
+				<FaqContents/>
 			</Flex>
-		</Container>
 	);
 }
 
