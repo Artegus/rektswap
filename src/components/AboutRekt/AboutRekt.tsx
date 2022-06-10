@@ -50,7 +50,12 @@ export const AboutRekt: FC<Props> = ({
 							whitepaper in the future explaining the
 							protocol.
 						</Text>
-						<Divider pt={3}/>
+						<Text py={3}>
+							Need more info? Check out the <Link color='#8247E5' href='/faq'>
+								FAQ
+							</Link>
+						</Text>
+						<Divider/>
 						<Wrap justify='center'>
 							<WrapItem>
 								<Link href={batcherEtherscan} isExternal>
