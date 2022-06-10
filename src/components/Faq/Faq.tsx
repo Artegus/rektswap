@@ -8,6 +8,7 @@ import { Footer } from '../Footer/Footer';
 import {
 	Container,
 	Flex,
+	Box
 } from '@chakra-ui/react'
 
 export const Faq: FC = () => {
@@ -22,7 +23,9 @@ export const Faq: FC = () => {
 				<FaqHeader />
 				<FaqHeading />
 				<FaqAccordion />
-				<Footer />
+				<Box px={[2, 0, 0, 0]} py={[2, 0, 0, 0]}>
+					<Footer />
+				</Box>
 			</Flex>
 		</Container>
 	);
