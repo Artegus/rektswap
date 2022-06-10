@@ -22,8 +22,8 @@ export const SellButton: FC = () => {
                 const tx = await rektContract.approve(
                     REKT_TX_BATCHER, utils.parseEther(initial_supply)
                 );
-                setLoading(false);
                 await tx.wait();
+                setLoading(false);
                 setApprovedContract(true);
             } catch (approveError) {
                 setLoading(false);
