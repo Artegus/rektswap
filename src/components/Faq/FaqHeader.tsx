@@ -1,16 +1,7 @@
-import React from 'react';
 import { FC } from 'react';
 
-import {
-	Heading,
-	Center, 
-	Text,
-	Flex,
-	HStack,
-	Button,
-	IconButton,
-	Link,
-	useColorMode,
+import { HStack, Button,
+	IconButton, Link, useColorMode,
 } from '@chakra-ui/react';
 
 import {
@@ -35,7 +26,7 @@ export const FaqHeader: FC = () => {
             justifyContent="space-between"
         >
             <Logo />
-
+            
             <HStack spacing={5} >
 				<Link href='/'>
 					<Button size='md'>Launch App</Button>
