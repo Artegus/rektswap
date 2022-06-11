@@ -23,7 +23,7 @@ export const rektEtherscan =
 	`https://polygonscan.com/address/${REKTCOIN}`;
 export const ownershipRenouncedTx = 
 	'https://polygonscan.com/tx/0x4c3b72620a65b06b965a73cbf5decef04af24aedef16a56516f766981e566389';
-const liqLockedTx = 
+export const liqLockedTx = 
 	'https://cryptexlock.me/pair/137/0xd7EC5C3569aCc64a705968bBDe6D2bdcE784B2B0';
 
 
