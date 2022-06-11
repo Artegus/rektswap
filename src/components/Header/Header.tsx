@@ -25,7 +25,9 @@ export const Header: FC = () => {
                 {!active ? 
                     <ConnectWallet/> : 
                     <Button size='md'>
-                        {account!.substring(0, 4)}...{account!.substring(account!.length - 4, account!.length)}
+                        {account!.substring(0, 4)}...{
+							account!.substring(account!.length - 4, account!.length)
+						}
                     </Button>
                 }
                 <MoreOptions />

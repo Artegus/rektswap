@@ -17,16 +17,15 @@ import {
 	ExternalLinkIcon
 } from '@chakra-ui/icons'
 
-const batcherEtherscan = 
+export const batcherEtherscan = 
 	`https://polygonscan.com/address/${REKT_TX_BATCHER}`;
-const rektEtherscan = 
+export const rektEtherscan = 
 	`https://polygonscan.com/address/${REKTCOIN}`;
-const ownershipRenouncedTx = 
+export const ownershipRenouncedTx = 
 	'https://polygonscan.com/tx/0x4c3b72620a65b06b965a73cbf5decef04af24aedef16a56516f766981e566389';
-const liqLockedTx = 
+export const liqLockedTx = 
 	'https://cryptexlock.me/pair/137/0xd7EC5C3569aCc64a705968bBDe6D2bdcE784B2B0';
 
-// TODO NOTE FIXME all those links should be updated in production
 
 export const AboutRekt: FC<Props> = ({
 	isOpen, onOpen, onClose
@@ -51,7 +50,12 @@ export const AboutRekt: FC<Props> = ({
 							whitepaper in the future explaining the
 							protocol.
 						</Text>
-						<Divider pt={3}/>
+						<Text py={3}>
+							Need more info? Check out the <Link color='#8247E5' href='/faq'>
+								FAQ
+							</Link>
+						</Text>
+						<Divider/>
 						<Wrap justify='center'>
 							<WrapItem>
 								<Link href={batcherEtherscan} isExternal>
