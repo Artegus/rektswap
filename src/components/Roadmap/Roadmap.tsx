@@ -1,16 +1,9 @@
 import { FC } from 'react';
 
-import {
-	Box,
-	Flex, 
-	HStack,
-	Heading,
-	Center,
-	Container,
-	List,
-	ListIcon,
-	ListItem,
-	Text
+import { 
+	Heading, Center, List,
+	ListIcon, ListItem, Text, 
+	VStack
 } from '@chakra-ui/layout';
 
 import { 
@@ -26,8 +19,10 @@ const purple = '#8247E5';
 
 export const Roadmap: FC = () => {
 	return (
-		<Container px={-5} h='100vh' pb={5}>
-			<Center p={10}>
+		<VStack
+			pb={20}
+		>
+				<Center p={10}>
 				<Heading size='3xl'>
 					<Text
 						bgGradient='linear(270deg, #ff3737, #8247E5)'
@@ -72,6 +67,6 @@ export const Roadmap: FC = () => {
 					Ecosystem expansion
 				</ListItem>
 			</List>
-		</Container>
+		</VStack>
 	);
 }

@@ -1,35 +1,42 @@
-import React from 'react';
 import { FC } from 'react';
 
 import {
-	SimpleGrid,
-	Box,
-	Container,
-	Center, 
 	Heading,
-	Text
+	Flex, Box, HStack
 } from '@chakra-ui/layout';
 
 import { RektText } from '../Logo/RektText';
 
 export const MainTokenPresentation: FC = () => {
 	return (
-		<Container maxW='50%' h='100vh'>
-		<Center h='100vh'>
-			<SimpleGrid columns={2} minChildWidth='200px' spacing='40px'>
-				<Center>
-				<Heading color='1a202c'>
-					REKT is an experimental shitcoin
-					that randomly deflates using Chainlink
-					random numbers.
-				</Heading>				
-				</Center>
-				<Center h='100%'>
-					<RektText asHeading fontSize='6xl'/>
-				</Center>
-			</SimpleGrid>
-		</Center>
-		</Container>
+		<Flex
+			minH="100vh"
+			gap={6}
+			flexWrap='wrap'
+			flexFlow={['wrap', 'wrap', 'wrap']}
+			flexDirection={['row', 'row', 'row']}
+			alignContent='center'
+			alignItems='center'
+			px={['10vw', '10vw', '10vw', '25vw', '30vw']}
+		>
+			<RektText
+				asHeading
+				otherProps={{
+					textAlign: 'center',
+					fontSize: { base: '4xl', md: '5xl', lg: '6xl' },
+					flex: 2
+				}}
+			/>
+			<Heading
+				color='1a202c'
+				textAlign='left'
+				fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+			>
+				REKT is an experimental shitcoin
+				that randomly deflates using Chainlink
+				random numbers.
+			</Heading>
+		</Flex>
 	);
 
 }
