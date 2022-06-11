@@ -6,7 +6,11 @@ import { FaqHeader as MainHeader } from '../Faq/FaqHeader';
 import { MainTokenPresentation } from './MainTokenPresentation';
 import { FaqForTheMainPage } from './FaqForTheMainPage';
 import { Roadmap } from '../Roadmap/Roadmap';
+<<<<<<< HEAD
 import { Particle } from '../Particle/Particle';
+=======
+import { AboutDevs } from '../AboutDevs/AboutDevs';
+>>>>>>> b3a6ae2 (feat: about devs component)
 
 export const Main: FC = () => {
 	return (
@@ -26,6 +30,7 @@ export const Main: FC = () => {
 				<FaqForTheMainPage />
 				<Roadmap />
 			</Flex>
+			<AboutDevs />
 		</Flex>
 	);
 }
