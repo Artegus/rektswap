@@ -6,6 +6,7 @@ import { FaqHeader as MainHeader } from '../Faq/FaqHeader';
 import { MainTokenPresentation } from './MainTokenPresentation';
 import { FaqForTheMainPage } from './FaqForTheMainPage';
 import { Roadmap } from '../Roadmap/Roadmap';
+import { Particle } from '../Particle/Particle';
 
 export const Main: FC = () => {
 	return (
@@ -14,6 +15,7 @@ export const Main: FC = () => {
 			px={5}
 			direction={'column'}
 		>
+			<Particle />
 			<MainHeader />
 			<MainTokenPresentation />
 			<Flex
