@@ -1,8 +1,14 @@
-import { extendTheme, theme as base } from '@chakra-ui/react';
+import { extendTheme, theme as base, ThemeConfig } from '@chakra-ui/react';
 import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools'
 import { buttonStyles } from './buttonStyles'
 
+const config: ThemeConfig = {
+    initialColorMode: 'dark',
+    useSystemColorMode: false
+}
+
 export const theme = extendTheme({
+    config: { ...config },
     colors: {
         brandLight: {
             50: '#e6e2da',
