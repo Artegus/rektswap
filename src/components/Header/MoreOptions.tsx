@@ -40,9 +40,10 @@ export const MoreOptions: FC = () => {
         <Menu
             autoSelect={false}
             closeOnSelect={false}
-        >
+            >
             <MenuButton
                 as={IconButton}
+                variant='simple-button'
                 aria-label='More'
                 icon={<HamburgerIcon />}
             />

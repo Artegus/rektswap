@@ -1,11 +1,10 @@
 import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools'
+import { ComponentStyleConfig } from '@chakra-ui/react'
 
-export const buttonStyles = {
-    baseStyle: (props: StyleFunctionProps) => ({
-        bg: mode('brandLightAlpha.300', 'whiteAlpha.200')(props)
-    }),
-    defaultProps: {
-        size: 'md', // default is md
-        variant: 'sm', // default is solid
+export const buttonStyles: ComponentStyleConfig = {
+    variants: {
+        'simple-button' : (props: StyleFunctionProps) => ({
+            bg: mode('brandLightAlpha.300', 'whiteAlpha.200')(props)
+        }),
     },
 }

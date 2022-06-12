@@ -29,10 +29,11 @@ export const FaqHeader: FC = () => {
             
             <HStack spacing={5} >
 				<Link href='/'>
-					<Button size='md'>Launch App</Button>
+					<Button size='md' variant='simple-button' >Launch App</Button>
 				</Link>
 				<IconButton 
 					aria-label='Change theme'
+                    variant='simple-button'
 					onClick={toggleColorMode} 
 					icon={iconMode()} 
 				/>
