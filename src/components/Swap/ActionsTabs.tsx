@@ -1,5 +1,6 @@
 import { 
 	Tab, TabList, TabPanel, TabPanels, Tabs,
+	useColorModeValue,
 	VStack
 } from "@chakra-ui/react"
 import { FC } from "react";
@@ -18,6 +19,9 @@ type TabData = {
 export const ActionsTabs = () => {
 
 	const { currentTabIsBuy, currentTabIsSell } = useSwapStore();
+
+	const borderColor = useColorModeValue('brandLightAlpha.300', 'whiteAlpha.300');
+	const colorScheme = useColorModeValue('brandLight', 'blue');
 
     const tabsData: TabData[] = [
         {
@@ -38,6 +42,8 @@ export const ActionsTabs = () => {
 			w={ACTION_TABS.VStackWidth}
 		>
 			<Tabs
+				borderColor={borderColor}
+				colorScheme={colorScheme}
 				isFitted
 				borderRadius='md'
 				borderWidth='1px'
