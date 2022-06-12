@@ -11,7 +11,11 @@ const App: FC = () => {
 
 	return (
 	  	<Router>
-    		<Container maxW="100vw" p={0} m={0} >
+    		<Container 
+				maxW="100vw" 
+				p={0} 
+				m={0} 
+			>
 			<Routes>
 			  	<Route
 				  	path='/'
