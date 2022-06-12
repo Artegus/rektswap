@@ -5,6 +5,12 @@ import { loadFull } from "tsparticles";
 
 import type { Container, Engine } from "tsparticles-engine";
 
+import { 
+	useViewportScroll,
+	useTransform,
+	motion 
+} from 'framer-motion';
+
 export const Particle: FC = () => {
 
     const particlesInit = async (main: Engine) => {
@@ -18,7 +24,12 @@ export const Particle: FC = () => {
     const colorParticle = useColorModeValue('#dc2d2d', '#FF3737');
     const colorLink = useColorModeValue('#130d43', '#ffffff');
 
+	const { scrollY } = useViewportScroll();
+
+	const linksOp = useTransform(scrollY, [0, 1500], [0.5, 0]);
+
     return (
+		<motion.div style={{opacity: linksOp}}>
         <Particles
             id="tsparticles"
             init={particlesInit}
@@ -60,7 +71,7 @@ export const Particle: FC = () => {
                         color: colorLink,
                         distance: 150,
                         enable: true,
-                        opacity: 0.5,
+                        opacity: 1,
                         width: 1,
                     },
                     collisions: {
@@ -81,10 +92,10 @@ export const Particle: FC = () => {
                             enable: true,
                             area: 800,
                         },
-                        value: 50,
+                        value: 49,
                     },
                     opacity: {
-                        value: 0.5,
+                        value: 1,
                     },
                     shape: {
                         type: "circle",
@@ -110,7 +121,7 @@ export const Particle: FC = () => {
                 detectRetina: true,
             }}
         >
-
         </Particles>
+		</motion.div>
     )
 }
