@@ -3,8 +3,8 @@ import { FC, useEffect } from 'react';
 import {
 	Heading,
 	Flex, Box, HStack,
-	Text
-} from '@chakra-ui/layout';
+	Text, useColorMode
+} from '@chakra-ui/react';
 
 import { RektText } from '../Logo/RektText';
 import { 
@@ -14,11 +14,15 @@ import {
 } from 'framer-motion';
 
 export const MainTokenPresentation: FC = () => {
-	
+
+    const { colorMode } = useColorMode();
 	const { scrollY } = useViewportScroll();
+
 	const titleY = useTransform(scrollY, [0, 500], [0, 100]);
 	const titleOpacity = useTransform(scrollY, [0, 300], [1, 0]);
-	const secondaryTitleColor = useTransform(scrollY, [0, 300], ['#fff', '#8247E5']);
+	const secondaryTitleColor = useTransform(
+		scrollY, [0, 300], [colorMode === 'light' ? '#000' : '#fff', '#8247E5']
+	);
 	
 	return (
 		<Flex
