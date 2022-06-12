@@ -23,6 +23,7 @@ export const Main: FC = () => {
 				direction={['column', 'column', 'row']}
 				gap={[10, 10, 10, 10, 20]}
 				mx={[0, 0, 0, '10%', '15%']}
+				pb={10}
 			>
 				<FaqForTheMainPage />
 				<Roadmap />
