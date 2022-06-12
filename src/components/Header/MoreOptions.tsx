@@ -47,7 +47,11 @@ export const MoreOptions: FC = () => {
                 aria-label='More'
                 icon={<HamburgerIcon />}
             />
-            <MenuList minW="150px" >
+            <MenuList 
+                minW="150px"
+                bg='whiteAlpha.200'
+            >
+
                 <MenuItem
                     onClick={toggleColorMode}
                 >
