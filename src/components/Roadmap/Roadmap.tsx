@@ -25,7 +25,7 @@ export const Roadmap: FC = () => {
 				<Center p={10}>
 				<Heading size='3xl'>
 					<Text
-						bgGradient='linear(270deg, #ff3737, #8247E5)'
+						bgGradient='linear(90deg, #C13F8E, #8247E5)'
 						backgroundClip='text'
 						fontFamily={`'Kdam Thmor Pro', sans-serif`}
 					>

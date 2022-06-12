@@ -68,7 +68,6 @@ export const FaqAccordion: FC = () => (
 		  </AccordionButton>
 		</h2>
 		<AccordionPanel pb={4}>
-			<Text>
 			Even though current <Link 
 				color='#8247E5'
 				href={'https://docs.uniswap.org/protocol/V2/reference/smart-contracts/router-02'}
@@ -84,13 +83,10 @@ export const FaqAccordion: FC = () => (
 			this contract to sell your REKT, it will store your REKT balance,
 			request a new random number to a Chainlink Oracle and, once it’s
 			received, it will fulfill all the sales requested during that time. 
-			</Text>
-			<Text>
 			If you have any questions about how the code works, feel free to ask the devs
 			in the <Link color='#8247E5' href='https://t.me/rektswap_community'>
 				Telegram group <TelegramIcon/> 
 			</Link>.
-			</Text>
 		</AccordionPanel>
 	  </AccordionItem>
 
@@ -104,7 +100,6 @@ export const FaqAccordion: FC = () => (
 		  </AccordionButton>
 		</h2>
 		<AccordionPanel pb={4}>
-			<Text>
 			The initial supply is 1B REKT. The front-end dev owns 3.5% of the
 			initial supply and the back-end dev has another 3.5%. The initial
 			liquidity is 3700 MATIC for 908.874.000 REKT, <Link href={liqLockedTx} color='#8247E5'>
@@ -117,11 +112,8 @@ export const FaqAccordion: FC = () => (
 			>
 				Telegram group <TelegramIcon />
 			</Link>.
-			</Text>
-			<Text>
 			Using REKTcoin does not incur any dev fees, thus if any money is
 			needed for marketing purposes it will be provided by the dev team.
-			</Text>
 		</AccordionPanel>
 	  </AccordionItem>
 

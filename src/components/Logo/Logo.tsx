@@ -13,7 +13,7 @@ export const Logo: FC = () => {
                 h={8}
                 color="#8247E5"
             />
-			<RektText />
+			<RektText asHeading otherProps={{size: 'lg'}}/>
         </HStack>
     )
 }
