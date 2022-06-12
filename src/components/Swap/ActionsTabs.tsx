@@ -21,7 +21,7 @@ export const ActionsTabs = () => {
 	const { currentTabIsBuy, currentTabIsSell } = useSwapStore();
 
 	const borderColor = useColorModeValue('brandLightAlpha.300', 'whiteAlpha.300');
-	const colorScheme = useColorModeValue('brandLight', 'blue');
+	const colorScheme = useColorModeValue('purple', 'purple');
 
     const tabsData: TabData[] = [
         {

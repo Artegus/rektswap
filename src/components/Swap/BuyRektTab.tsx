@@ -243,6 +243,7 @@ export const BuyRektTab: FC<Props> = ({
                     <Button
                         size="md"
                         w="full"
+            			variant='simple-button'
                         onClick={swapWithUniswapRouterV2}
                     >
                        	Buy 
