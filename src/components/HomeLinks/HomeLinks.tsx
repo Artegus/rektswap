@@ -19,7 +19,7 @@ import {
 
 export const HomeLinks: FC = () => {
 	return (
-		<Center>
+		<Center pb={10}>
 			<VStack>
 				<Heading
 					mb={3}
