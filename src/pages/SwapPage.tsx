@@ -6,7 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import { FC, useEffect } from 'react';
 import { Footer } from '../components/Footer/Footer';
 import { Header } from '../components/Header/Header';
-import { Main } from '../components/Main/Main';
+import { SwapMain } from '../components/SwapMain/SwapMain';
 import { useWalletHandleError } from '../hooks/useWalletHandleError';
 import { useEagerConnect, useInactiveListener } from '../hooks/useWeb3'
 import { useUserStore } from '../stores/UserStore';
@@ -41,7 +41,7 @@ export const SwapPage: FC = () => {
         direction={'column'}
       >
         <Header />
-        <Main />
+        <SwapMain />
         <Footer />
       </Flex>
   );
