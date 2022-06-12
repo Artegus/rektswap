@@ -1,6 +1,8 @@
 import { FC } from 'react';
 
-import { Flex } from '@chakra-ui/layout';
+import { 
+	Flex,
+} from '@chakra-ui/layout';
 
 import { FaqHeader as MainHeader } from '../Faq/FaqHeader';
 import { MainTokenPresentation } from './MainTokenPresentation';
@@ -29,8 +31,16 @@ export const Main: FC = () => {
 				<FaqForTheMainPage />
 				<Roadmap />
 			</Flex>
-			<HomeLinks />
-			<AboutDevs />
+			<Flex
+				justifyContent='center'
+				direction={['column', 'column', 'row']}
+				gap={[10, 10, 10, 10, 20]}
+				mx={[0, 0, 0, '10%', '15%']}
+				mb='10%'
+			>
+				<HomeLinks />
+				<AboutDevs />
+			</Flex>
 		</Flex>
 	);
 }

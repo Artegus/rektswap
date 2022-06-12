@@ -26,7 +26,7 @@ export const Particle: FC = () => {
 
 	const { scrollY } = useViewportScroll();
 
-	const linksOp = useTransform(scrollY, [0, 1500], [0.5, 0]);
+	const linksOp = useTransform(scrollY, [0, 1000], [0.5, 0]);
 
     return (
 		<motion.div style={{opacity: linksOp}}>
