@@ -23,7 +23,7 @@ export const MainTokenPresentation: FC = () => {
 				asHeading
 				otherProps={{
 					textAlign: 'center',
-					fontSize: { base: '4xl', md: '5xl', lg: '6xl' },
+					fontSize: { base: '6xl', md: '7xl', lg: '8xl' },
 					flex: 2
 				}}
 			/>
@@ -32,7 +32,7 @@ export const MainTokenPresentation: FC = () => {
 				textAlign='left'
 				fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
 			>
-				REKT is an experimental shitcoin
+				REKTcoin is an experimental shitcoin
 				that randomly deflates using Chainlink
 				random numbers.
 			</Heading>

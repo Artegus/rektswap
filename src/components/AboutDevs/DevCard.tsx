@@ -22,11 +22,10 @@ export const DevCard:FC<{
 			href={href}
 			style={{ textDecoration: 'none' }}
 			p={[3, 3, 5]}
+			borderRadius='xl'
 			_hover={{
-				//bgGradient:'linear(270deg, #ff3737, #8247E5)',
-				bg:'#8247E555',
-				borderRadius: 'xl',
-				transition:'0.3s',
+				textColor: '#8247e5',
+				transition: '0.5s'
 			}}
 		>
 			<VStack>
