@@ -31,7 +31,7 @@ export const AboutRekt: FC<Props> = ({
 	isOpen, onOpen, onClose
 }) => {
 	
-	const faqLink = `http://${window.location.host.split('.')[1]}/#faq`;
+	const faqLink = `https://${window.location.host.split('.')[1]}.net/#faq`;
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered >

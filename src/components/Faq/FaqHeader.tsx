@@ -20,7 +20,7 @@ export const FaqHeader: FC = () => {
         return colorMode === 'light' ? <MoonIcon /> : <SunIcon />
     }
 
-	const appLink = `http://app.${window.location.host.split('.')[0]}`;
+	const appLink = `https://app.${window.location.host.split('.')[1]}.net`;
 
 	return (
         <HStack 

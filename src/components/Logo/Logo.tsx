@@ -5,13 +5,21 @@ import {
 import { MaticIcon } from '../../icons/MaticIcon';
 import { RektText } from './RektText';
 
-export const Logo: FC = () => {
-	
-	const split = window.location.host.split('.');
-	const homeLink = split.length === 1 ? `http://${split[0]}` : `http://${split[1]}`;
+const getRouteSplit = ():Array<string> => (window.location.host.split('.'));
 
+const atHome = (): boolean => (getRouteSplit()[0] === 'www');
+
+const inProduction = (): boolean => (getRouteSplit().length === 3);
+
+const getHomeLink = (): string => (
+	atHome() ? '/' : (
+		inProduction() ? `https://${getRouteSplit()[1]}.net` : '/'
+	)
+);
+
+export const Logo: FC = () => {
     return (
-		<Link href={homeLink} style={{ textDecoration: 'none' }}>
+		<Link href={getHomeLink()} style={{ textDecoration: 'none' }}>
         <HStack>
             <MaticIcon
                 w={8} 
