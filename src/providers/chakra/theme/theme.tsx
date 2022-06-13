@@ -32,7 +32,10 @@ export const theme = extendTheme({
     styles: {
         global: (props: StyleFunctionProps) => ({
             body: {
-                bg: mode('linear-gradient(#FFFFFF, #E6DAFA)', 'linear-gradient(#07132C, #110101)')(props),
+                bg: mode(
+					'linear-gradient(#FFFFFF, #E6DAFA)',
+					'linear-gradient(#07132C, #110101)'
+				)(props),
             },
         }),
     },

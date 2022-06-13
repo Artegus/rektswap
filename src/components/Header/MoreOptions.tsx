@@ -16,7 +16,7 @@ import { REKTCOIN } from '../../config/constants/tokenLists/default.contracts';
 
 import { OrderHistory } from '../OrderHistory/OrderHistory';
 import { AboutRekt } from '../AboutRekt/AboutRekt';
-const chartLink = 
+export const chartLink = 
 	`https://polygon.poocoin.app/tokens/${REKTCOIN}`;
 
 
