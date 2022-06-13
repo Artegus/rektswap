@@ -37,6 +37,7 @@ export const SellButton: FC = () => {
             size="md"
             w="full"
             isLoading={loading}
+			variant='simple-button'
             onClick={approvedContract ? undefined : approveAllowance}
         >
             Approve

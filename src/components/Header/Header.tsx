@@ -24,7 +24,7 @@ export const Header: FC = () => {
             <HStack spacing={5} >
                 {!active ? 
                     <ConnectWallet/> : 
-                    <Button size='md'>
+                    <Button size='md' variant='simple-button'>
                         {account!.substring(0, 4)}...{
 							account!.substring(account!.length - 4, account!.length)
 						}

@@ -5,7 +5,13 @@ import { loadFull } from "tsparticles";
 
 import type { Container, Engine } from "tsparticles-engine";
 
-export const Particle: FC = () => {
+import { 
+	useViewportScroll,
+	useTransform,
+	motion 
+} from 'framer-motion';
+
+export const Particle: FC<{delicate?: boolean}> = ({delicate = false}) => {
 
     const particlesInit = async (main: Engine) => {
         await loadFull(main);
@@ -15,10 +21,15 @@ export const Particle: FC = () => {
         console.log(container)
     }
 
-    const colorParticle = useColorModeValue('#dc2d2d', '#FF3737');
+    const colorParticle = useColorModeValue('#8247E5', '#FF3737');
     const colorLink = useColorModeValue('#130d43', '#ffffff');
 
+	const { scrollY } = useViewportScroll();
+
+	const linksOp = useTransform(scrollY, [0, 1000], [0.5, 0]);
+
     return (
+		<motion.div style={{opacity: linksOp}}>
         <Particles
             id="tsparticles"
             init={particlesInit}
@@ -58,9 +69,9 @@ export const Particle: FC = () => {
                     },
                     links: {
                         color: colorLink,
-                        distance: 150,
+						distance: delicate? 100 : 150,
                         enable: true,
-                        opacity: 0.5,
+						opacity: delicate? 0.3 : 1,
                         width: 1,
                     },
                     collisions: {
@@ -73,7 +84,7 @@ export const Particle: FC = () => {
                             default: "bounce",
                         },
                         random: false,
-                        speed: 3,
+						speed: delicate? 1 : 3,
                         straight: false,
                     },
                     number: {
@@ -81,10 +92,10 @@ export const Particle: FC = () => {
                             enable: true,
                             area: 800,
                         },
-                        value: 50,
+						value: delicate? 100 : 49,
                     },
                     opacity: {
-                        value: 0.5,
+						value: delicate? 0.5 : 1,
                     },
                     shape: {
                         type: "circle",
@@ -110,7 +121,7 @@ export const Particle: FC = () => {
                 detectRetina: true,
             }}
         >
-
         </Particles>
+		</motion.div>
     )
 }

@@ -3,7 +3,7 @@ import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
     Box, useToast, Alert, Spinner,
-    AlertTitle,
+    AlertTitle, useColorModeValue
 } from "@chakra-ui/react";
 import { SellButton } from "../SellButton/SellButton";
 
@@ -41,6 +41,8 @@ export const SellRektTab: FC<Props> = ({
     const [userInputSellAmount, setUserInputSellAmount] = useState<string>("");
     const [expectedOutput, setExpectedOutput] = useState<string>("")
     const timeRef = useRef<number | undefined>(undefined);
+
+	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const { active, account } = useWeb3React<Web3Provider>();
     const [rektBal, setRektBal] = useState<number | null>(null);
@@ -157,6 +159,7 @@ export const SellRektTab: FC<Props> = ({
         return (
             approvedContract ? 
             <Button
+				variant='simple-button'
                 size="md"
                 w="full"
                 onClick={sellRektCoin}
@@ -204,6 +207,7 @@ export const SellRektTab: FC<Props> = ({
                         onKeyUp={onKeyUpInputAmount}
                         onChange={(e) => setUserInputSellAmount(e.currentTarget.value.trim())}
                         value={userInputSellAmount}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -213,6 +217,7 @@ export const SellRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>REKT</Text>
                         </Button>
@@ -230,6 +235,7 @@ export const SellRektTab: FC<Props> = ({
                         _placeholder={{ fontWeight: 'bold' }}
                         type="number"
                         value={expectedOutput}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -239,6 +245,7 @@ export const SellRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>MATIC</Text>
                         </Button>

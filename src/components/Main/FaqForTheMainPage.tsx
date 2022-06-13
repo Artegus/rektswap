@@ -15,7 +15,7 @@ export const FaqForTheMainPage: FC = () => {
 			<Center p={10}>
 				<Heading size='3xl'>
 					<Text
-						bgGradient='linear(270deg, #ff3737, #8247E5)'
+						bgGradient='linear(90deg, #ff3737, #c13f8e)'
 						backgroundClip='text'
 						fontFamily={`'Kdam Thmor Pro', sans-serif`}
 					>

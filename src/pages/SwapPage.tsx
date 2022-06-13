@@ -10,6 +10,7 @@ import { SwapMain } from '../components/SwapMain/SwapMain';
 import { useWalletHandleError } from '../hooks/useWalletHandleError';
 import { useEagerConnect, useInactiveListener } from '../hooks/useWeb3'
 import { useUserStore } from '../stores/UserStore';
+import { Particle } from '../components/Particle/Particle';
 
 import '../providers/chakra/styles.css';
 
@@ -40,6 +41,7 @@ export const SwapPage: FC = () => {
         px={5}
         direction={'column'}
       >
+		<Particle delicate />
         <Header />
         <SwapMain />
         <Footer />

@@ -14,6 +14,7 @@ export const ConnectWallet: FC<ButtonProps> = ({
         <Button 
             size={size}
             w={w}
+            variant='simple-button'
             onClick={() => {
                 connectWallet(ConnectorNames.Injected);
             }}
