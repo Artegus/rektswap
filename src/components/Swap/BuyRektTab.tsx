@@ -60,7 +60,9 @@ export const BuyRektTab: FC<Props> = ({
 
 	const { currentTab, currentTabIsBuy } = useSwapStore();
 	const { addTransaction } = useOrdersStore();
-	const toast = useToast();
+	const toast = useToast({
+        variant: 'defaultToast',
+    });
 	
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 

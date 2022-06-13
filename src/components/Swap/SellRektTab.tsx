@@ -49,7 +49,9 @@ export const SellRektTab: FC<Props> = ({
     const { addTransaction } = useOrdersStore();
     const { approvedContract, setApprovedContract } = useSwapStore();
 
-    const toast = useToast();
+    const toast = useToast({
+        variant: 'defaultToast',
+    });
 
     const rektContract = useRektContract();
     const rektTxsBatcherContract = useRektTxsBatcherContract();
