@@ -15,6 +15,7 @@ const useWalletHandleError = () => {
 
     const toast = useToast({
         title: 'Error',
+        variant: 'defaultToast',
         duration: WEB3_ERROR_DURATION,
         status: 'error',
         position: 'top',

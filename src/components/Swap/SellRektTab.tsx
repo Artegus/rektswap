@@ -3,8 +3,9 @@ import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
     Box, useToast, Alert, Spinner,
-    AlertTitle,
+    AlertTitle, useColorModeValue
 } from "@chakra-ui/react";
+import { SellButton } from "../SellButton/SellButton";
 
 import { utils, BigNumberish } from 'ethers'
 
@@ -18,6 +19,7 @@ import { useOrdersStore } from "../../stores/OrdersStore";
 import { useRektContract, useRektTxsBatcherContract } from '../../hooks/useContract';
 import { ACTION_TABS } from "./responsive/breakpoints";
 import { getTrade } from "../../utils/getTrade";
+import { useSwapStore } from "../../stores/SwapStore";
 
 
 export const formatBal = (bal: number, decimals: number): string => {
@@ -38,14 +40,20 @@ export const SellRektTab: FC<Props> = ({
 
     const [userInputSellAmount, setUserInputSellAmount] = useState<string>("");
     const [expectedOutput, setExpectedOutput] = useState<string>("")
-    const [allowedTosell, setAllowedTosell] = useState<boolean>(false);
     const timeRef = useRef<number | undefined>(undefined);
+
+	const toastColor = useColorModeValue('#F3EDFC', '#1a263c')
+
+	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const { active, account } = useWeb3React<Web3Provider>();
     const [rektBal, setRektBal] = useState<number | null>(null);
     const { addTransaction } = useOrdersStore();
+    const { approvedContract, setApprovedContract } = useSwapStore();
 
-    const toast = useToast();
+    const toast = useToast({
+        variant: 'defaultToast',
+    });
 
     const rektContract = useRektContract();
     const rektTxsBatcherContract = useRektTxsBatcherContract();
@@ -99,7 +107,10 @@ export const SellRektTab: FC<Props> = ({
                     duration: 9000000,
                     position: 'top',
                     render: () => (
-                        <Alert borderRadius='md'>
+                        <Alert 
+							borderRadius='md'
+							bgColor={toastColor}
+						>
                             <Spinner pr={2} mr={2} />
                             <AlertTitle>Selling REKTcoin</AlertTitle>
                         </Alert>
@@ -124,33 +135,20 @@ export const SellRektTab: FC<Props> = ({
 					toast({
 						position: 'top',
 						title: `The minimum sell amount is ${fee} REKT`,
-						status: 'error'
+						status: 'error',
+						isClosable: true
 					})
 				else
 					toast({
 						position: 'top',
 						title: 'Transaction error',
 						description: 'There was an error processing your transaction',
-						status: 'error'
+						status: 'error',
+						isClosable: true
 					});
             }
         }
 
-    }
-
-    const approveAllowance = async (): Promise<void> => {
-        if (rektContract) {
-            try {
-				const initial_supply = (1_000_000_000).toString();
-                const tx = await rektContract.approve(
-					REKT_TX_BATCHER, utils.parseEther(initial_supply)
-				);
-                await tx.wait();
-                setAllowedTosell(true);
-            } catch (approveError) {
-                setAllowedTosell(false);
-            }
-        }
     }
 
     const checkAllowance = async () => {
@@ -159,22 +157,25 @@ export const SellRektTab: FC<Props> = ({
                 const allowanceAmount: BigNumberish = await rektContract.allowance(account, REKT_TX_BATCHER);
                 const amountAllowed = utils.parseEther(allowanceAmount.toString());
                 const isApproved = amountAllowed.gt(utils.parseEther('1'));
-                setAllowedTosell(isApproved);
+                setApprovedContract(isApproved);
             } catch (e) {
-                setAllowedTosell(false);
+                setApprovedContract(false);
             }
         }
     }
 
     const renderActionButton = () => {
         return (
+            approvedContract ? 
             <Button
+				variant='simple-button'
                 size="md"
                 w="full"
-                onClick={allowedTosell ? sellRektCoin : approveAllowance}
+                onClick={sellRektCoin}
             >
-                {allowedTosell ? "Sell" : "Approve"}
-            </Button>
+                Sell
+            </Button> : 
+            <SellButton />
         )
     }
 
@@ -215,6 +216,7 @@ export const SellRektTab: FC<Props> = ({
                         onKeyUp={onKeyUpInputAmount}
                         onChange={(e) => setUserInputSellAmount(e.currentTarget.value.trim())}
                         value={userInputSellAmount}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -224,6 +226,7 @@ export const SellRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>REKT</Text>
                         </Button>
@@ -241,6 +244,7 @@ export const SellRektTab: FC<Props> = ({
                         _placeholder={{ fontWeight: 'bold' }}
                         type="number"
                         value={expectedOutput}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -250,6 +254,7 @@ export const SellRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>MATIC</Text>
                         </Button>

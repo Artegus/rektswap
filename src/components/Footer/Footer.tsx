@@ -5,10 +5,9 @@ import { TelegramIcon } from "../../icons/TelegramIcon"
 import { TwitterIcon } from "../../icons/TwitterIcon"
 import { IconLink } from "../IconLink/IconLink"
 
-const socialMediaData = [
+export const socialMediaData = [
     { href: 'https://twitter.com/REKTswap', component: TwitterIcon },
     { href: 'https://t.me/rektswap_community', component: TelegramIcon }
-
 ]
 
 export const Footer: FC = () => {

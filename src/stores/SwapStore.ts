@@ -1,5 +1,4 @@
 import create from 'zustand';
-import defaultTokens from '../config/constants/tokenLists/default.tokenlist';
 import { IToken } from '../types/IToken';
 
 interface SwapStore {
@@ -7,6 +6,7 @@ interface SwapStore {
     tokenOut: IToken | undefined;
     typedIn: string;
     estimatedOut: string;
+    approvedContract: boolean;
     setTypedIn: (amout: string) => void;
     setEstimitedOut: (amout: string) => void;
     setTokenIn: (_tokenIn: IToken | undefined) => void;
@@ -17,23 +17,23 @@ interface SwapStore {
 	currentTab: "Buy" | "Sell";
 	currentTabIsBuy: () => void;
 	currentTabIsSell: () => void;
+    setApprovedContract: (approved: boolean) => void;
 }
 
-const defaultTokenIn:IToken = {
-    address: defaultTokens[0].address,
-    chainId: defaultTokens[0].chainId,
-    decimals: defaultTokens[0].decimals,
-    name: defaultTokens[0].name,
-    symbol: defaultTokens[0].symbol
-}
 
 const useSwapStore = create<SwapStore>((set, get) => ({
-    tokenIn: defaultTokenIn,
+    tokenIn: undefined,
     tokenOut: undefined,
     typedIn: '',
     estimatedOut: '',
 	lastTx: {},
 	currentTab: "Buy",
+    approvedContract: false,
+    setApprovedContract: (approved: boolean) => {
+        return set((state) => ({
+            ...state, approvedContract: approved
+        }))
+    },
     setTokenIn: (_tokenIn: IToken | undefined ) => {
         if (get().tokenOut === undefined) {
             return set((state) => ({ ...state, tokenIn: _tokenIn }));

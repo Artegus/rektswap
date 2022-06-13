@@ -3,7 +3,7 @@ import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
 	Box, useDisclosure, useToast, Alert, AlertTitle,
-	Spinner
+	Spinner, useColorMode, useColorModeValue
 } from "@chakra-ui/react";
 
 import { Contract, utils, ethers, providers } from 'ethers';
@@ -60,7 +60,13 @@ export const BuyRektTab: FC<Props> = ({
 
 	const { currentTab, currentTabIsBuy } = useSwapStore();
 	const { addTransaction } = useOrdersStore();
-	const toast = useToast();
+	const toast = useToast({
+        variant: 'defaultToast',
+    });
+
+	const toastColor = useColorModeValue('#F3EDFC', '#1a263c')
+	
+	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const [userInputAmount, setInputAmount] = useState<string>("");
     const [expectedOutput, setOutputAmount] = useState<string>("");
@@ -130,13 +136,16 @@ export const BuyRektTab: FC<Props> = ({
 				(currentBal: number | null) => currentBal !== null?
 					currentBal - parseFloat(userInputAmount) : null
 			);
-            console.log('Txn: ', swapTx);
 			toast({
 				title: 'Buying REKTcoin',
 				duration: 9000000,
 				position: 'top',
 				render: () => (
-					<Alert borderRadius='md'>
+					<Alert 
+						borderRadius='md'
+						opacity='1'
+						bgColor={toastColor}
+					>
 						<Spinner pr={2} mr={2}/>
 					  	<AlertTitle>Buying REKTcoin</AlertTitle>
 					</Alert>
@@ -163,7 +172,8 @@ export const BuyRektTab: FC<Props> = ({
 				title: 'Transaction error',
 				position: 'top',
 				description: 'There was an error processing your transaction',
-				status: 'error'
+				status: 'error',
+				isClosable: true
 			});
         }
     }
@@ -194,6 +204,7 @@ export const BuyRektTab: FC<Props> = ({
                         onKeyUp={onKeyUpInputAmount}
                         onChange={(e) => setInputAmount(e.currentTarget.value.trim())}
                         value={userInputAmount}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -203,6 +214,7 @@ export const BuyRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>MATIC</Text>
                         </Button>
@@ -219,6 +231,7 @@ export const BuyRektTab: FC<Props> = ({
                         _placeholder={{ fontWeight: 'bold' }}
                         type="number"
                         value={expectedOutput}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -228,6 +241,7 @@ export const BuyRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>REKT</Text>
                         </Button>
@@ -245,6 +259,7 @@ export const BuyRektTab: FC<Props> = ({
                         size="md"
                         w="full"
                         onClick={swapWithUniswapRouterV2}
+						variant='simple-button'
                     >
                        	Buy 
                     </Button>
