@@ -33,13 +33,22 @@ export const theme = extendTheme({
         global: (props: StyleFunctionProps) => ({
             body: {
                 bg: mode(
-					'linear-gradient(#FFFFFF, #E6DAFA)',
-					'linear-gradient(#07132C, #110101)'
-				)(props),
+                    'linear-gradient(#FFFFFF, #E6DAFA)',
+                    'linear-gradient(#07132C, #110101)'
+                )(props),
             },
         }),
     },
     components: {
         Button: { ...buttonStyles },
+        Alert: {
+            variants: {
+                defaultToast: (props: StyleFunctionProps) => ({
+                    container: {
+                        bg: mode('#a998bf96', '#2C313C91')(props)
+                    }
+                }),
+            }
+        }
     }
 })
