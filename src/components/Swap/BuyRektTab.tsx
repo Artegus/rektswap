@@ -60,7 +60,11 @@ export const BuyRektTab: FC<Props> = ({
 
 	const { currentTab, currentTabIsBuy } = useSwapStore();
 	const { addTransaction } = useOrdersStore();
-	const toast = useToast();
+	const toast = useToast({
+        variant: 'defaultToast',
+    });
+
+	const toastColor = useColorModeValue('#F3EDFC', '#1a263c')
 	
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
@@ -137,7 +141,11 @@ export const BuyRektTab: FC<Props> = ({
 				duration: 9000000,
 				position: 'top',
 				render: () => (
-					<Alert borderRadius='md'>
+					<Alert 
+						borderRadius='md'
+						opacity='1'
+						bgColor={toastColor}
+					>
 						<Spinner pr={2} mr={2}/>
 					  	<AlertTitle>Buying REKTcoin</AlertTitle>
 					</Alert>
@@ -164,7 +172,8 @@ export const BuyRektTab: FC<Props> = ({
 				title: 'Transaction error',
 				position: 'top',
 				description: 'There was an error processing your transaction',
-				status: 'error'
+				status: 'error',
+				isClosable: true
 			});
         }
     }

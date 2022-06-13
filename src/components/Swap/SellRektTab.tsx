@@ -42,6 +42,8 @@ export const SellRektTab: FC<Props> = ({
     const [expectedOutput, setExpectedOutput] = useState<string>("")
     const timeRef = useRef<number | undefined>(undefined);
 
+	const toastColor = useColorModeValue('#F3EDFC', '#1a263c')
+
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const { active, account } = useWeb3React<Web3Provider>();
@@ -49,7 +51,9 @@ export const SellRektTab: FC<Props> = ({
     const { addTransaction } = useOrdersStore();
     const { approvedContract, setApprovedContract } = useSwapStore();
 
-    const toast = useToast();
+    const toast = useToast({
+        variant: 'defaultToast',
+    });
 
     const rektContract = useRektContract();
     const rektTxsBatcherContract = useRektTxsBatcherContract();
@@ -103,7 +107,10 @@ export const SellRektTab: FC<Props> = ({
                     duration: 9000000,
                     position: 'top',
                     render: () => (
-                        <Alert borderRadius='md'>
+                        <Alert 
+							borderRadius='md'
+							bgColor={toastColor}
+						>
                             <Spinner pr={2} mr={2} />
                             <AlertTitle>Selling REKTcoin</AlertTitle>
                         </Alert>
@@ -128,14 +135,16 @@ export const SellRektTab: FC<Props> = ({
 					toast({
 						position: 'top',
 						title: `The minimum sell amount is ${fee} REKT`,
-						status: 'error'
+						status: 'error',
+						isClosable: true
 					})
 				else
 					toast({
 						position: 'top',
 						title: 'Transaction error',
 						description: 'There was an error processing your transaction',
-						status: 'error'
+						status: 'error',
+						isClosable: true
 					});
             }
         }
