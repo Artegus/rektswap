@@ -1,7 +1,7 @@
 import { 
 	Tab, TabList, TabPanel, TabPanels, Tabs,
 	useColorModeValue,
-	VStack
+	VStack, useColorMode
 } from "@chakra-ui/react"
 import { FC } from "react";
 import { Props } from "../../types/TabProps/TabProps";
@@ -17,11 +17,12 @@ type TabData = {
 }
 
 export const ActionsTabs = () => {
-
+	const { colorMode } = useColorMode();
 	const { currentTabIsBuy, currentTabIsSell } = useSwapStore();
 
-	const borderColor = useColorModeValue('brandLightAlpha.300', 'whiteAlpha.300');
+	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 	const colorScheme = useColorModeValue('purple', 'purple');
+	const tabsBgColor = colorMode === 'light' ? 'white.300': '#1a263c33';
 
     const tabsData: TabData[] = [
         {
@@ -44,6 +45,7 @@ export const ActionsTabs = () => {
 			<Tabs
 				borderColor={borderColor}
 				colorScheme={colorScheme}
+				bg={tabsBgColor}
 				isFitted
 				borderRadius='md'
 				borderWidth='1px'

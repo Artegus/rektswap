@@ -3,7 +3,7 @@ import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
 	Box, useDisclosure, useToast, Alert, AlertTitle,
-	Spinner
+	Spinner, useColorMode, useColorModeValue
 } from "@chakra-ui/react";
 
 import { Contract, utils, ethers, providers } from 'ethers';
@@ -61,6 +61,8 @@ export const BuyRektTab: FC<Props> = ({
 	const { currentTab, currentTabIsBuy } = useSwapStore();
 	const { addTransaction } = useOrdersStore();
 	const toast = useToast();
+	
+	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const [userInputAmount, setInputAmount] = useState<string>("");
     const [expectedOutput, setOutputAmount] = useState<string>("");
@@ -193,6 +195,7 @@ export const BuyRektTab: FC<Props> = ({
                         onKeyUp={onKeyUpInputAmount}
                         onChange={(e) => setInputAmount(e.currentTarget.value.trim())}
                         value={userInputAmount}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -202,6 +205,7 @@ export const BuyRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>MATIC</Text>
                         </Button>
@@ -218,6 +222,7 @@ export const BuyRektTab: FC<Props> = ({
                         _placeholder={{ fontWeight: 'bold' }}
                         type="number"
                         value={expectedOutput}
+						borderColor={borderColor}
                     />
                     <InputRightElement
                         width='auto'
@@ -227,6 +232,7 @@ export const BuyRektTab: FC<Props> = ({
                         <Button
                             h='2.5rem' size='md'
                             disabled
+							variant='simple-button'
                         >
                             <Text>REKT</Text>
                         </Button>
@@ -243,8 +249,8 @@ export const BuyRektTab: FC<Props> = ({
                     <Button
                         size="md"
                         w="full"
-            			variant='simple-button'
                         onClick={swapWithUniswapRouterV2}
+						variant='simple-button'
                     >
                        	Buy 
                     </Button>
