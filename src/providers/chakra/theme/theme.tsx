@@ -45,7 +45,7 @@ export const theme = extendTheme({
             variants: {
                 defaultToast: (props: StyleFunctionProps) => ({
                     container: {
-                        bg: mode('#a998bf96', '#2C313C91')(props)
+                        bg: mode('#F3EDFC', '#1a263c')(props)
                     }
                 }),
             }

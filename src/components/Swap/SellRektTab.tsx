@@ -42,6 +42,8 @@ export const SellRektTab: FC<Props> = ({
     const [expectedOutput, setExpectedOutput] = useState<string>("")
     const timeRef = useRef<number | undefined>(undefined);
 
+	const toastColor = useColorModeValue('#F3EDFC', '#1a263c')
+
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const { active, account } = useWeb3React<Web3Provider>();
@@ -105,7 +107,10 @@ export const SellRektTab: FC<Props> = ({
                     duration: 9000000,
                     position: 'top',
                     render: () => (
-                        <Alert borderRadius='md'>
+                        <Alert 
+							borderRadius='md'
+							bgColor={toastColor}
+						>
                             <Spinner pr={2} mr={2} />
                             <AlertTitle>Selling REKTcoin</AlertTitle>
                         </Alert>

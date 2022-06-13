@@ -63,6 +63,8 @@ export const BuyRektTab: FC<Props> = ({
 	const toast = useToast({
         variant: 'defaultToast',
     });
+
+	const toastColor = useColorModeValue('#F3EDFC', '#1a263c')
 	
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
@@ -139,7 +141,11 @@ export const BuyRektTab: FC<Props> = ({
 				duration: 9000000,
 				position: 'top',
 				render: () => (
-					<Alert borderRadius='md'>
+					<Alert 
+						borderRadius='md'
+						opacity='1'
+						bgColor={toastColor}
+					>
 						<Spinner pr={2} mr={2}/>
 					  	<AlertTitle>Buying REKTcoin</AlertTitle>
 					</Alert>
