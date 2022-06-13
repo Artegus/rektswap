@@ -172,7 +172,8 @@ export const BuyRektTab: FC<Props> = ({
 				title: 'Transaction error',
 				position: 'top',
 				description: 'There was an error processing your transaction',
-				status: 'error'
+				status: 'error',
+				isClosable: true
 			});
         }
     }

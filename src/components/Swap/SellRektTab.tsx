@@ -135,14 +135,16 @@ export const SellRektTab: FC<Props> = ({
 					toast({
 						position: 'top',
 						title: `The minimum sell amount is ${fee} REKT`,
-						status: 'error'
+						status: 'error',
+						isClosable: true
 					})
 				else
 					toast({
 						position: 'top',
 						title: 'Transaction error',
 						description: 'There was an error processing your transaction',
-						status: 'error'
+						status: 'error',
+						isClosable: true
 					});
             }
         }
