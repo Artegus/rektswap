@@ -11,7 +11,7 @@ import { FaqAccordion } from '../Faq/FaqAccordion';
 
 export const FaqForTheMainPage: FC = () => {
 	return (
-		<VStack w={['auto', 'auto', 'auto', 'auto', '50%']}>
+		<VStack w={['auto', 'auto', 'auto', 'auto', '50%']} id='faq'>
 			<Center p={10}>
 				<Heading size='3xl'>
 					<Text

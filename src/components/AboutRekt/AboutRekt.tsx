@@ -39,11 +39,15 @@ export const AboutRekt: FC<Props> = ({
 			  	<ModalBody pb={6}>
 					<VStack>
 						<Text>
-							REKTcoin (REKT) is an hyperdeflationary ERC20
-							experimental shitcoin on the MATIC blockchain. You
-							can buy REKT without any fees, but every time you
-							sell any REKT an completely random amount gets
-							burned. Gamble with caution.
+							REKTcoin (REKT) is a hyper-deflationary ERC20 experimental shitcoin
+							on the MATIC blockchain. Although buying REKT does not incur any
+							fees, every time you sell REKT a completely random amount gets
+							burned. This is accomplished thanks to the use of <Link 
+								color='#8257E5'
+								href='https://docs.chain.link/docs/chainlink-vrf/v1/'
+							>
+								Chainlink Oracles 
+							</Link> random number generators.
 						</Text>
 						<Text>
 							If you like the coin we might do an proper 
@@ -51,7 +55,7 @@ export const AboutRekt: FC<Props> = ({
 							protocol.
 						</Text>
 						<Text py={3}>
-							Need more info? Check out the <Link color='#8247E5' href='/faq'>
+							Need more info? Check out the <Link color='#8247E5' href='/main/#faq'>
 								FAQ
 							</Link>
 						</Text>

@@ -22,10 +22,6 @@ const App: FC = () => {
 				  	element={<SwapPage />}
 			  	/>
 				<Route 
-					path='/faq'
-					element={<FaqPage />}
-				/>
-				<Route 
 					path='/main'
 					element={<MainPage />}
 				/>
