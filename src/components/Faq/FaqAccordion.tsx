@@ -50,7 +50,7 @@ export const FaqAccordion: FC = () => (
 		</h2>
 		<AccordionPanel pb={4}>
 			Since REKT is an experimental token, we are not sure how much
-			traffic the <Link color='#8247E5'href={'https://rektswap.net'}>
+			traffic the <Link color='#8247E5'href={'https://app.rektswap.net'}>
 				RektSwap
 			</Link> can handle. That’s why you should NOT gamble
 			more than you're willing to lose. In case of need due to our

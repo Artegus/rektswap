@@ -30,6 +30,9 @@ export const liqLockedTx =
 export const AboutRekt: FC<Props> = ({
 	isOpen, onOpen, onClose
 }) => {
+	
+	const faqLink = `http://${window.location.host.split('.')[1]}/#faq`;
+
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered >
 			<ModalOverlay />
@@ -55,7 +58,7 @@ export const AboutRekt: FC<Props> = ({
 							protocol.
 						</Text>
 						<Text py={3}>
-							Need more info? Check out the <Link color='#8247E5' href='/main/#faq'>
+							Need more info? Check out the <Link color='#8247E5' href={faqLink}>
 								FAQ
 							</Link>
 						</Text>
