@@ -16,14 +16,24 @@ import { REKTCOIN } from '../../config/constants/tokenLists/default.contracts';
 
 import { OrderHistory } from '../OrderHistory/OrderHistory';
 import { AboutRekt } from '../AboutRekt/AboutRekt';
-const chartLink = 
+export const chartLink = 
 	`https://polygon.poocoin.app/tokens/${REKTCOIN}`;
 
 
 export const MoreOptions: FC = () => {
 
     const { colorMode, toggleColorMode } = useColorMode();
-    
+   	
+	const menuStyle = {
+		bg: colorMode === 'light' ? '#F3EDFC' : '#1a263c',
+	};
+
+	const menuButtonStyle = {
+		_hover: {
+			bg: colorMode === 'light' ? '#e6dafa' : '#2f374b'
+		}
+	};
+
     const iconMode = () => {
         return colorMode === 'light' ? <MoonIcon /> : <SunIcon />
     }
@@ -49,11 +59,12 @@ export const MoreOptions: FC = () => {
             />
             <MenuList 
                 minW="150px"
-                bg='whiteAlpha.200'
+				{...menuStyle}
             >
 
                 <MenuItem
                     onClick={toggleColorMode}
+					{...menuButtonStyle}
                 >
                     <HStack w="full" justifyContent="space-between" >
                         <Text>
@@ -64,6 +75,7 @@ export const MoreOptions: FC = () => {
                 </MenuItem>
                 <MenuItem
 					onClick={historyOnOpen}
+					{...menuButtonStyle}
 				>
                     <HStack w="full" justifyContent="space-between" >
                         <Text>
@@ -74,6 +86,7 @@ export const MoreOptions: FC = () => {
                 </MenuItem>
                 <MenuItem
 					onClick={infoOnOpen}
+					{...menuButtonStyle}
 				>
                     <HStack w="full" justifyContent="space-between" >
                         <Text>
@@ -82,17 +95,18 @@ export const MoreOptions: FC = () => {
                         <InfoIcon />
                     </HStack>
                 </MenuItem>
-					<Link href={chartLink}>
-                <MenuItem
-				>
-                    <HStack w="full" justifyContent="space-between" >
-                        <Text>
-							Chart	
-                        </Text>
-                        <BsFillBarChartFill />
-                    </HStack>
-                </MenuItem>
-					</Link>
+				<Link href={chartLink}>
+					<MenuItem
+						{...menuButtonStyle}
+					>
+						<HStack w="full" justifyContent="space-between" >
+							<Text>
+								Chart	
+							</Text>
+							<BsFillBarChartFill />
+						</HStack>
+					</MenuItem>
+				</Link>
             </MenuList>
         </Menu>
 		<OrderHistory 
