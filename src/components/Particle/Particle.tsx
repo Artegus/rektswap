@@ -11,7 +11,7 @@ import {
 	motion 
 } from 'framer-motion';
 
-export const Particle: FC = () => {
+export const Particle: FC<{delicate?: boolean}> = ({delicate = false}) => {
 
     const particlesInit = async (main: Engine) => {
         await loadFull(main);
@@ -21,7 +21,7 @@ export const Particle: FC = () => {
         console.log(container)
     }
 
-    const colorParticle = useColorModeValue('#dc2d2d', '#FF3737');
+    const colorParticle = useColorModeValue('#8247E5', '#FF3737');
     const colorLink = useColorModeValue('#130d43', '#ffffff');
 
 	const { scrollY } = useViewportScroll();
@@ -69,9 +69,9 @@ export const Particle: FC = () => {
                     },
                     links: {
                         color: colorLink,
-                        distance: 150,
+						distance: delicate? 100 : 150,
                         enable: true,
-                        opacity: 1,
+						opacity: delicate? 0.3 : 1,
                         width: 1,
                     },
                     collisions: {
@@ -84,7 +84,7 @@ export const Particle: FC = () => {
                             default: "bounce",
                         },
                         random: false,
-                        speed: 3,
+						speed: delicate? 1 : 3,
                         straight: false,
                     },
                     number: {
@@ -92,10 +92,10 @@ export const Particle: FC = () => {
                             enable: true,
                             area: 800,
                         },
-                        value: 49,
+						value: delicate? 100 : 49,
                     },
                     opacity: {
-                        value: 1,
+						value: delicate? 0.5 : 1,
                     },
                     shape: {
                         type: "circle",

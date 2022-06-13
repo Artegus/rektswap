@@ -22,7 +22,7 @@ export const ActionsTabs = () => {
 
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 	const colorScheme = useColorModeValue('purple', 'purple');
-	const tabsBgColor = colorMode === 'light' ? 'white.300': '#1a263c33';
+	const tabsBgColor = colorMode === 'light' ? '#ffffff33': '#1a263c33';
 
     const tabsData: TabData[] = [
         {
