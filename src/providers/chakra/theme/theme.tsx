@@ -1,4 +1,4 @@
-import { extendTheme, theme as base, ThemeConfig } from '@chakra-ui/react';
+import { extendTheme, ThemeConfig } from '@chakra-ui/react';
 import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools'
 import { buttonStyles } from './buttonStyles'
 

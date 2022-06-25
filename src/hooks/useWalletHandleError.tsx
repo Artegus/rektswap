@@ -10,7 +10,7 @@ const WEB3_ERROR_DURATION = 4_000;
 
 const useWalletHandleError = () => {
 
-    const { error, active } = useWeb3React<Web3Provider>();
+    const { error } = useWeb3React<Web3Provider>();
     const [errorWeb3, setErrorWeb3] = useState<Web3Error | undefined>(undefined);
 
     const toast = useToast({

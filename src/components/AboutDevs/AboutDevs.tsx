@@ -1,13 +1,6 @@
 import { FC } from 'react';
 import {
-	Box,
-	Center,
-	Heading,
-	Text,
-	VStack,
-	HStack,
-	Flex,
-	SimpleGrid
+	Heading, VStack, HStack,
 } from '@chakra-ui/react';
 
 import { DevCard } from './DevCard';

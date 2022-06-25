@@ -1,14 +1,8 @@
 import { FC } from 'react';
 
 import {
-	Image,
-	Box,
-	VStack,
-	HStack,
-	Text,
-	Avatar,
-	Button,
-	Link
+	VStack, Text,
+	Avatar,	Link
 } from '@chakra-ui/react';
 
 export const DevCard:FC<{

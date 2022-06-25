@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers'
-import { Trade, TradeType, TokenAmount, Token, Route, Fetcher, WETH, ChainId } from 'quickswap-sdk'
+import { Trade, TradeType, TokenAmount, Token, Route, Fetcher } from 'quickswap-sdk'
 
 import { REKTCOIN, defaultContracts } from '../config/constants/tokenLists/default.contracts';
 import { config } from '../config/config';

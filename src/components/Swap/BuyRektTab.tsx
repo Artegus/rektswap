@@ -3,11 +3,10 @@ import {
     Button, FormControl, Heading,
     HStack, Input, InputRightElement, Text, VStack,
 	Box, useDisclosure, useToast, Alert, AlertTitle,
-	Spinner, useColorMode, useColorModeValue
+	Spinner, useColorModeValue
 } from "@chakra-ui/react";
 
 import { Contract, utils, ethers, providers } from 'ethers';
-import { ChainId, Fetcher, Route, TokenAmount, Trade, TradeType, WETH } from "@uniswap/sdk";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 
@@ -17,14 +16,11 @@ import WETH_ABI from '../../abis/weth.json';
 
 import { Props } from "../../types/TabProps/TabProps";
 import { ConnectWallet } from "../ConnectWallet/ConnectWallet";
-import { formatBal } from "./SellRektTab";
+import { formatBal, formatRekt } from "./SellRektTab";
 import { ACTION_TABS } from "./responsive/breakpoints";
 
-import { useSwapStore } from "../../stores/SwapStore";
 import { useOrdersStore } from "../../stores/OrdersStore";
 import { OrderHistory } from "../OrderHistory/OrderHistory";
-
-import { formatRekt } from './SellRektTab';
 import { getTrade } from "../../utils/getTrade";
 
 declare global {
@@ -58,7 +54,6 @@ export const BuyRektTab: FC<Props> = ({
     tabTitle
 }) => {
 
-	const { currentTab, currentTabIsBuy } = useSwapStore();
 	const { addTransaction } = useOrdersStore();
 	const toast = useToast({
         variant: 'defaultToast',
