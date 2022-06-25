@@ -1,9 +1,9 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 import { FC } from 'react'
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 
-import type { Container, Engine } from "tsparticles-engine";
+import { Engine } from "tsparticles-engine";
 
 import { 
 	useViewportScroll,
@@ -15,10 +15,6 @@ export const Particle: FC<{delicate?: boolean}> = ({delicate = false}) => {
 
     const particlesInit = async (main: Engine) => {
         await loadFull(main);
-    }
-
-    const particlesLoaded = async (container: Container) => {
-        console.log(container)
     }
 
     const colorParticle = useColorModeValue('#8247E5', '#FF3737');
@@ -33,7 +29,6 @@ export const Particle: FC<{delicate?: boolean}> = ({delicate = false}) => {
         <Particles
             id="tsparticles"
             init={particlesInit}
-            loaded={particlesLoaded}
             options={{
                 background: {
                     color: {
