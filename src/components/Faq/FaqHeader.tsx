@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
-import { HStack, Button,
+import { 
+	HStack, Button,
 	IconButton, Link, useColorMode,
 } from '@chakra-ui/react';
 
@@ -19,6 +20,8 @@ export const FaqHeader: FC = () => {
         return colorMode === 'light' ? <MoonIcon /> : <SunIcon />
     }
 
+	const appLink = `https://app.${window.location.host.split('.')[1]}.net`;
+
 	return (
         <HStack 
             w="full" 
@@ -28,7 +31,7 @@ export const FaqHeader: FC = () => {
             <Logo />
             
             <HStack spacing={5} >
-				<Link href='/'>
+				<Link href={appLink}>
 					<Button 
 						size='md' 
 						variant='simple-button' 
