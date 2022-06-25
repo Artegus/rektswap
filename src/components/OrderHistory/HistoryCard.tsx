@@ -1,8 +1,7 @@
 import { FC, useState, useEffect } from 'react';
+import { useSwapStore } from '../../stores/SwapStore';
 import { providers, utils } from 'ethers';
 import { defaultContracts } from '../../config/constants/tokenLists/default.contracts';
-import { formatEth } from '../Swap/BuyRektTab';
-import { formatRekt } from '../Swap/SellRektTab';
 import { RektSaleFormat } from './RektSaleFormat';
 
 import {
@@ -11,18 +10,15 @@ import {
 import {
 	CheckCircleIcon	
 } from '@chakra-ui/icons'
+import { Web3Provider } from '@ethersproject/providers';
+import { useWeb3React } from '@web3-react/core';
+import { FormatUtils } from '../../utils/FormatUtils';
 
 export const isBuyOrder = (tx: TransactionReceipt) =>
 	tx.to !== defaultContracts.REKT_TRANSACTION_BATCHER.address;
 
 type TransactionReceipt = providers.TransactionReceipt;
 
-export const getTxDate = async (tx: TransactionReceipt): Promise<Date> => {
-	const userProv = new providers.Web3Provider(window.ethereum);
-	return new Date(
-		1000 * (await userProv.getBlock(tx.blockNumber)).timestamp
-	);
-}
 
 const getFormatedDate = (d: Date): string => {
 	const mdy = d.toLocaleDateString('en-US');
@@ -34,7 +30,18 @@ const getFormatedDate = (d: Date): string => {
 }
 
 export const DateBadgeFor: FC<{tx: TransactionReceipt}> = ({tx}) => {
-    const [txDate, setTxDate] = useState<Date | null>(null);
+	const [txDate, setTxDate] = useState<Date | null>(null);
+	
+	const { library } = useWeb3React<Web3Provider>();
+
+	const getTxDate = async (tx: TransactionReceipt): Promise<Date> => {
+		const block = await library!.getBlock(tx.blockNumber);
+		
+		return new Date(
+			1000 * block.timestamp
+		);
+	}
+	
 	useEffect(() => {
 		const updateDate = async () => {
 			getTxDate(tx).then(res => setTxDate(res))
@@ -59,9 +66,9 @@ const BuyText: FC<{tx: TransactionReceipt}> = ({tx}) => {
 			<VStack w='100%' align='left'>
 				<Box>
 					You bought <Badge>
-						{formatRekt(parseFloat(quantityReceived))} REKT
+						{FormatUtils.formatRekt(quantityReceived)} REKT
 					</Badge> for <Badge>
-						{formatEth(parseFloat(quantitySold))} MATIC 
+						{FormatUtils.formatEth(quantitySold)} MATIC 
 					</Badge>
 				</Box>
 				<DateBadgeFor tx={tx} />
