@@ -4,7 +4,7 @@ import {
 	Modal, ModalOverlay, 
 	ModalContent,
 	ModalHeader, ModalCloseButton, ModalBody,
-	Text, VStack, Divider, Container
+	Text, VStack, Divider, Container, Box
 } from '@chakra-ui/react';
 
 import { Web3Provider } from "@ethersproject/providers";
@@ -25,7 +25,7 @@ const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
 
 const maxTxToShow = 5;
 
-const blockMargin = 3000;//totalHistoryDays * estimatedBlocksPerDay;
+const blockMargin = 3000;
 
 export const OrderHistory: FC<Props> = ({
 	isOpen, onOpen, onClose
@@ -73,6 +73,15 @@ export const OrderHistory: FC<Props> = ({
 		}
 	}
 
+	const historyCards = () => {
+		return lastTransactions.map((tx) =>(
+			<Box key={tx.blockHash}>
+				<Divider />
+				<HistoryCard tx={tx} />
+			</Box>
+		)).reverse().slice(0, maxTxToShow);
+	}
+
 	useEffect(() => {
 		if (typeof account === "string")
 			getLastOrders();
@@ -93,12 +102,7 @@ export const OrderHistory: FC<Props> = ({
 								borderRadius='md'
 								overflowY="auto"
 							>
-								{lastTransactions.map(txData => (
-									<>
-									<Divider />
-									<HistoryCard tx={txData} />
-									</>
-								)).reverse().slice(0, maxTxToShow)}
+								{historyCards()}
 							</VStack> 
 							{lastTransactions.length > maxTxToShow ?
 								<Container centerContent>...</Container> : null
