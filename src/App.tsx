@@ -7,7 +7,8 @@ import { Container } from '@chakra-ui/layout';
 
 const App: FC = () => {
 	
-	const subdom = window.location.host.split('.')[0];
+	const hostSplitted = window.location.host.split('.');
+	const subdom = hostSplitted[hostSplitted.length - 1];
 
 	return (
 	  	<Router>
