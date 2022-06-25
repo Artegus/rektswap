@@ -5,8 +5,9 @@ import { REKTCOIN, defaultContracts } from '../config/constants/tokenLists/defau
 import { config } from '../config/config';
 import { Web3Provider } from '@ethersproject/providers';
 
-const rektCoin = new Token(config.CHAIN_ID, REKTCOIN, 18);
-const wethToken = new Token(config.CHAIN_ID, defaultContracts.WETH.address, 18);
+const DECIMALS_TOKEN = 18;
+const rektCoin = new Token(config.CHAIN_ID, REKTCOIN, DECIMALS_TOKEN);
+const wethToken = new Token(config.CHAIN_ID, defaultContracts.WETH.address, DECIMALS_TOKEN);
 
 export const getTrade = async (amount: BigNumber, type: 'sell' | 'buy') => {
     const tokenToTrade = type === 'sell' ? rektCoin : wethToken;
