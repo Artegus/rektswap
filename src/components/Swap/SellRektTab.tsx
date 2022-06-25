@@ -20,19 +20,7 @@ import { useRektContract, useRektTxsBatcherContract } from '../../hooks/useContr
 import { ACTION_TABS } from "./responsive/breakpoints";
 import { getTrade } from "../../utils/getTrade";
 import { useSwapStore } from "../../stores/SwapStore";
-
-
-export const formatBal = (bal: number, decimals: number): string => {
-    const balStr = bal.toString();
-    const decimalPos = balStr.search("\\.");
-	if(decimalPos === -1) return balStr;
-    return balStr.substring(0, decimalPos + decimals + 1);
-}
-
-const rektBalanceDecimalsToShow = 2;
-export const formatRekt = (bal: number): string => {
-    return formatBal(bal, rektBalanceDecimalsToShow);
-}
+import { FormatUtils } from "../../utils/FormatUtils";
 
 export const SellRektTab: FC<Props> = ({
     tabTitle
@@ -47,7 +35,7 @@ export const SellRektTab: FC<Props> = ({
 	const borderColor = useColorModeValue('#E6DAFA', '#1a263c');
 
     const { active, account } = useWeb3React<Web3Provider>();
-    const [rektBal, setRektBal] = useState<number | null>(null);
+    const [rektBal, setRektBal] = useState<string>('');
     const { addTransaction } = useOrdersStore();
     const { approvedContract, setApprovedContract } = useSwapStore();
 
@@ -61,11 +49,11 @@ export const SellRektTab: FC<Props> = ({
 
     const updateBals = async (addr: string | null | undefined) => {
         if (!active)
-            setRektBal(null);
+            setRektBal('');
         else if (typeof addr === "string") {
             if (rektContract) {
                 const balance = await rektContract.balanceOf(addr);
-                setRektBal(parseFloat(utils.formatUnits(balance)));
+                setRektBal(utils.formatUnits(balance));
             }
         }
     }
@@ -99,8 +87,8 @@ export const SellRektTab: FC<Props> = ({
             try {
                 const swapTx = await rektTxsBatcherContract.sellRektCoin(amount);
                 setRektBal(
-                    (currentBal: number | null) => currentBal !== null ?
-                        currentBal - parseFloat(userInputSellAmount) : null
+                    utils.parseEther(rektBal)
+                    .sub(utils.parseEther(userInputSellAmount)).toString()
                 );
                 toast({
                     title: 'Selling REKTcoin',
@@ -121,7 +109,7 @@ export const SellRektTab: FC<Props> = ({
                 toast.closeAll();
                 toast({
                     title: 'Sell order submited',
-                    description: `You submited an ${formatRekt(parseFloat(utils.formatUnits(tx.logs[0].data)))
+                    description: `You submited an ${FormatUtils.formatRekt(utils.formatUnits(tx.logs[0].data))
                         } REKT sell order to the batcher, you can see its status at the recent orders tab`,
                     status: 'success',
                     duration: 7000,
@@ -201,7 +189,7 @@ export const SellRektTab: FC<Props> = ({
                     fontSize={ACTION_TABS.HeadingFontSize}
                 >{tabTitle}</Heading>
                 <Box textAlign={"right"} fontSize={ACTION_TABS.BoxFontSize} >
-                    {rektBal === null ? "" : `REKT balance: ${formatRekt(rektBal)}`}
+                    {rektBal === null ? "" : `REKT balance: ${FormatUtils.formatRekt(rektBal)}`}
                 </Box>
             </HStack>
 
