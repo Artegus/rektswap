@@ -1,8 +1,6 @@
-import React from 'react';
 import { FC } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { SwapPage } from './pages/SwapPage';
-import { FaqPage } from './pages/FaqPage';
 import { MainPage } from './pages/MainPage';
 
 import { Container } from '@chakra-ui/layout';

@@ -1,5 +1,4 @@
 import { FC, useState, useEffect } from 'react';
-import { useSwapStore } from '../../stores/SwapStore';
 import { providers, utils } from 'ethers';
 import { defaultContracts } from '../../config/constants/tokenLists/default.contracts';
 import { formatEth } from '../Swap/BuyRektTab';

@@ -1,10 +1,7 @@
 import { FC } from 'react';
 import {
-	Container,
-	Center,
-	Heading,
-	Text,
-	VStack
+	Center, Heading,
+	Text, VStack
 } from '@chakra-ui/react';
 import { FaqAccordion } from '../Faq/FaqAccordion';
 

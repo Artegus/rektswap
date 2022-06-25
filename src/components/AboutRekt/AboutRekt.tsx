@@ -5,7 +5,7 @@ import {
 	Modal, ModalOverlay, 
 	ModalContent,
 	ModalHeader, ModalCloseButton, ModalBody,
-	Text, VStack, Divider, Box, Link, HStack,
+	Text, VStack, Divider, Link,
 	Wrap, WrapItem
 } from '@chakra-ui/react';
 

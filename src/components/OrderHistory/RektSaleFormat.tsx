@@ -1,22 +1,15 @@
 import { FC, useState, useEffect } from 'react';
 
 import { providers, utils, EventFilter } from 'ethers';
-import { formatEth } from '../Swap/BuyRektTab';
 import { formatRekt } from '../Swap/SellRektTab';
 import { useRektTxsBatcherContract } from '../../hooks/useContract';
 import { DateBadgeFor } from './HistoryCard';
-
+import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
-	Badge, Text, Spinner, HStack, Box, Center,
-	Flex, VStack
+	Badge, Spinner, HStack, 
+	Box, Center, VStack
 } from '@chakra-ui/react';
 
-import {
-	CheckCircleIcon	
-} from '@chakra-ui/icons'
-
-import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
-const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
 
 type TransactionReceipt = providers.TransactionReceipt;
 

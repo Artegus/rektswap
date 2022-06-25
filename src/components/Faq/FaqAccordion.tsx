@@ -1,4 +1,3 @@
-import React from 'react';
 import { FC } from 'react';
 
 import {
@@ -7,11 +6,10 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Box, Link, Text
+  Box, Link
 } from '@chakra-ui/react'
 
-import { batcherEtherscan } from '../AboutRekt/AboutRekt';
-import { liqLockedTx } from '../AboutRekt/AboutRekt';
+import { batcherEtherscan, liqLockedTx } from '../AboutRekt/AboutRekt';
 import { TelegramIcon } from '../../icons/TelegramIcon';
 
 export const FaqAccordion: FC = () => (

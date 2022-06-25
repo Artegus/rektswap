@@ -12,34 +12,28 @@ import { useWeb3React } from "@web3-react/core";
 import { Event, EventFilter, providers } from "ethers";
 
 import { Props } from '../../types/ModalProps/ModalProps';
-import { useRektContract, useWethContract } from "../../hooks/useContract";
+import { useRektContract } from "../../hooks/useContract";
 
 import { HistoryCard } from "./HistoryCard";
 
-import { useSwapStore } from "../../stores/SwapStore";
 import { useOrdersStore } from "../../stores/OrdersStore";
 
 import { defaultContracts } from "../../config/constants/tokenLists/default.contracts";
 const batcherAddr = defaultContracts.REKT_TRANSACTION_BATCHER.address;
 const uniswapPairAddr = defaultContracts.UNISWAPV2_PAIR.address;
-const uniRouterAddr = defaultContracts.UNISWAPV2_ROUTER02.address;
 
 
 const maxTxToShow = 5;
 
-const estimatedBlocksPerDay = 6000;
-const totalHistoryDays = 5;
 const blockMargin = 3000;//totalHistoryDays * estimatedBlocksPerDay;
 
 export const OrderHistory: FC<Props> = ({
 	isOpen, onOpen, onClose
 }) => {
 	
-	const { active, account } = useWeb3React<Web3Provider>();
-	const { currentTab } = useSwapStore();
+	const { account } = useWeb3React<Web3Provider>();
 	const { lastTransactions, setTransactions } = useOrdersStore();
 	const rektContract = useRektContract();
-	const wethContract = useWethContract();
 
 	const mergeEvents = (arr1: Event[], arr2: Event[]) => {
 		if(arr1.length === 0) return arr2;
@@ -97,7 +91,6 @@ export const OrderHistory: FC<Props> = ({
 						<>
 							<VStack
 								borderRadius='md'
-								//borderWidth='1px'
 								overflowY="auto"
 							>
 								{lastTransactions.map(txData => (

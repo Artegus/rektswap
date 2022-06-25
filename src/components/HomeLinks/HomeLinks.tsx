@@ -2,9 +2,7 @@ import { FC } from 'react';
 
 import { 
 	Center, VStack,
-	Heading, SimpleGrid,
-	Link, Button, HStack,
-	Text, useColorMode, 
+	Heading, Link, Button, useColorMode, 
 	Popover, PopoverContent, 
 	PopoverTrigger, PopoverArrow,
 	PopoverBody, PopoverCloseButton,
@@ -12,7 +10,6 @@ import {
 
 import { TelegramIcon } from '../../icons/TelegramIcon';
 import { TwitterIcon } from '../../icons/TwitterIcon';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { FaFileContract } from 'react-icons/fa';
 import { BsFillBarChartFill } from 'react-icons/bs'
 import { 

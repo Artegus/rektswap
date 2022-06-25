@@ -11,7 +11,6 @@ import { Header } from '../Header/Header';
 import { useWalletHandleError } from '../../hooks/useWalletHandleError';
 import { useEagerConnect, useInactiveListener } from '../../hooks/useWeb3'
 import { useUserStore } from '../../stores/UserStore';
-import { Button, useToast } from '@chakra-ui/react';
 
 export const SwapMain: FC = () => {
 

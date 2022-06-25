@@ -1,7 +1,7 @@
+import { FC } from 'react';
 import {
   Flex,
 } from '@chakra-ui/layout';
-import { FC, useEffect } from 'react';
 import { SwapMain } from '../components/SwapMain/SwapMain';
 import { Particle } from '../components/Particle/Particle';
 

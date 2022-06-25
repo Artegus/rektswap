@@ -9,7 +9,6 @@ import {
 import { 
 	CheckCircleIcon as
 	MdCheckCircle,
-	SettingsIcon as MdSettings
 } from '@chakra-ui/icons';
 
 import { BsCircle } from 'react-icons/bs';

@@ -1,9 +1,8 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 import {
 	Heading,
-	Flex, Box, HStack,
-	Text, useColorMode
+	Flex, useColorMode
 } from '@chakra-ui/react';
 
 import { RektText } from '../Logo/RektText';
