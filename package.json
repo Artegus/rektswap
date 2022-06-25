@@ -9,13 +9,6 @@
     "@emotion/styled": "^11",
     "@ethersproject/contracts": "^5.6.0",
     "@ethersproject/providers": "^5.5.1",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
     "@uniswap/sdk": "^3.0.3",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v3-sdk": "^3.8.2",
@@ -35,6 +28,15 @@
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0",
     "zustand": "^3.6.8"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
