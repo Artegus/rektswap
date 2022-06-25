@@ -1,39 +1,34 @@
 import { FC } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { SwapPage } from './pages/SwapPage';
 import { MainPage } from './pages/MainPage';
 
 import { Container } from '@chakra-ui/layout';
 
 const App: FC = () => {
-	
-	const subdom = window.location.host.split('.')[0];
 
 	return (
-	  	<Router>
-    		<Container 
-				maxW="100vw" 
-				p={0} 
-				m={0} 
+		<Router>
+			<Container
+				maxW="100vw"
+				p={0}
+				m={0}
 			>
-			{subdom === 'app' ? (
 				<Routes>
 					<Route
 						path='/'
-						element={<SwapPage />}
-					/> 
-				</Routes>
-			) : (
-				<Routes>
-					<Route 
-						path='/'
 						element={<MainPage />}
 					/>
+					<Route
+						path='/swap'
+						element={<SwapPage />}
+					/>
+					<Route path='/*' element={<Navigate to='/' replace />} />
+					<Route path='/swap/*' element={<Navigate to='/swap' replace />} />
 				</Routes>
-			)}
 			</Container>
-	  	</Router>
-  	);
+		</Router>
+	);
 }
 
 export default App;
